@@ -59,6 +59,8 @@ import type { IProjectRootStore } from "./project";
 import { ProjectRootStore } from "./project";
 import type { IProjectViewStore } from "./project-view.store";
 import { ProjectViewStore } from "./project-view.store";
+import type { IRolesStore } from "./roles.store";
+import { RolesStore } from "./roles.store";
 import type { IRouterStore } from "./router.store";
 import { RouterStore } from "./router.store";
 import type { IStickyStore } from "./sticky/sticky.store";
@@ -101,6 +103,7 @@ export class CoreRootStore {
   editorAssetStore: IEditorAssetStore;
   workItemFilters: IWorkItemFilterStore;
   powerK: IPowerKStore;
+  roles: IRolesStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -132,6 +135,7 @@ export class CoreRootStore {
     this.analytics = new AnalyticsStore();
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
+    this.roles = new RolesStore();
   }
 
   resetOnSignOut() {
@@ -165,5 +169,6 @@ export class CoreRootStore {
     this.editorAssetStore = new EditorAssetStore();
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
+    this.roles = new RolesStore();
   }
 }

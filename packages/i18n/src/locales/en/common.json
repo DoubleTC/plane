@@ -867,5 +867,9 @@
       "description": "Export work items to a JSON file.",
       "short_description": "Export as json"
     }
-  }
+  },
+  "select_all": "Select all",
+  "deselect_all": "Deselect all",
+  "requires": "Requires",
+  "create": "Create"
 }

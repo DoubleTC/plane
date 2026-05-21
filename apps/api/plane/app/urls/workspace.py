@@ -36,6 +36,10 @@ from plane.app.views import (
     WorkspaceHomePreferenceViewSet,
     WorkspaceStickyViewSet,
     WorkspaceUserPreferenceViewSet,
+    # GAC
+    PermissionSchemeViewSet,
+    CustomRoleViewSet,
+    RoleSchemeViewSet,
 )
 
 
@@ -256,5 +260,54 @@ urlpatterns = [
         "workspaces/<str:slug>/sidebar-preferences/",
         WorkspaceUserPreferenceViewSet.as_view(),
         name="workspace-user-preference",
+    ),
+    # ------------------------------------------------------------------ #
+    # GAC — Permission Schemes
+    # ------------------------------------------------------------------ #
+    path(
+        "workspaces/<str:slug>/permission-schemes/",
+        PermissionSchemeViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-permission-schemes",
+    ),
+    path(
+        "workspaces/<str:slug>/permission-schemes/permission-groups/",
+        PermissionSchemeViewSet.as_view({"get": "permission_groups"}),
+        name="workspace-permission-groups",
+    ),
+    path(
+        "workspaces/<str:slug>/permission-schemes/<uuid:pk>/",
+        PermissionSchemeViewSet.as_view(
+            {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
+        ),
+        name="workspace-permission-scheme-detail",
+    ),
+    # GAC — Custom Roles
+    path(
+        "workspaces/<str:slug>/custom-roles/",
+        CustomRoleViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-custom-roles",
+    ),
+    path(
+        "workspaces/<str:slug>/custom-roles/<uuid:pk>/",
+        CustomRoleViewSet.as_view(
+            {"get": "retrieve", "patch": "partial_update", "delete": "destroy"}
+        ),
+        name="workspace-custom-role-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/custom-roles/<uuid:pk>/effective-permissions/",
+        CustomRoleViewSet.as_view({"get": "effective_permissions"}),
+        name="workspace-custom-role-effective-permissions",
+    ),
+    # GAC — Role ↔ Scheme management
+    path(
+        "workspaces/<str:slug>/custom-roles/<uuid:role_pk>/schemes/",
+        RoleSchemeViewSet.as_view({"post": "create"}),
+        name="workspace-role-schemes",
+    ),
+    path(
+        "workspaces/<str:slug>/custom-roles/<uuid:role_pk>/schemes/<uuid:pk>/",
+        RoleSchemeViewSet.as_view({"delete": "destroy"}),
+        name="workspace-role-scheme-detail",
     ),
 ]

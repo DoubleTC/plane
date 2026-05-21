@@ -133,3 +133,10 @@ from .draft import (
     DraftIssueSerializer,
     DraftIssueDetailSerializer,
 )
+
+from .roles import (
+    PermissionSchemeSerializer,
+    PermissionSchemeLiteSerializer,
+    CustomRoleSerializer,
+    CustomRoleSchemeSerializer,
+)

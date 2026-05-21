@@ -211,6 +211,14 @@ class WorkspaceMember(BaseModel):
     getting_started_checklist = models.JSONField(default=dict)
     tips = models.JSONField(default=dict)
     explored_features = models.JSONField(default=dict)
+    # GAC: optional override with a custom role
+    custom_role = models.ForeignKey(
+        "db.CustomRole",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="workspace_members",
+    )
 
     class Meta:
         unique_together = ["workspace", "member", "deleted_at"]

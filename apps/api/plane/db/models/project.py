@@ -222,6 +222,14 @@ class ProjectMember(ProjectBaseModel):
     preferences = models.JSONField(default=get_default_preferences)
     sort_order = models.FloatField(default=65535)
     is_active = models.BooleanField(default=True)
+    # GAC: optional override with a custom role
+    custom_role = models.ForeignKey(
+        "db.CustomRole",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="project_members",
+    )
 
     def save(self, *args, **kwargs):
         if self._state.adding and self.member:

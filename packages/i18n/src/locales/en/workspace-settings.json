@@ -484,6 +484,94 @@
         "heading": "Scripts",
         "new_script": "New Script",
         "description": "Automate your workflows with custom scripts and automation rules."
+      },
+      "roles": {
+        "title": "Roles & Permissions",
+        "description": "Manage custom roles and permission schemes for your workspace.",
+        "add_role": "Add role",
+        "add_scheme": "Add scheme",
+        "workspace_roles": "Workspace roles",
+        "project_roles": "Project roles",
+        "roles_tab": "Roles",
+        "schemes_tab": "Permission Schemes",
+        "no_roles": {
+          "title": "No custom roles yet",
+          "description": "Create custom roles to grant fine-grained access control to your workspace members."
+        },
+        "no_schemes": {
+          "title": "No permission schemes yet",
+          "description": "Create permission schemes and attach them to roles to control what actions members can perform."
+        },
+        "role": {
+          "name": "Role name",
+          "description": "Description",
+          "scope": "Scope",
+          "scope_workspace": "Workspace",
+          "scope_project": "Project",
+          "schemes": "Attached schemes",
+          "effective_permissions": "Effective permissions",
+          "member_count": "{count} member(s)",
+          "system_role": "System role",
+          "delete_role": "Delete role",
+          "edit_role": "Edit role",
+          "attach_scheme": "Attach scheme",
+          "create": {
+            "title": "Create role",
+            "success": "Role created successfully.",
+            "error": "Failed to create role. Try again."
+          },
+          "update": {
+            "success": "Role updated successfully.",
+            "error": "Failed to update role. Try again."
+          },
+          "delete": {
+            "title": "Delete role",
+            "description": "This role is assigned to {count} member(s). Please select a replacement role before deleting.",
+            "replacement_label": "Replacement role",
+            "confirm": "Delete",
+            "success": "Role deleted successfully.",
+            "error": "Failed to delete role. Try again."
+          }
+        },
+        "scheme": {
+          "name": "Scheme name",
+          "description": "Description",
+          "scope": "Scope",
+          "permissions": "Permissions",
+          "select_all": "Select all",
+          "conditional_badge": "Own only",
+          "attached_roles": "Attached to roles",
+          "system_scheme": "System scheme",
+          "delete_scheme": "Delete scheme",
+          "edit_scheme": "Edit scheme",
+          "detach": "Detach",
+          "create": {
+            "title": "Create permission scheme",
+            "success": "Permission scheme created successfully.",
+            "error": "Failed to create permission scheme. Try again."
+          },
+          "update": {
+            "success": "Permission scheme updated successfully.",
+            "error": "Failed to update permission scheme. Try again."
+          },
+          "delete": {
+            "title": "Delete permission scheme",
+            "description": "Deleting this scheme will remove it from all roles it is attached to.",
+            "confirm": "Delete",
+            "success": "Permission scheme deleted successfully.",
+            "error": "Failed to delete permission scheme. Try again."
+          },
+          "attach": {
+            "title": "Attach permission schemes",
+            "description": "Select schemes to attach to this role. The effective permissions shown are the union of all attached schemes.",
+            "preview_heading": "Effective permissions preview",
+            "attach_btn": "Attach selected",
+            "success": "Scheme attached successfully.",
+            "error": "Failed to attach scheme. Try again."
+          },
+          "detach_success": "Scheme detached successfully.",
+          "detach_error": "Failed to detach scheme. Try again."
+        }
       }
     },
     "empty_state": {
