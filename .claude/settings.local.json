@@ -25,7 +25,9 @@
       "Bash(pnpm --filter=@plane/i18n check:sync)",
       "Bash(grep -E \"\\\\.\\(tsx|ts|py\\)$\")",
       "Bash(git stash *)",
-      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx\\)$\")"
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx\\)$\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
