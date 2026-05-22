@@ -484,6 +484,43 @@
         "heading": "Scripts",
         "new_script": "Nouveau script",
         "description": "Automatisez vos flux de travail avec des scripts personnalisés et des règles d’automatisation."
+      },
+      "roles": {
+        "title": "Rôles personnalisés",
+        "description": "Créez des étiquettes de rôle pour classer et regrouper les membres de votre espace de travail et de vos projets.",
+        "add_role": "Ajouter un rôle",
+        "no_roles": {
+          "title": "Aucun rôle personnalisé pour le moment",
+          "description": "Créez des rôles personnalisés pour classer les membres de votre espace de travail."
+        },
+        "role": {
+          "name": "Nom du rôle",
+          "description": "Description",
+          "scope": "Portée",
+          "scope_workspace": "Espace de travail",
+          "scope_project": "Projet",
+          "member_count": "{count} membre(s)",
+          "system_role": "Rôle système",
+          "delete_role": "Supprimer le rôle",
+          "edit_role": "Modifier le rôle",
+          "create": {
+            "title": "Créer un rôle",
+            "success": "Rôle créé avec succès.",
+            "error": "Échec de la création du rôle. Réessayez."
+          },
+          "update": {
+            "success": "Rôle mis à jour avec succès.",
+            "error": "Échec de la mise à jour du rôle. Réessayez."
+          },
+          "delete": {
+            "title": "Supprimer le rôle",
+            "description": "Ce rôle est attribué à {count} membre(s). Veuillez sélectionner un rôle de remplacement avant de supprimer.",
+            "replacement_label": "Rôle de remplacement",
+            "confirm": "Supprimer",
+            "success": "Rôle supprimé avec succès.",
+            "error": "Échec de la suppression du rôle. Réessayez."
+          }
+        }
       }
     },
     "empty_state": {

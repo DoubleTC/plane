@@ -239,8 +239,4 @@ from .user.base import AccountEndpoint, ProfileEndpoint, UserSessionEndpoint
 
 from .timezone.base import TimezoneEndpoint
 
-from .workspace.roles import (
-    PermissionSchemeViewSet,
-    CustomRoleViewSet,
-    RoleSchemeViewSet,
-)
+from .workspace.roles import CustomRoleViewSet

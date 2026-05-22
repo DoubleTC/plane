@@ -484,6 +484,43 @@
         "heading": "Script-uri",
         "new_script": "Script nou",
         "description": "Automatizează fluxurile tale de lucru cu scripturi personalizate și reguli de automatizare."
+      },
+      "roles": {
+        "title": "Roluri personalizate",
+        "description": "Creați etichete de rol pentru a clasifica și grupa membrii spațiului dvs. de lucru și ai proiectelor.",
+        "add_role": "Adăugați rol",
+        "no_roles": {
+          "title": "Încă nu există roluri personalizate",
+          "description": "Creați roluri personalizate pentru a clasifica membrii spațiului dvs. de lucru."
+        },
+        "role": {
+          "name": "Nume rol",
+          "description": "Descriere",
+          "scope": "Domeniu",
+          "scope_workspace": "Spațiu de lucru",
+          "scope_project": "Proiect",
+          "member_count": "{count} membru/membri",
+          "system_role": "Rol de sistem",
+          "delete_role": "Ștergeți rolul",
+          "edit_role": "Editați rolul",
+          "create": {
+            "title": "Creați rol",
+            "success": "Rolul a fost creat cu succes.",
+            "error": "Crearea rolului a eșuat. Încercați din nou."
+          },
+          "update": {
+            "success": "Rolul a fost actualizat cu succes.",
+            "error": "Actualizarea rolului a eșuat. Încercați din nou."
+          },
+          "delete": {
+            "title": "Ștergeți rolul",
+            "description": "Acest rol este atribuit la {count} membru/membri. Selectați un rol de înlocuire înainte de a șterge.",
+            "replacement_label": "Rol de înlocuire",
+            "confirm": "Ștergeți",
+            "success": "Rolul a fost șters cu succes.",
+            "error": "Ștergerea rolului a eșuat. Încercați din nou."
+          }
+        }
       }
     },
     "empty_state": {

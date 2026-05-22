@@ -484,6 +484,43 @@
         "heading": "指令碼",
         "new_script": "新指令碼",
         "description": "使用自訂指令碼和自動化規則，自動化您的工作流程。"
+      },
+      "roles": {
+        "title": "自訂角色",
+        "description": "建立角色標籤以對工作區和專案的成員進行分類和分組。",
+        "add_role": "新增角色",
+        "no_roles": {
+          "title": "尚未建立自訂角色",
+          "description": "建立自訂角色以對您的工作區成員進行分類。"
+        },
+        "role": {
+          "name": "角色名稱",
+          "description": "描述",
+          "scope": "範圍",
+          "scope_workspace": "工作區",
+          "scope_project": "專案",
+          "member_count": "{count} 位成員",
+          "system_role": "系統角色",
+          "delete_role": "刪除角色",
+          "edit_role": "編輯角色",
+          "create": {
+            "title": "建立角色",
+            "success": "角色建立成功。",
+            "error": "建立角色失敗。請重試。"
+          },
+          "update": {
+            "success": "角色更新成功。",
+            "error": "更新角色失敗。請重試。"
+          },
+          "delete": {
+            "title": "刪除角色",
+            "description": "此角色已指派給 {count} 位成員。請在刪除前選擇一個替代角色。",
+            "replacement_label": "替代角色",
+            "confirm": "刪除",
+            "success": "角色刪除成功。",
+            "error": "刪除角色失敗。請重試。"
+          }
+        }
       }
     },
     "empty_state": {

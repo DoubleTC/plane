@@ -16,7 +16,6 @@ import { PageHead } from "@/components/core/page-title";
 import { SettingsHeading } from "@/components/settings/heading";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
 import { RolesList } from "@/components/roles";
-import { SchemesList } from "@/components/roles";
 // hooks
 import { useRoles } from "@/hooks/store/use-roles";
 import { useWorkspace } from "@/hooks/store/use-workspace";
@@ -26,7 +25,6 @@ import type { Route } from "./+types/page";
 import { RolesWorkspaceSettingsHeader } from "./header";
 
 type ScopeTab = "workspace" | "project";
-type ContentTab = "roles" | "schemes";
 
 function RolesSettingsPage({ params }: Route.ComponentProps) {
   const { workspaceSlug } = params;
@@ -34,21 +32,15 @@ function RolesSettingsPage({ params }: Route.ComponentProps) {
 
   const { workspaceUserInfo, allowPermissions } = useUserPermissions();
   const { currentWorkspace } = useWorkspace();
-  const { fetchRoles, fetchSchemes } = useRoles();
+  const { fetchRoles } = useRoles();
 
   const [scopeTab, setScopeTab] = useState<ScopeTab>("workspace");
-  const [contentTab, setContentTab] = useState<ContentTab>("roles");
 
   const canAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE);
 
-  // Fetch roles and schemes for the current scope
   useSWR(
     canAdmin ? `ROLES_LIST_${workspaceSlug}_${scopeTab}` : null,
     canAdmin ? () => fetchRoles(workspaceSlug, scopeTab) : null
-  );
-  useSWR(
-    canAdmin ? `SCHEMES_LIST_${workspaceSlug}_${scopeTab}` : null,
-    canAdmin ? () => fetchSchemes(workspaceSlug, scopeTab) : null
   );
 
   const pageTitle = currentWorkspace?.name
@@ -89,34 +81,7 @@ function RolesSettingsPage({ params }: Route.ComponentProps) {
           ))}
         </div>
 
-        {/* Content tabs: Roles / Schemes */}
-        <div className="border-custom-border-200 mb-6 border-b">
-          <div className="flex gap-6">
-            {(["roles", "schemes"] as ContentTab[]).map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setContentTab(tab)}
-                className={`text-sm -mb-px border-b-2 pb-3 font-medium transition-colors ${
-                  contentTab === tab
-                    ? "border-custom-primary-100 text-custom-primary-100"
-                    : "text-custom-text-300 hover:text-custom-text-200 border-transparent"
-                }`}
-              >
-                {tab === "roles"
-                  ? t("workspace_settings.settings.roles.roles_tab")
-                  : t("workspace_settings.settings.roles.schemes_tab")}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Content */}
-        {contentTab === "roles" ? (
-          <RolesList workspaceSlug={workspaceSlug} scope={scopeTab} />
-        ) : (
-          <SchemesList workspaceSlug={workspaceSlug} scope={scopeTab} />
-        )}
+        <RolesList workspaceSlug={workspaceSlug} scope={scopeTab} />
       </div>
     </SettingsContentWrapper>
   );

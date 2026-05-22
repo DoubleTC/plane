@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d['workspace_settings']['settings'].keys\\(\\)\\)\\)\")",
+      "Bash(pnpm --filter @plane/types tsc --noEmit)",
+      "Bash(pnpm --filter @plane/types exec tsc --noEmit)",
+      "Bash(npx tsc *)",
+      "Bash(pnpm --filter @plane/types build)",
+      "Bash(mkdir -p \"/home/doubletc/dtc-x-plane/apps/web/.react-router/types/app/\\(all\\)/[workspaceSlug]/\\(settings\\)/settings/\\(workspace\\)/roles/+types\")",
+      "Bash(mkdir -p \"/home/doubletc/dtc-x-plane/apps/web/.react-router/types/app/\\(all\\)/[workspaceSlug]/\\(settings\\)/settings/\\(workspace\\)/roles/[roleId]/+types\")",
+      "Bash(npx react-router *)",
+      "Bash(tsc --noEmit --skipLibCheck)",
+      "Bash(npx oxlint *)",
+      "Bash(pnpm --filter=web check:types)",
+      "Bash(pnpm --filter=web check:lint)",
+      "Bash(python3 *)",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm --filter=@plane/i18n exec tsx scripts/sync-check.ts --ci)",
+      "Bash(node *)",
+      "Bash(git log *)",
+      "Bash(pnpm --filter=@plane/i18n run copy:locales)",
+      "Bash(pnpm --filter=@plane/i18n exec tsx scripts/generate-resources.ts)",
+      "Bash(pnpm --filter=@plane/i18n build)",
+      "Bash(pnpm --filter=@plane/i18n check:sync)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts|py\\)$\")",
+      "Bash(git stash *)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx\\)$\")"
+    ]
+  }
+}

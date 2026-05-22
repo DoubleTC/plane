@@ -7,6 +7,7 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
+import useSWR from "swr";
 
 import { Disclosure } from "@headlessui/react";
 // plane imports
@@ -21,11 +22,13 @@ import { CustomSelect, PopoverMenu } from "@plane/ui";
 import { getFileURL } from "@plane/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
+import { useRoles } from "@/hooks/store/use-roles";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 
 export interface RowData {
   member: IWorkspaceMember;
   role: EUserPermissions;
+  custom_role?: string | null;
   is_active: boolean;
 }
 
@@ -87,21 +90,14 @@ export function NameColumn(props: NameProps) {
                 popoverClassName="justify-end"
                 buttonClassName="outline-none	origin-center rotate-90 size-8 aspect-square flex-shrink-0 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity"
                 render={() => (
-                  <div
-                    role="button"
-                    tabIndex={0}
+                  <button
+                    type="button"
                     className="flex cursor-pointer items-center gap-x-3"
                     onClick={() => setRemoveMemberModal(rowData)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setRemoveMemberModal(rowData);
-                      }
-                    }}
                     data-ph-element={MEMBER_TRACKER_ELEMENTS.WORKSPACE_MEMBER_TABLE_CONTEXT_MENU}
                   >
                     <TrashIcon className="size-3.5 align-middle" /> {id === currentUser?.id ? "Leave " : "Remove "}
-                  </div>
+                  </button>
                 )}
               />
             )}
@@ -153,11 +149,11 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
           render={({ field: { value } }) => (
             <CustomSelect
               value={value as EUserPermissions}
-              onChange={async (value: EUserPermissions) => {
+              onChange={async (newValue: EUserPermissions) => {
                 if (!workspaceSlug) return;
                 try {
                   await updateMember(workspaceSlug.toString(), rowData.member.id, {
-                    role: value as unknown as EUserPermissions,
+                    role: newValue as unknown as EUserPermissions,
                   });
                 } catch (err: unknown) {
                   const error = err as { error?: string | string[] };
@@ -189,5 +185,69 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
         />
       )}
     </>
+  );
+});
+
+export const CustomRoleColumn = observer(function CustomRoleColumn(props: AccountTypeProps) {
+  const { rowData, workspaceSlug } = props;
+  const { allowPermissions } = useUserPermissions();
+  const { data: currentUser } = useUser();
+  const {
+    workspace: { updateMember },
+  } = useMember();
+  const { customRoles, fetchRoles } = useRoles();
+
+  const isAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE);
+  const isSuspended = rowData.is_active === false;
+  const isCurrentUser = currentUser?.id === rowData.member.id;
+  const isEditable = isAdmin && !isCurrentUser && !isSuspended;
+
+  useSWR(
+    workspaceSlug && isAdmin ? `ROLES_LIST_${workspaceSlug}_workspace` : null,
+    workspaceSlug && isAdmin ? () => fetchRoles(workspaceSlug.toString(), "workspace") : null
+  );
+
+  const workspaceRoles = Object.values(customRoles).filter((r) => r.scope === "workspace");
+  const selected = rowData.custom_role ? customRoles[rowData.custom_role] : null;
+  const selectedLabel = selected?.name ?? "—";
+
+  if (!isEditable) {
+    return <div className="flex w-40 text-secondary">{selectedLabel}</div>;
+  }
+
+  return (
+    <CustomSelect
+      value={rowData.custom_role ?? null}
+      onChange={async (value: string | null) => {
+        if (!workspaceSlug) return;
+        try {
+          await updateMember(workspaceSlug.toString(), rowData.member.id, {
+            custom_role: value,
+          });
+        } catch (err: unknown) {
+          const error = err as { error?: string | string[] };
+          const errorString = Array.isArray(error?.error) ? error.error[0] : error?.error;
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: "Error!",
+            message: errorString ?? "Could not update custom role. Please try again.",
+          });
+        }
+      }}
+      label={<span>{selectedLabel}</span>}
+      buttonClassName="!px-0 !justify-start hover:bg-surface-1 border-none"
+      className="w-40 rounded-md p-0"
+      input
+    >
+      <CustomSelect.Option key="__none__" value={null}>
+        — (no custom role)
+      </CustomSelect.Option>
+      {workspaceRoles.map((role) => (
+        <CustomSelect.Option key={role.id} value={role.id}>
+          {role.name}
+          {role.is_system ? <span className="ml-1 text-placeholder">(system)</span> : null}
+        </CustomSelect.Option>
+      ))}
+    </CustomSelect>
   );
 });

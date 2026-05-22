@@ -484,6 +484,43 @@
         "heading": "脚本",
         "new_script": "新建脚本",
         "description": "使用自定义脚本和自动化规则自动化您的工作流程。"
+      },
+      "roles": {
+        "title": "自定义角色",
+        "description": "创建角色标签以对工作区和项目的成员进行分类和分组。",
+        "add_role": "添加角色",
+        "no_roles": {
+          "title": "还没有自定义角色",
+          "description": "创建自定义角色以对您的工作区成员进行分类。"
+        },
+        "role": {
+          "name": "角色名称",
+          "description": "描述",
+          "scope": "范围",
+          "scope_workspace": "工作区",
+          "scope_project": "项目",
+          "member_count": "{count} 名成员",
+          "system_role": "系统角色",
+          "delete_role": "删除角色",
+          "edit_role": "编辑角色",
+          "create": {
+            "title": "创建角色",
+            "success": "角色创建成功。",
+            "error": "角色创建失败。请重试。"
+          },
+          "update": {
+            "success": "角色更新成功。",
+            "error": "角色更新失败。请重试。"
+          },
+          "delete": {
+            "title": "删除角色",
+            "description": "此角色已分配给 {count} 名成员。请在删除前选择一个替代角色。",
+            "replacement_label": "替代角色",
+            "confirm": "删除",
+            "success": "角色删除成功。",
+            "error": "角色删除失败。请重试。"
+          }
+        }
       }
     },
     "empty_state": {

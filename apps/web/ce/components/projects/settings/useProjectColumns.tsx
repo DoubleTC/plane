@@ -11,13 +11,13 @@ import type { IWorkspaceMember, TProjectMembership } from "@plane/types";
 import { renderFormattedDate } from "@plane/utils";
 // components
 import { MemberHeaderColumn } from "@/components/project/member-header-column";
-import { AccountTypeColumn, NameColumn } from "@/components/project/settings/member-columns";
+import { AccountTypeColumn, CustomRoleColumn, NameColumn } from "@/components/project/settings/member-columns";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import type { IMemberFilters } from "@/store/member/utils";
 
-export interface RowData extends Pick<TProjectMembership, "original_role"> {
+export interface RowData extends Pick<TProjectMembership, "original_role" | "custom_role"> {
   member: IWorkspaceMember;
 }
 
@@ -119,6 +119,13 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
           projectId={projectId}
           workspaceSlug={workspaceSlug}
         />
+      ),
+    },
+    {
+      key: "Custom Role",
+      content: "Custom role",
+      tdRender: (rowData: RowData) => (
+        <CustomRoleColumn rowData={rowData} workspaceSlug={workspaceSlug} projectId={projectId} />
       ),
     },
     {

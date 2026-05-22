@@ -484,6 +484,43 @@
         "heading": "Skripty",
         "new_script": "Nový skript",
         "description": "Automatizujte své pracovní postupy pomocí vlastních skriptů a pravidel automatizace."
+      },
+      "roles": {
+        "title": "Vlastní role",
+        "description": "Vytvořte štítky rolí pro klasifikaci a seskupení členů vašeho pracovního prostoru a projektů.",
+        "add_role": "Přidat roli",
+        "no_roles": {
+          "title": "Zatím žádné vlastní role",
+          "description": "Vytvořte vlastní role pro klasifikaci členů vašeho pracovního prostoru."
+        },
+        "role": {
+          "name": "Název role",
+          "description": "Popis",
+          "scope": "Rozsah",
+          "scope_workspace": "Pracovní prostor",
+          "scope_project": "Projekt",
+          "member_count": "{count} členů",
+          "system_role": "Systémová role",
+          "delete_role": "Smazat roli",
+          "edit_role": "Upravit roli",
+          "create": {
+            "title": "Vytvořit roli",
+            "success": "Role byla úspěšně vytvořena.",
+            "error": "Vytvoření role se nezdařilo. Zkuste to znovu."
+          },
+          "update": {
+            "success": "Role byla úspěšně aktualizována.",
+            "error": "Aktualizace role se nezdařila. Zkuste to znovu."
+          },
+          "delete": {
+            "title": "Smazat roli",
+            "description": "Tato role je přiřazena {count} členům. Před smazáním vyberte náhradní roli.",
+            "replacement_label": "Náhradní role",
+            "confirm": "Smazat",
+            "success": "Role byla úspěšně smazána.",
+            "error": "Smazání role se nezdařilo. Zkuste to znovu."
+          }
+        }
       }
     },
     "empty_state": {

@@ -484,6 +484,43 @@
         "heading": "Script",
         "new_script": "Script mới",
         "description": "Tự động hóa quy trình làm việc của bạn với các script và quy tắc tự động hóa tùy chỉnh."
+      },
+      "roles": {
+        "title": "Vai trò tùy chỉnh",
+        "description": "Tạo nhãn vai trò để phân loại và nhóm thành viên trong không gian làm việc và dự án của bạn.",
+        "add_role": "Thêm vai trò",
+        "no_roles": {
+          "title": "Chưa có vai trò tùy chỉnh nào",
+          "description": "Tạo vai trò tùy chỉnh để phân loại thành viên trong không gian làm việc của bạn."
+        },
+        "role": {
+          "name": "Tên vai trò",
+          "description": "Mô tả",
+          "scope": "Phạm vi",
+          "scope_workspace": "Không gian làm việc",
+          "scope_project": "Dự án",
+          "member_count": "{count} thành viên",
+          "system_role": "Vai trò hệ thống",
+          "delete_role": "Xóa vai trò",
+          "edit_role": "Chỉnh sửa vai trò",
+          "create": {
+            "title": "Tạo vai trò",
+            "success": "Đã tạo vai trò thành công.",
+            "error": "Không thể tạo vai trò. Vui lòng thử lại."
+          },
+          "update": {
+            "success": "Đã cập nhật vai trò thành công.",
+            "error": "Không thể cập nhật vai trò. Vui lòng thử lại."
+          },
+          "delete": {
+            "title": "Xóa vai trò",
+            "description": "Vai trò này đang được gán cho {count} thành viên. Vui lòng chọn vai trò thay thế trước khi xóa.",
+            "replacement_label": "Vai trò thay thế",
+            "confirm": "Xóa",
+            "success": "Đã xóa vai trò thành công.",
+            "error": "Không thể xóa vai trò. Vui lòng thử lại."
+          }
+        }
       }
     },
     "empty_state": {

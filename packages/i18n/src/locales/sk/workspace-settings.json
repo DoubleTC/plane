@@ -484,6 +484,43 @@
         "heading": "Skripty",
         "new_script": "Nový skript",
         "description": "Automatizujte svoje pracovné postupy pomocou vlastných skriptov a automatizačných pravidiel."
+      },
+      "roles": {
+        "title": "Vlastné role",
+        "description": "Vytvorte štítky rolí na klasifikáciu a zoskupenie členov vášho pracovného priestoru a projektov.",
+        "add_role": "Pridať rolu",
+        "no_roles": {
+          "title": "Zatiaľ žiadne vlastné role",
+          "description": "Vytvorte vlastné role na klasifikáciu členov vášho pracovného priestoru."
+        },
+        "role": {
+          "name": "Názov roly",
+          "description": "Popis",
+          "scope": "Rozsah",
+          "scope_workspace": "Pracovný priestor",
+          "scope_project": "Projekt",
+          "member_count": "{count} členov",
+          "system_role": "Systémová rola",
+          "delete_role": "Odstrániť rolu",
+          "edit_role": "Upraviť rolu",
+          "create": {
+            "title": "Vytvoriť rolu",
+            "success": "Rola bola úspešne vytvorená.",
+            "error": "Vytvorenie roly zlyhalo. Skúste to znova."
+          },
+          "update": {
+            "success": "Rola bola úspešne aktualizovaná.",
+            "error": "Aktualizácia roly zlyhala. Skúste to znova."
+          },
+          "delete": {
+            "title": "Odstrániť rolu",
+            "description": "Táto rola je priradená {count} členom. Pred odstránením vyberte náhradnú rolu.",
+            "replacement_label": "Náhradná rola",
+            "confirm": "Odstrániť",
+            "success": "Rola bola úspešne odstránená.",
+            "error": "Odstránenie roly zlyhalo. Skúste to znova."
+          }
+        }
       }
     },
     "empty_state": {

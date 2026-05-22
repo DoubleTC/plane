@@ -484,6 +484,43 @@
         "heading": "Komut Dosyaları",
         "new_script": "Yeni Komut Dosyası",
         "description": "İş akışlarınızı özel komut dosyaları ve otomasyon kurallarıyla otomatikleştirin."
+      },
+      "roles": {
+        "title": "Özel roller",
+        "description": "Çalışma alanınızın ve projelerinizin üyelerini sınıflandırmak ve gruplamak için rol etiketleri oluşturun.",
+        "add_role": "Rol ekle",
+        "no_roles": {
+          "title": "Henüz özel rol yok",
+          "description": "Çalışma alanı üyelerinizi sınıflandırmak için özel roller oluşturun."
+        },
+        "role": {
+          "name": "Rol adı",
+          "description": "Açıklama",
+          "scope": "Kapsam",
+          "scope_workspace": "Çalışma alanı",
+          "scope_project": "Proje",
+          "member_count": "{count} üye",
+          "system_role": "Sistem rolü",
+          "delete_role": "Rolü sil",
+          "edit_role": "Rolü düzenle",
+          "create": {
+            "title": "Rol oluştur",
+            "success": "Rol başarıyla oluşturuldu.",
+            "error": "Rol oluşturulamadı. Tekrar deneyin."
+          },
+          "update": {
+            "success": "Rol başarıyla güncellendi.",
+            "error": "Rol güncellenemedi. Tekrar deneyin."
+          },
+          "delete": {
+            "title": "Rolü sil",
+            "description": "Bu rol {count} üyeye atanmış. Silmeden önce bir yedek rol seçin.",
+            "replacement_label": "Yedek rol",
+            "confirm": "Sil",
+            "success": "Rol başarıyla silindi.",
+            "error": "Rol silinemedi. Tekrar deneyin."
+          }
+        }
       }
     },
     "empty_state": {

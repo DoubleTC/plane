@@ -484,6 +484,43 @@
         "heading": "Skrypty",
         "new_script": "Nowy skrypt",
         "description": "Automatyzuj swoje przepływy pracy za pomocą niestandardowych skryptów i reguł automatyzacji."
+      },
+      "roles": {
+        "title": "Niestandardowe role",
+        "description": "Utwórz etykiety ról, aby klasyfikować i grupować członków swojego obszaru roboczego i projektów.",
+        "add_role": "Dodaj rolę",
+        "no_roles": {
+          "title": "Nie ma jeszcze niestandardowych ról",
+          "description": "Utwórz niestandardowe role, aby klasyfikować członków swojego obszaru roboczego."
+        },
+        "role": {
+          "name": "Nazwa roli",
+          "description": "Opis",
+          "scope": "Zakres",
+          "scope_workspace": "Obszar roboczy",
+          "scope_project": "Projekt",
+          "member_count": "{count} członków",
+          "system_role": "Rola systemowa",
+          "delete_role": "Usuń rolę",
+          "edit_role": "Edytuj rolę",
+          "create": {
+            "title": "Utwórz rolę",
+            "success": "Rola została utworzona pomyślnie.",
+            "error": "Nie udało się utworzyć roli. Spróbuj ponownie."
+          },
+          "update": {
+            "success": "Rola została zaktualizowana pomyślnie.",
+            "error": "Nie udało się zaktualizować roli. Spróbuj ponownie."
+          },
+          "delete": {
+            "title": "Usuń rolę",
+            "description": "Ta rola jest przypisana do {count} członków. Wybierz rolę zastępczą przed usunięciem.",
+            "replacement_label": "Rola zastępcza",
+            "confirm": "Usuń",
+            "success": "Rola została usunięta pomyślnie.",
+            "error": "Nie udało się usunąć roli. Spróbuj ponownie."
+          }
+        }
       }
     },
     "empty_state": {

@@ -7,6 +7,7 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
+import useSWR from "swr";
 import { CircleMinus } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 // plane imports
@@ -17,9 +18,10 @@ import { CustomMenu, CustomSelect } from "@plane/ui";
 import { getFileURL } from "@plane/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
+import { useRoles } from "@/hooks/store/use-roles";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 
-export interface RowData extends Pick<TProjectMembership, "original_role"> {
+export interface RowData extends Pick<TProjectMembership, "original_role" | "custom_role"> {
   member: IWorkspaceMember;
 }
 
@@ -45,7 +47,7 @@ export function NameColumn(props: NameProps) {
 
   return (
     <Disclosure>
-      {({}) => (
+      {() => (
         <div className="group relative">
           <div className="flex w-72 items-center gap-2">
             <div className="flex flex-1 items-center gap-x-2 gap-y-2">
@@ -76,14 +78,15 @@ export function NameColumn(props: NameProps) {
                 placement="bottom-end"
               >
                 <CustomMenu.MenuItem>
-                  <div
+                  <button
+                    type="button"
                     className="flex cursor-pointer items-center gap-x-1 font-medium text-danger-primary"
                     data-ph-element={MEMBER_TRACKER_ELEMENTS.PROJECT_MEMBER_TABLE_CONTEXT_MENU}
                     onClick={() => setRemoveMemberModal(rowData)}
                   >
                     <CircleMinus className="size-3.5 flex-shrink-0" />
                     {rowData.member?.id === currentUser?.id ? "Leave " : "Remove "}
-                  </div>
+                  </button>
                 </CustomMenu.MenuItem>
               </CustomMenu>
             )}
@@ -111,18 +114,14 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
   // derived values
   const roleLabel = ROLE[rowData.original_role ?? EUserPermissions.GUEST];
   const isCurrentUser = currentUser?.id === rowData.member.id;
-  const isRowDataWorkspaceAdmin = [EUserPermissions.ADMIN].includes(
-    Number(getWorkspaceMemberDetails(rowData.member.id)?.role) ?? EUserPermissions.GUEST
-  );
-  const isCurrentUserWorkspaceAdmin = currentUser
-    ? [EUserPermissions.ADMIN].includes(
-        Number(getWorkspaceMemberDetails(currentUser.id)?.role) ?? EUserPermissions.GUEST
-      )
-    : false;
+  const rowWorkspaceRole = getWorkspaceMemberDetails(rowData.member.id)?.role;
+  const isRowDataWorkspaceAdmin = Number(rowWorkspaceRole) === EUserPermissions.ADMIN;
+  const currentUserWorkspaceRole = currentUser ? getWorkspaceMemberDetails(currentUser.id)?.role : undefined;
+  const isCurrentUserWorkspaceAdmin = Number(currentUserWorkspaceRole) === EUserPermissions.ADMIN;
   const currentProjectRole = getProjectRoleByWorkspaceSlugAndProjectId(workspaceSlug, projectId);
 
   const isCurrentUserProjectAdmin = currentProjectRole
-    ? ![EUserPermissions.MEMBER, EUserPermissions.GUEST].includes(Number(currentProjectRole) ?? EUserPermissions.GUEST)
+    ? ![EUserPermissions.MEMBER, EUserPermissions.GUEST].includes(Number(currentProjectRole ?? EUserPermissions.GUEST))
     : false;
 
   // logic
@@ -191,5 +190,75 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
         </div>
       )}
     </>
+  );
+});
+
+type CustomRoleColumnProps = {
+  rowData: RowData;
+  workspaceSlug: string;
+  projectId: string;
+};
+
+export const CustomRoleColumn = observer(function CustomRoleColumn(props: CustomRoleColumnProps) {
+  const { rowData, workspaceSlug, projectId } = props;
+  const { data: currentUser } = useUser();
+  const { getProjectRoleByWorkspaceSlugAndProjectId } = useUserPermissions();
+  const {
+    project: { updateMemberCustomRole },
+  } = useMember();
+  const { customRoles, fetchRoles } = useRoles();
+
+  const currentProjectRole = getProjectRoleByWorkspaceSlugAndProjectId(workspaceSlug, projectId);
+  const isProjectAdmin = currentProjectRole
+    ? ![EUserPermissions.MEMBER, EUserPermissions.GUEST].includes(Number(currentProjectRole ?? EUserPermissions.GUEST))
+    : false;
+  const isCurrentUser = currentUser?.id === rowData.member.id;
+  const isEditable = isProjectAdmin && !isCurrentUser;
+
+  useSWR(
+    workspaceSlug && isProjectAdmin ? `ROLES_LIST_${workspaceSlug}_project` : null,
+    workspaceSlug && isProjectAdmin ? () => fetchRoles(workspaceSlug.toString(), "project") : null
+  );
+
+  const projectRoles = Object.values(customRoles).filter((r) => r.scope === "project");
+  const selected = rowData.custom_role ? customRoles[rowData.custom_role] : null;
+  const selectedLabel = selected?.name ?? "—";
+
+  if (!isEditable) {
+    return <div className="flex w-40 text-secondary">{selectedLabel}</div>;
+  }
+
+  return (
+    <CustomSelect
+      value={rowData.custom_role ?? null}
+      onChange={async (value: string | null) => {
+        if (!workspaceSlug) return;
+        try {
+          await updateMemberCustomRole(workspaceSlug.toString(), projectId.toString(), rowData.member.id, value);
+        } catch (err: unknown) {
+          const error = err as { error?: string | string[] };
+          const errorString = Array.isArray(error?.error) ? error.error[0] : error?.error;
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: "You can't change this custom role yet.",
+            message: errorString ?? "Could not update custom role. Please try again.",
+          });
+        }
+      }}
+      label={<span>{selectedLabel}</span>}
+      buttonClassName="!px-0 !justify-start hover:bg-surface-1 border-none"
+      className="w-40 rounded-md p-0"
+      input
+    >
+      <CustomSelect.Option key="__none__" value={null}>
+        — (no custom role)
+      </CustomSelect.Option>
+      {projectRoles.map((role) => (
+        <CustomSelect.Option key={role.id} value={role.id}>
+          {role.name}
+          {role.is_system ? <span className="ml-1 text-placeholder">(system)</span> : null}
+        </CustomSelect.Option>
+      ))}
+    </CustomSelect>
   );
 });

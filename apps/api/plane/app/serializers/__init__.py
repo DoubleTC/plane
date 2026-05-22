@@ -134,9 +134,4 @@ from .draft import (
     DraftIssueDetailSerializer,
 )
 
-from .roles import (
-    PermissionSchemeSerializer,
-    PermissionSchemeLiteSerializer,
-    CustomRoleSerializer,
-    CustomRoleSchemeSerializer,
-)
+from .roles import CustomRoleSerializer

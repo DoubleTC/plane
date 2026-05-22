@@ -39,15 +39,12 @@ export const RoleCard = observer(function RoleCard({ workspaceSlug, role }: Prop
               )}
             </div>
             {role.description && <p className="text-xs text-custom-text-300 mt-0.5">{role.description}</p>}
-            <div className="mt-1 flex items-center gap-4">
-              {role.member_count !== undefined && (
-                <span className="text-xs text-custom-text-400 flex items-center gap-1">
-                  <Users className="size-3" />
-                  {t("workspace_settings.settings.roles.role.member_count", { count: role.member_count })}
-                </span>
-              )}
-              <span className="text-xs text-custom-text-400">{role.schemes.length} scheme(s)</span>
-            </div>
+            {role.member_count !== undefined && (
+              <span className="text-xs text-custom-text-400 mt-1 flex items-center gap-1">
+                <Users className="size-3" />
+                {t("workspace_settings.settings.roles.role.member_count", { count: role.member_count })}
+              </span>
+            )}
           </div>
           <ChevronRight className="text-custom-text-300 size-4" />
         </Link>

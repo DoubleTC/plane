@@ -5,9 +5,8 @@
 """
 Management command: seed_system_roles
 ======================================
-Creates (or updates) the built-in Permission Schemes and Custom Roles for
-every workspace.  The command is *idempotent* — running it multiple times
-produces the same result.
+Creates the built-in metadata Custom Roles for every workspace. Idempotent —
+running it multiple times produces the same result.
 
 Usage::
 
@@ -17,73 +16,24 @@ Usage::
 
 from django.core.management.base import BaseCommand, CommandError
 
-from plane.db.models import Workspace, PermissionScheme, CustomRole, CustomRoleScheme
-from plane.db.constants.permissions import WORKSPACE_PERMISSIONS, PROJECT_PERMISSIONS
+from plane.db.models import Workspace, CustomRole
 
-# ---------------------------------------------------------------------------
-# System scheme definitions
-# ---------------------------------------------------------------------------
 
-_WORKSPACE_MEMBER_PERMS = [
-    "workspace:view_settings",
-    "workspace_member:view",
-    "project:browse",
-    "project:create",
-    "project:self_join_public",
-    "custom_role:view",
-]
-
-_WORKSPACE_GUEST_PERMS = [
-    "workspace_member:view",
-    "project:browse",
-]
-
-_PROJECT_MEMBER_PERMS = [
-    "workitem:view",
-    "workitem:create",
-    "workitem:edit",
-    "workitem:delete+creator",
-    "comment:create",
-    "comment:edit+creator",
-    "comment:delete+creator",
-    "cycle:view",
-    "cycle:create",
-    "cycle:edit",
-    "cycle:delete+creator",
-    "module:view",
-    "module:create",
-    "module:edit",
-    "module:delete+creator",
-    "page:view",
-    "page:create",
-    "page:edit",
-]
-
-_PROJECT_GUEST_PERMS = [
-    "workitem:view",
-    "comment:create",
-    "comment:edit+creator",
-    "comment:delete+creator",
-    "cycle:view",
-    "module:view",
-    "page:view",
-]
-
-# Each entry: (name, scope, permissions, authority_level)
-SYSTEM_SCHEME_DEFS: list[tuple[str, str, list[str], int]] = [
+# Each entry: (name, scope, authority_level)
+SYSTEM_ROLE_DEFS: list[tuple[str, str, int]] = [
     # Workspace-scoped
-    ("Workspace Admin", "workspace", WORKSPACE_PERMISSIONS, 20),
-    ("Workspace Member", "workspace", _WORKSPACE_MEMBER_PERMS, 15),
-    ("Workspace Guest", "workspace", _WORKSPACE_GUEST_PERMS, 5),
+    ("Workspace Admin", "workspace", 20),
+    ("Workspace Member", "workspace", 15),
+    ("Workspace Guest", "workspace", 5),
     # Project-scoped
-    ("Project Admin", "project", PROJECT_PERMISSIONS, 20),
-    ("Project Member", "project", _PROJECT_MEMBER_PERMS, 15),
-    ("Project Guest", "project", _PROJECT_GUEST_PERMS, 5),
+    ("Project Admin", "project", 20),
+    ("Project Member", "project", 15),
+    ("Project Guest", "project", 5),
 ]
 
 
 class Command(BaseCommand):
-    help = "Seed system permission schemes and custom roles for all workspaces (idempotent)."
+    help = "Seed system custom roles for all workspaces (idempotent)."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -112,26 +62,9 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS("✓ System roles seeded successfully."))
 
-    # ---------------------------------------------------------------------- #
-
     def _seed_workspace(self, workspace: Workspace) -> None:
-        for name, scope, permissions, authority_level in SYSTEM_SCHEME_DEFS:
-            # Upsert scheme — update permissions if already exists
-            scheme, created = PermissionScheme.objects.get_or_create(
-                workspace=workspace,
-                name=name,
-                scope=scope,
-                defaults={
-                    "permissions": permissions,
-                    "is_system": True,
-                },
-            )
-            if not created and scheme.permissions != permissions:
-                scheme.permissions = permissions
-                scheme.save(disable_auto_set_user=True)
-
-            # Upsert role (1-to-1 with scheme)
-            role, _ = CustomRole.objects.get_or_create(
+        for name, scope, authority_level in SYSTEM_ROLE_DEFS:
+            CustomRole.objects.get_or_create(
                 workspace=workspace,
                 name=name,
                 scope=scope,
@@ -140,8 +73,5 @@ class Command(BaseCommand):
                     "authority_level": authority_level,
                 },
             )
-
-            # Ensure the scheme is attached to the role
-            CustomRoleScheme.objects.get_or_create(role=role, scheme=scheme)
 
         self.stdout.write(f"  ✓ {workspace.slug}")

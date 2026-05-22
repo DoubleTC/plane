@@ -484,6 +484,43 @@
         "heading": "Scripts",
         "new_script": "Novo Script",
         "description": "Automatize seus fluxos de trabalho com scripts personalizados e regras de automação."
+      },
+      "roles": {
+        "title": "Funções personalizadas",
+        "description": "Crie rótulos de função para classificar e agrupar membros do seu espaço de trabalho e projetos.",
+        "add_role": "Adicionar função",
+        "no_roles": {
+          "title": "Ainda não há funções personalizadas",
+          "description": "Crie funções personalizadas para classificar os membros do seu espaço de trabalho."
+        },
+        "role": {
+          "name": "Nome da função",
+          "description": "Descrição",
+          "scope": "Escopo",
+          "scope_workspace": "Espaço de trabalho",
+          "scope_project": "Projeto",
+          "member_count": "{count} membro(s)",
+          "system_role": "Função do sistema",
+          "delete_role": "Excluir função",
+          "edit_role": "Editar função",
+          "create": {
+            "title": "Criar função",
+            "success": "Função criada com sucesso.",
+            "error": "Falha ao criar função. Tente novamente."
+          },
+          "update": {
+            "success": "Função atualizada com sucesso.",
+            "error": "Falha ao atualizar função. Tente novamente."
+          },
+          "delete": {
+            "title": "Excluir função",
+            "description": "Esta função está atribuída a {count} membro(s). Selecione uma função de substituição antes de excluir.",
+            "replacement_label": "Função de substituição",
+            "confirm": "Excluir",
+            "success": "Função excluída com sucesso.",
+            "error": "Falha ao excluir função. Tente novamente."
+          }
+        }
       }
     },
     "empty_state": {

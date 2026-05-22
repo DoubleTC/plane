@@ -484,6 +484,43 @@
         "heading": "Skrip",
         "new_script": "Skrip Baru",
         "description": "Otomatisasi alur kerja Anda dengan skrip kustom dan aturan otomatisasi."
+      },
+      "roles": {
+        "title": "Peran kustom",
+        "description": "Buat label peran untuk mengklasifikasikan dan mengelompokkan anggota ruang kerja dan proyek Anda.",
+        "add_role": "Tambah peran",
+        "no_roles": {
+          "title": "Belum ada peran kustom",
+          "description": "Buat peran kustom untuk mengklasifikasikan anggota ruang kerja Anda."
+        },
+        "role": {
+          "name": "Nama peran",
+          "description": "Deskripsi",
+          "scope": "Lingkup",
+          "scope_workspace": "Ruang kerja",
+          "scope_project": "Proyek",
+          "member_count": "{count} anggota",
+          "system_role": "Peran sistem",
+          "delete_role": "Hapus peran",
+          "edit_role": "Ubah peran",
+          "create": {
+            "title": "Buat peran",
+            "success": "Peran berhasil dibuat.",
+            "error": "Gagal membuat peran. Coba lagi."
+          },
+          "update": {
+            "success": "Peran berhasil diperbarui.",
+            "error": "Gagal memperbarui peran. Coba lagi."
+          },
+          "delete": {
+            "title": "Hapus peran",
+            "description": "Peran ini ditetapkan kepada {count} anggota. Silakan pilih peran pengganti sebelum menghapus.",
+            "replacement_label": "Peran pengganti",
+            "confirm": "Hapus",
+            "success": "Peran berhasil dihapus.",
+            "error": "Gagal menghapus peran. Coba lagi."
+          }
+        }
       }
     },
     "empty_state": {

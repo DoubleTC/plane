@@ -81,6 +81,12 @@ export interface IBaseProjectMemberStore {
     userId: string,
     role: EUserProjectRoles
   ) => Promise<TProjectMembership>;
+  updateMemberCustomRole: (
+    workspaceSlug: string,
+    projectId: string,
+    userId: string,
+    customRoleId: string | null
+  ) => Promise<TProjectMembership>;
   removeMemberFromProject: (workspaceSlug: string, projectId: string, userId: string) => Promise<void>;
 }
 
@@ -120,6 +126,7 @@ export abstract class BaseProjectMemberStore implements IBaseProjectMemberStore 
       updateProjectUserProperties: action,
       bulkAddMembersToProject: action,
       updateMemberRole: action,
+      updateMemberCustomRole: action,
       removeMemberFromProject: action,
     });
     // root store
@@ -219,6 +226,7 @@ export abstract class BaseProjectMemberStore implements IBaseProjectMemberStore 
       id: projectMember.id,
       role: projectMember.role,
       original_role: projectMember.original_role,
+      custom_role: projectMember.custom_role ?? null,
       member: {
         ...userDetails,
         joining_date: projectMember.created_at ?? undefined,
@@ -272,6 +280,7 @@ export abstract class BaseProjectMemberStore implements IBaseProjectMemberStore 
       id: projectMember.id,
       role: projectMember.role,
       original_role: projectMember.original_role,
+      custom_role: projectMember.custom_role ?? null,
       member: {
         ...userDetails,
         joining_date: projectMember.created_at ?? undefined,
@@ -401,6 +410,31 @@ export abstract class BaseProjectMemberStore implements IBaseProjectMemberStore 
     }
   };
 
+  updateMemberCustomRole = async (
+    workspaceSlug: string,
+    projectId: string,
+    userId: string,
+    customRoleId: string | null
+  ) => {
+    const memberDetails = this.getProjectMemberDetails(userId, projectId);
+    if (!memberDetails || !memberDetails?.id) throw new Error("Member not found");
+    const previousCustomRole = this.projectMemberMap?.[projectId]?.[userId]?.custom_role ?? null;
+    try {
+      runInAction(() => {
+        set(this.projectMemberMap, [projectId, userId, "custom_role"], customRoleId);
+      });
+      const response = await this.projectMemberService.updateProjectMember(workspaceSlug, projectId, memberDetails.id, {
+        custom_role: customRoleId,
+      });
+      return response;
+    } catch (error) {
+      runInAction(() => {
+        set(this.projectMemberMap, [projectId, userId, "custom_role"], previousCustomRole);
+      });
+      throw error;
+    }
+  };
+
   /**
    * @description Handles the removal of a member from a project
    * @param projectId - The ID of the project to remove the member from
@@ -432,10 +466,9 @@ export abstract class BaseProjectMemberStore implements IBaseProjectMemberStore 
   removeMemberFromProject = async (workspaceSlug: string, projectId: string, userId: string) => {
     const memberDetails = this.getProjectMemberDetails(userId, projectId);
     if (!memberDetails || !memberDetails?.id) throw new Error("Member not found");
-    await this.projectMemberService.deleteProjectMember(workspaceSlug, projectId, memberDetails?.id).then(() => {
-      runInAction(() => {
-        this.processMemberRemoval(projectId, userId);
-      });
+    await this.projectMemberService.deleteProjectMember(workspaceSlug, projectId, memberDetails?.id);
+    runInAction(() => {
+      this.processMemberRemoval(projectId, userId);
     });
   };
 

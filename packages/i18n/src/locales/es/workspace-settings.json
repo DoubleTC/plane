@@ -484,6 +484,43 @@
         "heading": "Scripts",
         "new_script": "Nuevo script",
         "description": "Automatiza tus flujos de trabajo con scripts personalizados y reglas de automatización."
+      },
+      "roles": {
+        "title": "Roles personalizados",
+        "description": "Cree etiquetas de rol para clasificar y agrupar a los miembros de su espacio de trabajo y proyectos.",
+        "add_role": "Añadir rol",
+        "no_roles": {
+          "title": "Todavía no hay roles personalizados",
+          "description": "Cree roles personalizados para clasificar a los miembros de su espacio de trabajo."
+        },
+        "role": {
+          "name": "Nombre del rol",
+          "description": "Descripción",
+          "scope": "Ámbito",
+          "scope_workspace": "Espacio de trabajo",
+          "scope_project": "Proyecto",
+          "member_count": "{count} miembro(s)",
+          "system_role": "Rol del sistema",
+          "delete_role": "Eliminar rol",
+          "edit_role": "Editar rol",
+          "create": {
+            "title": "Crear rol",
+            "success": "Rol creado correctamente.",
+            "error": "No se pudo crear el rol. Inténtelo de nuevo."
+          },
+          "update": {
+            "success": "Rol actualizado correctamente.",
+            "error": "No se pudo actualizar el rol. Inténtelo de nuevo."
+          },
+          "delete": {
+            "title": "Eliminar rol",
+            "description": "Este rol está asignado a {count} miembro(s). Seleccione un rol de reemplazo antes de eliminar.",
+            "replacement_label": "Rol de reemplazo",
+            "confirm": "Eliminar",
+            "success": "Rol eliminado correctamente.",
+            "error": "No se pudo eliminar el rol. Inténtelo de nuevo."
+          }
+        }
       }
     },
     "empty_state": {

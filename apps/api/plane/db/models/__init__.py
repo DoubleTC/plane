@@ -91,4 +91,4 @@ from .sticky import Sticky
 
 from .description import Description, DescriptionVersion
 
-from .roles import PermissionScheme, CustomRole, CustomRoleScheme
+from .roles import CustomRole

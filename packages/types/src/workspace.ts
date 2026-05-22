@@ -83,6 +83,7 @@ export interface IWorkspaceMember {
   id: string;
   member: IUserLite;
   role: TUserPermissions | EUserWorkspaceRoles;
+  custom_role?: string | null;
   created_at?: string;
   avatar_url?: string;
   email?: string;

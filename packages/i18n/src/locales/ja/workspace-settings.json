@@ -484,6 +484,43 @@
         "heading": "スクリプト",
         "new_script": "新しいスクリプト",
         "description": "カスタムスクリプトと自動化ルールでワークフローを自動化します。"
+      },
+      "roles": {
+        "title": "カスタムロール",
+        "description": "ワークスペースとプロジェクトのメンバーを分類・グループ化するためのロールラベルを作成します。",
+        "add_role": "ロールを追加",
+        "no_roles": {
+          "title": "カスタムロールはまだありません",
+          "description": "ワークスペースメンバーを分類するためにカスタムロールを作成してください。"
+        },
+        "role": {
+          "name": "ロール名",
+          "description": "説明",
+          "scope": "範囲",
+          "scope_workspace": "ワークスペース",
+          "scope_project": "プロジェクト",
+          "member_count": "{count}人のメンバー",
+          "system_role": "システムロール",
+          "delete_role": "ロールを削除",
+          "edit_role": "ロールを編集",
+          "create": {
+            "title": "ロールを作成",
+            "success": "ロールを作成しました。",
+            "error": "ロールの作成に失敗しました。もう一度お試しください。"
+          },
+          "update": {
+            "success": "ロールを更新しました。",
+            "error": "ロールの更新に失敗しました。もう一度お試しください。"
+          },
+          "delete": {
+            "title": "ロールを削除",
+            "description": "このロールは{count}人のメンバーに割り当てられています。削除する前に置換ロールを選択してください。",
+            "replacement_label": "置換ロール",
+            "confirm": "削除",
+            "success": "ロールを削除しました。",
+            "error": "ロールの削除に失敗しました。もう一度お試しください。"
+          }
+        }
       }
     },
     "empty_state": {

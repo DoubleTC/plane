@@ -484,6 +484,43 @@
         "heading": "Skripte",
         "new_script": "Neues Skript",
         "description": "Automatisieren Sie Ihre Workflows mit benutzerdefinierten Skripten und Automatisierungsregeln."
+      },
+      "roles": {
+        "title": "Benutzerdefinierte Rollen",
+        "description": "Erstellen Sie Rollen-Labels, um Mitglieder Ihres Arbeitsbereichs und Ihrer Projekte zu klassifizieren und zu gruppieren.",
+        "add_role": "Rolle hinzufügen",
+        "no_roles": {
+          "title": "Noch keine benutzerdefinierten Rollen",
+          "description": "Erstellen Sie benutzerdefinierte Rollen, um die Mitglieder Ihres Arbeitsbereichs zu klassifizieren."
+        },
+        "role": {
+          "name": "Rollenname",
+          "description": "Beschreibung",
+          "scope": "Geltungsbereich",
+          "scope_workspace": "Arbeitsbereich",
+          "scope_project": "Projekt",
+          "member_count": "{count} Mitglied(er)",
+          "system_role": "Systemrolle",
+          "delete_role": "Rolle löschen",
+          "edit_role": "Rolle bearbeiten",
+          "create": {
+            "title": "Rolle erstellen",
+            "success": "Rolle erfolgreich erstellt.",
+            "error": "Rolle konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+          },
+          "update": {
+            "success": "Rolle erfolgreich aktualisiert.",
+            "error": "Rolle konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+          },
+          "delete": {
+            "title": "Rolle löschen",
+            "description": "Diese Rolle ist {count} Mitglied(ern) zugewiesen. Bitte wählen Sie vor dem Löschen eine Ersatzrolle aus.",
+            "replacement_label": "Ersatzrolle",
+            "confirm": "Löschen",
+            "success": "Rolle erfolgreich gelöscht.",
+            "error": "Rolle konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+          }
+        }
       }
     },
     "empty_state": {

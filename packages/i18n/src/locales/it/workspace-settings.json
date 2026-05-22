@@ -484,6 +484,43 @@
         "heading": "Script",
         "new_script": "Nuovo script",
         "description": "Automatizza i tuoi flussi di lavoro con script personalizzati e regole di automazione."
+      },
+      "roles": {
+        "title": "Ruoli personalizzati",
+        "description": "Crea etichette di ruolo per classificare e raggruppare i membri del tuo spazio di lavoro e dei progetti.",
+        "add_role": "Aggiungi ruolo",
+        "no_roles": {
+          "title": "Nessun ruolo personalizzato",
+          "description": "Crea ruoli personalizzati per classificare i membri del tuo spazio di lavoro."
+        },
+        "role": {
+          "name": "Nome del ruolo",
+          "description": "Descrizione",
+          "scope": "Ambito",
+          "scope_workspace": "Spazio di lavoro",
+          "scope_project": "Progetto",
+          "member_count": "{count} membro/i",
+          "system_role": "Ruolo di sistema",
+          "delete_role": "Elimina ruolo",
+          "edit_role": "Modifica ruolo",
+          "create": {
+            "title": "Crea ruolo",
+            "success": "Ruolo creato con successo.",
+            "error": "Impossibile creare il ruolo. Riprova."
+          },
+          "update": {
+            "success": "Ruolo aggiornato con successo.",
+            "error": "Impossibile aggiornare il ruolo. Riprova."
+          },
+          "delete": {
+            "title": "Elimina ruolo",
+            "description": "Questo ruolo è assegnato a {count} membro/i. Seleziona un ruolo sostitutivo prima di eliminare.",
+            "replacement_label": "Ruolo sostitutivo",
+            "confirm": "Elimina",
+            "success": "Ruolo eliminato con successo.",
+            "error": "Impossibile eliminare il ruolo. Riprova."
+          }
+        }
       }
     },
     "empty_state": {
