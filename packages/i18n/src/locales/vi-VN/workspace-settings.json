@@ -51,7 +51,8 @@
           "email_address": "Địa chỉ email",
           "account_type": "Loại tài khoản",
           "authentication": "Xác thực",
-          "joining_date": "Ngày tham gia"
+          "joining_date": "Ngày tham gia",
+          "custom_role": "Vai trò tùy chỉnh"
         },
         "modal": {
           "title": "Mời người cộng tác",

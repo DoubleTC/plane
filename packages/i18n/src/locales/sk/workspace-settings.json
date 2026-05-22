@@ -51,7 +51,8 @@
           "email_address": "E-mailová adresa",
           "account_type": "Typ účtu",
           "authentication": "Overovanie",
-          "joining_date": "Dátum pripojenia"
+          "joining_date": "Dátum pripojenia",
+          "custom_role": "Vlastná rola"
         },
         "modal": {
           "title": "Pozvať spolupracovníkov",

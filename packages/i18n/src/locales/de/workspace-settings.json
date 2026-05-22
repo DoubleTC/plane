@@ -51,7 +51,8 @@
           "email_address": "E-Mail-Adresse",
           "account_type": "Kontotyp",
           "authentication": "Authentifizierung",
-          "joining_date": "Beitrittsdatum"
+          "joining_date": "Beitrittsdatum",
+          "custom_role": "Benutzerdefinierte Rolle"
         },
         "modal": {
           "title": "Mitarbeiter einladen",

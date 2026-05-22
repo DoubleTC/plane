@@ -51,7 +51,8 @@
           "email_address": "メールアドレス",
           "account_type": "アカウントタイプ",
           "authentication": "認証",
-          "joining_date": "参加日"
+          "joining_date": "参加日",
+          "custom_role": "カスタムロール"
         },
         "modal": {
           "title": "共同作業者を招待",

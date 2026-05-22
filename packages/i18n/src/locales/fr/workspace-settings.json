@@ -51,7 +51,8 @@
           "email_address": "Adresse e-mail",
           "account_type": "Type de compte",
           "authentication": "Authentification",
-          "joining_date": "Date d’adhésion"
+          "joining_date": "Date d’adhésion",
+          "custom_role": "Rôle personnalisé"
         },
         "modal": {
           "title": "Inviter des personnes à collaborer",

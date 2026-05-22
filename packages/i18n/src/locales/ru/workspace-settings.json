@@ -51,7 +51,8 @@
           "email_address": "Email",
           "account_type": "Тип аккаунта",
           "authentication": "Аутентификация",
-          "joining_date": "Дата присоединения"
+          "joining_date": "Дата присоединения",
+          "custom_role": "Пользовательская роль"
         },
         "modal": {
           "title": "Пригласить участников",

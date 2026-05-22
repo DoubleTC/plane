@@ -51,7 +51,8 @@
           "email_address": "電子郵件地址",
           "account_type": "帳號類型",
           "authentication": "驗證",
-          "joining_date": "加入日期"
+          "joining_date": "加入日期",
+          "custom_role": "自訂角色"
         },
         "modal": {
           "title": "邀請人員協作",

@@ -51,7 +51,8 @@
           "email_address": "E-mailová adresa",
           "account_type": "Typ účtu",
           "authentication": "Ověřování",
-          "joining_date": "Datum připojení"
+          "joining_date": "Datum připojení",
+          "custom_role": "Vlastní role"
         },
         "modal": {
           "title": "Pozvat spolupracovníky",

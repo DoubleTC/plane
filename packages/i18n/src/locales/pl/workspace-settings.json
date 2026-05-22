@@ -51,7 +51,8 @@
           "email_address": "Adres e-mail",
           "account_type": "Typ konta",
           "authentication": "Uwierzytelnianie",
-          "joining_date": "Data dołączenia"
+          "joining_date": "Data dołączenia",
+          "custom_role": "Niestandardowa rola"
         },
         "modal": {
           "title": "Zaproś współpracowników",

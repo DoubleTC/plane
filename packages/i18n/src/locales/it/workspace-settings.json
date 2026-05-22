@@ -51,7 +51,8 @@
           "email_address": "Indirizzo email",
           "account_type": "Tipo di account",
           "authentication": "Autenticazione",
-          "joining_date": "Data di ingresso"
+          "joining_date": "Data di ingresso",
+          "custom_role": "Ruolo personalizzato"
         },
         "modal": {
           "title": "Invita persone a collaborare",

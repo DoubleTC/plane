@@ -51,7 +51,8 @@
           "email_address": "Adresă de email",
           "account_type": "Tip cont",
           "authentication": "Autentificare",
-          "joining_date": "Data înscrierii"
+          "joining_date": "Data înscrierii",
+          "custom_role": "Rol personalizat"
         },
         "modal": {
           "title": "Invită persoane cu care să colaborezi",

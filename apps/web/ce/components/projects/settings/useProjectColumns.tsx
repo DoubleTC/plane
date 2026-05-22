@@ -7,6 +7,7 @@
 import { useState } from "react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import type { IWorkspaceMember, TProjectMembership } from "@plane/types";
 import { renderFormattedDate } from "@plane/utils";
 // components
@@ -28,6 +29,8 @@ type TUseProjectColumnsProps = {
 
 export const useProjectColumns = (props: TUseProjectColumnsProps) => {
   const { projectId, workspaceSlug } = props;
+  // i18n
+  const { t } = useTranslation();
   // states
   const [removeMemberModal, setRemoveMemberModal] = useState<RowData | null>(null);
 
@@ -123,7 +126,7 @@ export const useProjectColumns = (props: TUseProjectColumnsProps) => {
     },
     {
       key: "Custom Role",
-      content: "Custom role",
+      content: t("workspace_settings.settings.members.details.custom_role"),
       tdRender: (rowData: RowData) => (
         <CustomRoleColumn rowData={rowData} workspaceSlug={workspaceSlug} projectId={projectId} />
       ),

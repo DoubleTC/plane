@@ -51,7 +51,8 @@
           "email_address": "이메일 주소",
           "account_type": "계정 유형",
           "authentication": "인증",
-          "joining_date": "가입 날짜"
+          "joining_date": "가입 날짜",
+          "custom_role": "사용자 정의 역할"
         },
         "modal": {
           "title": "사람들을 초대하여 협업하세요",

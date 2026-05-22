@@ -51,7 +51,8 @@
           "email_address": "E-posta adresi",
           "account_type": "Hesap türü",
           "authentication": "Kimlik Doğrulama",
-          "joining_date": "Katılma tarihi"
+          "joining_date": "Katılma tarihi",
+          "custom_role": "Özel rol"
         },
         "modal": {
           "title": "İşbirliği yapmaları için kişileri davet edin",

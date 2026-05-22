@@ -51,7 +51,8 @@
           "email_address": "Електронна пошта",
           "account_type": "Тип облікового запису",
           "authentication": "Автентифікація",
-          "joining_date": "Дата приєднання"
+          "joining_date": "Дата приєднання",
+          "custom_role": "Користувацька роль"
         },
         "modal": {
           "title": "Запросити колег",

@@ -109,7 +109,7 @@ export const useMemberColumns = () => {
 
     {
       key: "Custom role",
-      content: "Custom role",
+      content: t("workspace_settings.settings.members.details.custom_role"),
       tdRender: (rowData: RowData) => <CustomRoleColumn rowData={rowData} workspaceSlug={workspaceSlug} />,
     },
 

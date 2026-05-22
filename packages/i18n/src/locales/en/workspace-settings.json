@@ -51,7 +51,8 @@
           "email_address": "Email address",
           "account_type": "Account type",
           "authentication": "Authentication",
-          "joining_date": "Joining date"
+          "joining_date": "Joining date",
+          "custom_role": "Custom role"
         },
         "modal": {
           "title": "Invite people to collaborate",

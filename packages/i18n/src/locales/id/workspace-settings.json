@@ -51,7 +51,8 @@
           "email_address": "Alamat email",
           "account_type": "Tipe akun",
           "authentication": "Autentikasi",
-          "joining_date": "Tanggal bergabung"
+          "joining_date": "Tanggal bergabung",
+          "custom_role": "Peran kustom"
         },
         "modal": {
           "title": "Undang orang untuk berkolaborasi",

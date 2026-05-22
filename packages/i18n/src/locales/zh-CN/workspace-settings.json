@@ -51,7 +51,8 @@
           "email_address": "电子邮件地址",
           "account_type": "账户类型",
           "authentication": "身份验证",
-          "joining_date": "加入日期"
+          "joining_date": "加入日期",
+          "custom_role": "自定义角色"
         },
         "modal": {
           "title": "邀请人员协作",
