@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Milník} few {Milníky} other {Milníků}}",
+    "no_milestone": "Žádný milník",
+    "page_title": "Milníky",
+    "add_milestone": "Přidat milník",
+    "create_milestone": "Vytvořit milník",
+    "edit_milestone": "Upravit milník",
+    "issues_label": "úkolů",
+    "fields": {
+      "name": "Název",
+      "name_placeholder": "Např. Spuštění Q4, Vydání MVP",
+      "description": "Popis",
+      "description_placeholder": "Popište účel tohoto milníku...",
+      "target_date": "Cílové datum"
+    },
+    "validation": {
+      "name_required": "Název milníku je povinný."
+    },
+    "toast": {
+      "created_title": "Milník vytvořen",
+      "created_message": "Milník byl úspěšně vytvořen.",
+      "updated_title": "Milník aktualizován",
+      "updated_message": "Milník byl úspěšně aktualizován.",
+      "deleted_title": "Milník smazán",
+      "deleted_message": "\"{name}\" byl smazán.",
+      "delete_error": "Milník nelze smazat. Zkuste to znovu.",
+      "save_error": "Milník nelze uložit. Zkuste to znovu.",
+      "archived_title": "Milník archivován",
+      "unarchived_title": "Milník obnoven"
+    },
+    "delete": {
+      "title": "Smazat milník",
+      "content": "Opravdu chcete smazat \"{name}\"? Tuto akci nelze vrátit zpět."
+    },
+    "empty_state": {
+      "title": "Zatím žádné milníky",
+      "description": "Vytvořte milník pro sledování klíčových výstupů a termínů dokončení."
+    },
+    "disabled": {
+      "title": "Milníky jsou zakázány",
+      "description": "Povolte milníky v nastavení projektu.",
+      "cta": "Povolit milníky"
+    }
+  }
+}

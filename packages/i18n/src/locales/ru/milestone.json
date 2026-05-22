@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Веха} few {Вехи} other {Вех}}",
+    "no_milestone": "Нет вехи",
+    "page_title": "Вехи",
+    "add_milestone": "Добавить веху",
+    "create_milestone": "Создать веху",
+    "edit_milestone": "Редактировать веху",
+    "issues_label": "задач",
+    "fields": {
+      "name": "Название",
+      "name_placeholder": "Например: Запуск Q4, Выпуск MVP",
+      "description": "Описание",
+      "description_placeholder": "Опишите цель этой вехи...",
+      "target_date": "Целевая дата"
+    },
+    "validation": {
+      "name_required": "Название вехи обязательно."
+    },
+    "toast": {
+      "created_title": "Веха создана",
+      "created_message": "Веха успешно создана.",
+      "updated_title": "Веха обновлена",
+      "updated_message": "Веха успешно обновлена.",
+      "deleted_title": "Веха удалена",
+      "deleted_message": "«{name}» удалена.",
+      "delete_error": "Не удалось удалить веху. Попробуйте снова.",
+      "save_error": "Не удалось сохранить веху. Попробуйте снова.",
+      "archived_title": "Веха архивирована",
+      "unarchived_title": "Веха восстановлена"
+    },
+    "delete": {
+      "title": "Удалить веху",
+      "content": "Вы уверены, что хотите удалить «{name}»? Это действие нельзя отменить."
+    },
+    "empty_state": {
+      "title": "Вех пока нет",
+      "description": "Создайте веху для отслеживания ключевых результатов и сроков."
+    },
+    "disabled": {
+      "title": "Вехи отключены",
+      "description": "Включите вехи в настройках проекта.",
+      "cta": "Включить вехи"
+    }
+  }
+}

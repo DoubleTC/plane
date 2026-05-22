@@ -61,6 +61,8 @@ import type { IProjectViewStore } from "./project-view.store";
 import { ProjectViewStore } from "./project-view.store";
 import type { IRolesStore } from "./roles.store";
 import { RolesStore } from "./roles.store";
+import type { IMilestoneStore } from "./milestone.store";
+import { MilestoneStore } from "./milestone.store";
 import type { IRouterStore } from "./router.store";
 import { RouterStore } from "./router.store";
 import type { IStickyStore } from "./sticky/sticky.store";
@@ -104,6 +106,7 @@ export class CoreRootStore {
   workItemFilters: IWorkItemFilterStore;
   powerK: IPowerKStore;
   roles: IRolesStore;
+  milestone: IMilestoneStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -136,6 +139,7 @@ export class CoreRootStore {
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
     this.roles = new RolesStore();
+    this.milestone = new MilestoneStore(this);
   }
 
   resetOnSignOut() {
@@ -170,5 +174,6 @@ export class CoreRootStore {
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
     this.roles = new RolesStore();
+    this.milestone = new MilestoneStore(this);
   }
 }

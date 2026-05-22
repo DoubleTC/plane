@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Meilenstein} other {Meilensteine}}",
+    "no_milestone": "Kein Meilenstein",
+    "page_title": "Meilensteine",
+    "add_milestone": "Meilenstein hinzufügen",
+    "create_milestone": "Meilenstein erstellen",
+    "edit_milestone": "Meilenstein bearbeiten",
+    "issues_label": "Aufgaben",
+    "fields": {
+      "name": "Name",
+      "name_placeholder": "z.B. Q4 Launch, MVP-Veröffentlichung",
+      "description": "Beschreibung",
+      "description_placeholder": "Beschreiben Sie den Zweck dieses Meilensteins...",
+      "target_date": "Zieldatum"
+    },
+    "validation": {
+      "name_required": "Meilensteinname ist erforderlich."
+    },
+    "toast": {
+      "created_title": "Meilenstein erstellt",
+      "created_message": "Meilenstein wurde erfolgreich erstellt.",
+      "updated_title": "Meilenstein aktualisiert",
+      "updated_message": "Meilenstein wurde erfolgreich aktualisiert.",
+      "deleted_title": "Meilenstein gelöscht",
+      "deleted_message": "\"{name}\" wurde gelöscht.",
+      "delete_error": "Meilenstein konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.",
+      "save_error": "Meilenstein konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+      "archived_title": "Meilenstein archiviert",
+      "unarchived_title": "Meilenstein wiederhergestellt"
+    },
+    "delete": {
+      "title": "Meilenstein löschen",
+      "content": "Sind Sie sicher, dass Sie \"{name}\" löschen möchten? Dies kann nicht rückgängig gemacht werden."
+    },
+    "empty_state": {
+      "title": "Noch keine Meilensteine",
+      "description": "Erstellen Sie einen Meilenstein, um wichtige Liefergegenstände und Fertigstellungstermine zu verfolgen."
+    },
+    "disabled": {
+      "title": "Meilensteine sind deaktiviert",
+      "description": "Aktivieren Sie Meilensteine in den Projekteinstellungen.",
+      "cta": "Meilensteine aktivieren"
+    }
+  }
+}

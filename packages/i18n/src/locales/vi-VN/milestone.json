@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Cột mốc} other {Cột mốc}}",
+    "no_milestone": "Không có cột mốc",
+    "page_title": "Cột mốc",
+    "add_milestone": "Thêm cột mốc",
+    "create_milestone": "Tạo cột mốc",
+    "edit_milestone": "Chỉnh sửa cột mốc",
+    "issues_label": "công việc",
+    "fields": {
+      "name": "Tên",
+      "name_placeholder": "Ví dụ: Ra mắt Q4, Bản phát hành MVP",
+      "description": "Mô tả",
+      "description_placeholder": "Mô tả mục đích của cột mốc này...",
+      "target_date": "Ngày mục tiêu"
+    },
+    "validation": {
+      "name_required": "Tên cột mốc là bắt buộc."
+    },
+    "toast": {
+      "created_title": "Cột mốc đã được tạo",
+      "created_message": "Cột mốc đã được tạo thành công.",
+      "updated_title": "Cột mốc đã được cập nhật",
+      "updated_message": "Cột mốc đã được cập nhật thành công.",
+      "deleted_title": "Cột mốc đã bị xóa",
+      "deleted_message": "\"{name}\" đã bị xóa.",
+      "delete_error": "Không thể xóa cột mốc. Vui lòng thử lại.",
+      "save_error": "Không thể lưu cột mốc. Vui lòng thử lại.",
+      "archived_title": "Cột mốc đã được lưu trữ",
+      "unarchived_title": "Cột mốc đã được khôi phục"
+    },
+    "delete": {
+      "title": "Xóa cột mốc",
+      "content": "Bạn có chắc muốn xóa \"{name}\"? Hành động này không thể hoàn tác."
+    },
+    "empty_state": {
+      "title": "Chưa có cột mốc nào",
+      "description": "Tạo cột mốc để theo dõi các mốc quan trọng và ngày hoàn thành."
+    },
+    "disabled": {
+      "title": "Cột mốc bị tắt",
+      "description": "Bật cột mốc trong cài đặt dự án để theo dõi các mốc quan trọng.",
+      "cta": "Bật cột mốc"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Hito} other {Hitos}}",
+    "no_milestone": "Sin hito",
+    "page_title": "Hitos",
+    "add_milestone": "Agregar hito",
+    "create_milestone": "Crear hito",
+    "edit_milestone": "Editar hito",
+    "issues_label": "tareas",
+    "fields": {
+      "name": "Nombre",
+      "name_placeholder": "Ej. Lanzamiento Q4, Lanzamiento MVP",
+      "description": "Descripción",
+      "description_placeholder": "Describe el propósito de este hito...",
+      "target_date": "Fecha objetivo"
+    },
+    "validation": {
+      "name_required": "El nombre del hito es obligatorio."
+    },
+    "toast": {
+      "created_title": "Hito creado",
+      "created_message": "El hito se ha creado correctamente.",
+      "updated_title": "Hito actualizado",
+      "updated_message": "El hito se ha actualizado correctamente.",
+      "deleted_title": "Hito eliminado",
+      "deleted_message": "\"{name}\" ha sido eliminado.",
+      "delete_error": "No se pudo eliminar el hito. Inténtelo de nuevo.",
+      "save_error": "No se pudo guardar el hito. Inténtelo de nuevo.",
+      "archived_title": "Hito archivado",
+      "unarchived_title": "Hito restaurado"
+    },
+    "delete": {
+      "title": "Eliminar hito",
+      "content": "¿Está seguro de que desea eliminar \"{name}\"? Esta acción no se puede deshacer."
+    },
+    "empty_state": {
+      "title": "Aún no hay hitos",
+      "description": "Cree un hito para rastrear entregables clave y fechas de finalización."
+    },
+    "disabled": {
+      "title": "Los hitos están desactivados",
+      "description": "Active los hitos en la configuración del proyecto.",
+      "cta": "Activar hitos"
+    }
+  }
+}

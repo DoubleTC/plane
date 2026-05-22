@@ -240,3 +240,5 @@ from .user.base import AccountEndpoint, ProfileEndpoint, UserSessionEndpoint
 from .timezone.base import TimezoneEndpoint
 
 from .workspace.roles import CustomRoleViewSet
+
+from .milestone import MilestoneViewSet, MilestoneArchiveViewSet, MilestoneIssueViewSet

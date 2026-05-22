@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Kilometre taşı} other {Kilometre taşları}}",
+    "no_milestone": "Kilometre taşı yok",
+    "page_title": "Kilometre Taşları",
+    "add_milestone": "Kilometre taşı ekle",
+    "create_milestone": "Kilometre taşı oluştur",
+    "edit_milestone": "Kilometre taşını düzenle",
+    "issues_label": "görev",
+    "fields": {
+      "name": "Ad",
+      "name_placeholder": "Örn. Q4 Lansmanı, MVP Sürümü",
+      "description": "Açıklama",
+      "description_placeholder": "Bu kilometre taşının amacını açıklayın...",
+      "target_date": "Hedef tarih"
+    },
+    "validation": {
+      "name_required": "Kilometre taşı adı zorunludur."
+    },
+    "toast": {
+      "created_title": "Kilometre taşı oluşturuldu",
+      "created_message": "Kilometre taşı başarıyla oluşturuldu.",
+      "updated_title": "Kilometre taşı güncellendi",
+      "updated_message": "Kilometre taşı başarıyla güncellendi.",
+      "deleted_title": "Kilometre taşı silindi",
+      "deleted_message": "\"{name}\" silindi.",
+      "delete_error": "Kilometre taşı silinemedi. Lütfen tekrar deneyin.",
+      "save_error": "Kilometre taşı kaydedilemedi. Lütfen tekrar deneyin.",
+      "archived_title": "Kilometre taşı arşivlendi",
+      "unarchived_title": "Kilometre taşı geri yüklendi"
+    },
+    "delete": {
+      "title": "Kilometre taşını sil",
+      "content": "\"{name}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+    },
+    "empty_state": {
+      "title": "Henüz kilometre taşı yok",
+      "description": "Temel teslimatları ve tamamlanma tarihlerini izlemek için bir kilometre taşı oluşturun."
+    },
+    "disabled": {
+      "title": "Kilometre taşları devre dışı",
+      "description": "Kilometre taşlarını proje ayarlarından etkinleştirin.",
+      "cta": "Kilometre taşlarını etkinleştir"
+    }
+  }
+}

@@ -835,8 +835,8 @@
   "pi_chat": "Plane AI",
   "in_app": "Uygulama İçi",
   "forms": "Formlar",
-  "milestones": "Kilometre taşları",
-  "milestones_description": "Kilometre taşları, iş öğelerini ortak tamamlanma tarihlerine göre hizalamak için bir katman sağlar.",
+  "milestones": "Kilometre Taşları",
+  "milestones_description": "Temel teslimatları takip edin ve iş öğelerini paylaşılan tamamlanma tarihlerine göre hizalayın.",
   "file_upload": {
     "upload_text": "Dosya yüklemek için buraya tıklayın",
     "drag_drop_text": "Sürükle ve Bırak",

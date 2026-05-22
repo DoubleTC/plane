@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Marco} other {Marcos}}",
+    "no_milestone": "Nenhum marco",
+    "page_title": "Marcos",
+    "add_milestone": "Adicionar marco",
+    "create_milestone": "Criar marco",
+    "edit_milestone": "Editar marco",
+    "issues_label": "tarefas",
+    "fields": {
+      "name": "Nome",
+      "name_placeholder": "Ex. Lançamento Q4, Lançamento MVP",
+      "description": "Descrição",
+      "description_placeholder": "Descreva o propósito deste marco...",
+      "target_date": "Data alvo"
+    },
+    "validation": {
+      "name_required": "O nome do marco é obrigatório."
+    },
+    "toast": {
+      "created_title": "Marco criado",
+      "created_message": "O marco foi criado com sucesso.",
+      "updated_title": "Marco atualizado",
+      "updated_message": "O marco foi atualizado com sucesso.",
+      "deleted_title": "Marco excluído",
+      "deleted_message": "\"{name}\" foi excluído.",
+      "delete_error": "Não foi possível excluir o marco. Tente novamente.",
+      "save_error": "Não foi possível salvar o marco. Tente novamente.",
+      "archived_title": "Marco arquivado",
+      "unarchived_title": "Marco restaurado"
+    },
+    "delete": {
+      "title": "Excluir marco",
+      "content": "Tem certeza de que deseja excluir \"{name}\"? Esta ação não pode ser desfeita."
+    },
+    "empty_state": {
+      "title": "Nenhum marco ainda",
+      "description": "Crie um marco para acompanhar os principais entregáveis e datas de conclusão."
+    },
+    "disabled": {
+      "title": "Marcos estão desativados",
+      "description": "Ative os marcos nas configurações do projeto.",
+      "cta": "Ativar marcos"
+    }
+  }
+}

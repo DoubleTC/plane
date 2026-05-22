@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Етап} few {Етапи} other {Етапів}}",
+    "no_milestone": "Немає етапу",
+    "page_title": "Етапи",
+    "add_milestone": "Додати етап",
+    "create_milestone": "Створити етап",
+    "edit_milestone": "Редагувати етап",
+    "issues_label": "завдань",
+    "fields": {
+      "name": "Назва",
+      "name_placeholder": "Напр. Запуск Q4, Випуск MVP",
+      "description": "Опис",
+      "description_placeholder": "Опишіть мету цього етапу...",
+      "target_date": "Цільова дата"
+    },
+    "validation": {
+      "name_required": "Назва етапу є обов'язковою."
+    },
+    "toast": {
+      "created_title": "Етап створено",
+      "created_message": "Етап успішно створено.",
+      "updated_title": "Етап оновлено",
+      "updated_message": "Етап успішно оновлено.",
+      "deleted_title": "Етап видалено",
+      "deleted_message": "«{name}» видалено.",
+      "delete_error": "Не вдалося видалити етап. Спробуйте знову.",
+      "save_error": "Не вдалося зберегти етап. Спробуйте знову.",
+      "archived_title": "Етап архівовано",
+      "unarchived_title": "Етап відновлено"
+    },
+    "delete": {
+      "title": "Видалити етап",
+      "content": "Ви впевнені, що хочете видалити «{name}»? Цю дію не можна скасувати."
+    },
+    "empty_state": {
+      "title": "Ще немає етапів",
+      "description": "Створіть етап для відстеження ключових результатів і термінів виконання."
+    },
+    "disabled": {
+      "title": "Етапи вимкнено",
+      "description": "Увімкніть етапи в налаштуваннях проекту.",
+      "cta": "Увімкнути етапи"
+    }
+  }
+}

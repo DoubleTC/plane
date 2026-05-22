@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Jalon} other {Jaloane}}",
+    "no_milestone": "Niciun jalon",
+    "page_title": "Jaloane",
+    "add_milestone": "Adaugă jalon",
+    "create_milestone": "Creează jalon",
+    "edit_milestone": "Editează jalon",
+    "issues_label": "sarcini",
+    "fields": {
+      "name": "Nume",
+      "name_placeholder": "Ex. Lansare Q4, Lansare MVP",
+      "description": "Descriere",
+      "description_placeholder": "Descrieți scopul acestui jalon...",
+      "target_date": "Data țintă"
+    },
+    "validation": {
+      "name_required": "Numele jalonului este obligatoriu."
+    },
+    "toast": {
+      "created_title": "Jalon creat",
+      "created_message": "Jalonul a fost creat cu succes.",
+      "updated_title": "Jalon actualizat",
+      "updated_message": "Jalonul a fost actualizat cu succes.",
+      "deleted_title": "Jalon șters",
+      "deleted_message": "\"{name}\" a fost șters.",
+      "delete_error": "Nu s-a putut șterge jalonul. Încercați din nou.",
+      "save_error": "Nu s-a putut salva jalonul. Încercați din nou.",
+      "archived_title": "Jalon arhivat",
+      "unarchived_title": "Jalon restaurat"
+    },
+    "delete": {
+      "title": "Șterge jalon",
+      "content": "Sigur doriți să ștergeți \"{name}\"? Această acțiune nu poate fi anulată."
+    },
+    "empty_state": {
+      "title": "Niciun jalon deocamdată",
+      "description": "Creați un jalon pentru a urmări livrabilele cheie și datele de finalizare."
+    },
+    "disabled": {
+      "title": "Jaloanele sunt dezactivate",
+      "description": "Activați jaloanele în setările proiectului.",
+      "cta": "Activați jaloanele"
+    }
+  }
+}

@@ -836,7 +836,7 @@
   "in_app": "En la aplicación",
   "forms": "Formularios",
   "milestones": "Hitos",
-  "milestones_description": "Los hitos proporcionan una capa para alinear los elementos de trabajo hacia fechas de finalización compartidas.",
+  "milestones_description": "Realice un seguimiento de los entregables clave y alinee las tareas con las fechas de finalización compartidas.",
   "file_upload": {
     "upload_text": "Haz clic aquí para subir archivo",
     "drag_drop_text": "Arrastrar y soltar",

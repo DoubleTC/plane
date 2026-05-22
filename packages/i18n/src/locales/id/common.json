@@ -836,7 +836,7 @@
   "in_app": "Dalam Aplikasi",
   "forms": "Formulir",
   "milestones": "Tonggak",
-  "milestones_description": "Tonggak menyediakan lapisan untuk menyelaraskan item kerja menuju tanggal penyelesaian bersama.",
+  "milestones_description": "Lacak kiriman kunci dan selaraskan item pekerjaan dengan tanggal penyelesaian bersama.",
   "file_upload": {
     "upload_text": "Klik di sini untuk mengunggah file",
     "drag_drop_text": "Tarik dan Lepas",

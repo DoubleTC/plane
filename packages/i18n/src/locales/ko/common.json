@@ -836,7 +836,7 @@
   "in_app": "인앱",
   "forms": "폼스",
   "milestones": "마일스톤",
-  "milestones_description": "마일스톤은 공유된 완료 일자에 맞춰 작업 항목을 정렬할 수 있는 레이어를 제공합니다.",
+  "milestones_description": "주요 산출물을 추적하고 작업 항목을 공유 완료 날짜에 맞게 조정합니다.",
   "file_upload": {
     "upload_text": "파일을 업로드하려면 여기를 클릭하세요",
     "drag_drop_text": "드래그 앤 드롭",

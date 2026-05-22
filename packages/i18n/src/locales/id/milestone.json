@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Tonggak} other {Tonggak}}",
+    "no_milestone": "Tidak ada tonggak",
+    "page_title": "Tonggak",
+    "add_milestone": "Tambah tonggak",
+    "create_milestone": "Buat tonggak",
+    "edit_milestone": "Edit tonggak",
+    "issues_label": "tugas",
+    "fields": {
+      "name": "Nama",
+      "name_placeholder": "Mis. Peluncuran Q4, Rilis MVP",
+      "description": "Deskripsi",
+      "description_placeholder": "Jelaskan tujuan tonggak ini...",
+      "target_date": "Tanggal target"
+    },
+    "validation": {
+      "name_required": "Nama tonggak wajib diisi."
+    },
+    "toast": {
+      "created_title": "Tonggak dibuat",
+      "created_message": "Tonggak berhasil dibuat.",
+      "updated_title": "Tonggak diperbarui",
+      "updated_message": "Tonggak berhasil diperbarui.",
+      "deleted_title": "Tonggak dihapus",
+      "deleted_message": "\"{name}\" telah dihapus.",
+      "delete_error": "Tidak dapat menghapus tonggak. Silakan coba lagi.",
+      "save_error": "Tidak dapat menyimpan tonggak. Silakan coba lagi.",
+      "archived_title": "Tonggak diarsipkan",
+      "unarchived_title": "Tonggak dipulihkan"
+    },
+    "delete": {
+      "title": "Hapus tonggak",
+      "content": "Apakah Anda yakin ingin menghapus \"{name}\"? Tindakan ini tidak dapat diurungkan."
+    },
+    "empty_state": {
+      "title": "Belum ada tonggak",
+      "description": "Buat tonggak untuk melacak kiriman kunci dan tanggal penyelesaian."
+    },
+    "disabled": {
+      "title": "Tonggak dinonaktifkan",
+      "description": "Aktifkan tonggak di pengaturan proyek.",
+      "cta": "Aktifkan tonggak"
+    }
+  }
+}

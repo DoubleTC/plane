@@ -836,7 +836,7 @@
   "in_app": "In-app",
   "forms": "Forms",
   "milestones": "Milestones",
-  "milestones_description": "Milestones provide a layer to align work items toward shared completion dates.",
+  "milestones_description": "Track key deliverables and align work items toward shared completion dates.",
   "file_upload": {
     "upload_text": "Click here to upload file",
     "drag_drop_text": "Drag and Drop",

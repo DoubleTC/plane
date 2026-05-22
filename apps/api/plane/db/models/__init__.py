@@ -92,3 +92,5 @@ from .sticky import Sticky
 from .description import Description, DescriptionVersion
 
 from .roles import CustomRole
+
+from .milestone import Milestone, MilestoneIssue

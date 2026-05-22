@@ -836,7 +836,7 @@
   "in_app": "アプリ内",
   "forms": "フォーム",
   "milestones": "マイルストーン",
-  "milestones_description": "マイルストーンは、共通の完了日に向けて作業項目を揃えるためのレイヤーを提供します。",
+  "milestones_description": "主要な成果物を追跡し、作業項目を共有の完了日に向けて調整します。",
   "file_upload": {
     "upload_text": "クリックしてファイルをアップロード",
     "drag_drop_text": "ドラッグ＆ドロップ",

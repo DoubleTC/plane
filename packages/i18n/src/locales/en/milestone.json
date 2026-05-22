@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Milestone} other {Milestones}}",
+    "no_milestone": "No milestone",
+    "page_title": "Milestones",
+    "add_milestone": "Add milestone",
+    "create_milestone": "Create milestone",
+    "edit_milestone": "Edit milestone",
+    "issues_label": "issues",
+    "fields": {
+      "name": "Name",
+      "name_placeholder": "e.g. Q4 Launch, MVP Release",
+      "description": "Description",
+      "description_placeholder": "Describe the purpose of this milestone...",
+      "target_date": "Target date"
+    },
+    "validation": {
+      "name_required": "Milestone name is required."
+    },
+    "toast": {
+      "created_title": "Milestone created",
+      "created_message": "Milestone has been created successfully.",
+      "updated_title": "Milestone updated",
+      "updated_message": "Milestone has been updated successfully.",
+      "deleted_title": "Milestone deleted",
+      "deleted_message": "\"{name}\" has been deleted.",
+      "delete_error": "Could not delete milestone. Please try again.",
+      "save_error": "Could not save milestone. Please try again.",
+      "archived_title": "Milestone archived",
+      "unarchived_title": "Milestone restored"
+    },
+    "delete": {
+      "title": "Delete milestone",
+      "content": "Are you sure you want to delete \"{name}\"? This cannot be undone."
+    },
+    "empty_state": {
+      "title": "No milestones yet",
+      "description": "Create a milestone to track key deliverables and completion dates."
+    },
+    "disabled": {
+      "title": "Milestones are disabled",
+      "description": "Enable milestones in project settings to track key deliverables.",
+      "cta": "Enable milestones"
+    }
+  }
+}

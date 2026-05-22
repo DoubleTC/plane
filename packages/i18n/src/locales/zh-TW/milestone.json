@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, other {里程碑}}",
+    "no_milestone": "無里程碑",
+    "page_title": "里程碑",
+    "add_milestone": "新增里程碑",
+    "create_milestone": "建立里程碑",
+    "edit_milestone": "編輯里程碑",
+    "issues_label": "工作項目",
+    "fields": {
+      "name": "名稱",
+      "name_placeholder": "例：Q4發布、MVP發布",
+      "description": "描述",
+      "description_placeholder": "描述此里程碑的目的...",
+      "target_date": "目標日期"
+    },
+    "validation": {
+      "name_required": "里程碑名稱為必填項。"
+    },
+    "toast": {
+      "created_title": "里程碑已建立",
+      "created_message": "里程碑已成功建立。",
+      "updated_title": "里程碑已更新",
+      "updated_message": "里程碑已成功更新。",
+      "deleted_title": "里程碑已刪除",
+      "deleted_message": "「{name}」已被刪除。",
+      "delete_error": "無法刪除里程碑。請重試。",
+      "save_error": "無法儲存里程碑。請重試。",
+      "archived_title": "里程碑已封存",
+      "unarchived_title": "里程碑已復原"
+    },
+    "delete": {
+      "title": "刪除里程碑",
+      "content": "確定要刪除「{name}」嗎？此操作無法還原。"
+    },
+    "empty_state": {
+      "title": "尚無里程碑",
+      "description": "建立里程碑以追蹤關鍵交付物和完成日期。"
+    },
+    "disabled": {
+      "title": "里程碑已停用",
+      "description": "請在專案設定中啟用里程碑。",
+      "cta": "啟用里程碑"
+    }
+  }
+}

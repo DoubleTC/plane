@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Milestone} other {Milestone}}",
+    "no_milestone": "Nessuna milestone",
+    "page_title": "Milestone",
+    "add_milestone": "Aggiungi milestone",
+    "create_milestone": "Crea milestone",
+    "edit_milestone": "Modifica milestone",
+    "issues_label": "attività",
+    "fields": {
+      "name": "Nome",
+      "name_placeholder": "Es. Lancio Q4, Rilascio MVP",
+      "description": "Descrizione",
+      "description_placeholder": "Descrivi lo scopo di questa milestone...",
+      "target_date": "Data obiettivo"
+    },
+    "validation": {
+      "name_required": "Il nome della milestone è obbligatorio."
+    },
+    "toast": {
+      "created_title": "Milestone creata",
+      "created_message": "La milestone è stata creata con successo.",
+      "updated_title": "Milestone aggiornata",
+      "updated_message": "La milestone è stata aggiornata con successo.",
+      "deleted_title": "Milestone eliminata",
+      "deleted_message": "\"{name}\" è stata eliminata.",
+      "delete_error": "Impossibile eliminare la milestone. Riprovare.",
+      "save_error": "Impossibile salvare la milestone. Riprovare.",
+      "archived_title": "Milestone archiviata",
+      "unarchived_title": "Milestone ripristinata"
+    },
+    "delete": {
+      "title": "Elimina milestone",
+      "content": "Sei sicuro di voler eliminare \"{name}\"? Questa operazione non può essere annullata."
+    },
+    "empty_state": {
+      "title": "Nessuna milestone ancora",
+      "description": "Crea una milestone per tracciare i deliverable chiave e le date di completamento."
+    },
+    "disabled": {
+      "title": "Le milestone sono disabilitate",
+      "description": "Abilita le milestone nelle impostazioni del progetto.",
+      "cta": "Abilita milestone"
+    }
+  }
+}

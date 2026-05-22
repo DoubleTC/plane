@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Jalon} other {Jalons}}",
+    "no_milestone": "Aucun jalon",
+    "page_title": "Jalons",
+    "add_milestone": "Ajouter un jalon",
+    "create_milestone": "Créer un jalon",
+    "edit_milestone": "Modifier le jalon",
+    "issues_label": "tâches",
+    "fields": {
+      "name": "Nom",
+      "name_placeholder": "Ex. Lancement Q4, Version MVP",
+      "description": "Description",
+      "description_placeholder": "Décrivez l'objectif de ce jalon...",
+      "target_date": "Date cible"
+    },
+    "validation": {
+      "name_required": "Le nom du jalon est obligatoire."
+    },
+    "toast": {
+      "created_title": "Jalon créé",
+      "created_message": "Le jalon a été créé avec succès.",
+      "updated_title": "Jalon mis à jour",
+      "updated_message": "Le jalon a été mis à jour avec succès.",
+      "deleted_title": "Jalon supprimé",
+      "deleted_message": "\"{name}\" a été supprimé.",
+      "delete_error": "Impossible de supprimer le jalon. Veuillez réessayer.",
+      "save_error": "Impossible d'enregistrer le jalon. Veuillez réessayer.",
+      "archived_title": "Jalon archivé",
+      "unarchived_title": "Jalon restauré"
+    },
+    "delete": {
+      "title": "Supprimer le jalon",
+      "content": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible."
+    },
+    "empty_state": {
+      "title": "Aucun jalon pour l'instant",
+      "description": "Créez un jalon pour suivre les livrables clés et les dates de fin."
+    },
+    "disabled": {
+      "title": "Les jalons sont désactivés",
+      "description": "Activez les jalons dans les paramètres du projet.",
+      "cta": "Activer les jalons"
+    }
+  }
+}

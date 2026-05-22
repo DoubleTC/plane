@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Kamień milowy} few {Kamienie milowe} other {Kamieni milowych}}",
+    "no_milestone": "Brak kamienia milowego",
+    "page_title": "Kamienie milowe",
+    "add_milestone": "Dodaj kamień milowy",
+    "create_milestone": "Utwórz kamień milowy",
+    "edit_milestone": "Edytuj kamień milowy",
+    "issues_label": "zadań",
+    "fields": {
+      "name": "Nazwa",
+      "name_placeholder": "Np. Premiera Q4, Wydanie MVP",
+      "description": "Opis",
+      "description_placeholder": "Opisz cel tego kamienia milowego...",
+      "target_date": "Data docelowa"
+    },
+    "validation": {
+      "name_required": "Nazwa kamienia milowego jest wymagana."
+    },
+    "toast": {
+      "created_title": "Kamień milowy utworzony",
+      "created_message": "Kamień milowy został pomyślnie utworzony.",
+      "updated_title": "Kamień milowy zaktualizowany",
+      "updated_message": "Kamień milowy został pomyślnie zaktualizowany.",
+      "deleted_title": "Kamień milowy usunięty",
+      "deleted_message": "\"{name}\" został usunięty.",
+      "delete_error": "Nie można usunąć kamienia milowego. Spróbuj ponownie.",
+      "save_error": "Nie można zapisać kamienia milowego. Spróbuj ponownie.",
+      "archived_title": "Kamień milowy zarchiwizowany",
+      "unarchived_title": "Kamień milowy przywrócony"
+    },
+    "delete": {
+      "title": "Usuń kamień milowy",
+      "content": "Czy na pewno chcesz usunąć \"{name}\"? Tej operacji nie można cofnąć."
+    },
+    "empty_state": {
+      "title": "Brak kamieni milowych",
+      "description": "Utwórz kamień milowy, aby śledzić kluczowe elementy i daty ukończenia."
+    },
+    "disabled": {
+      "title": "Kamienie milowe są wyłączone",
+      "description": "Włącz kamienie milowe w ustawieniach projektu.",
+      "cta": "Włącz kamienie milowe"
+    }
+  }
+}

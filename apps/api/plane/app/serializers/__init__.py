@@ -135,3 +135,5 @@ from .draft import (
 )
 
 from .roles import CustomRoleSerializer
+
+from .milestone import MilestoneSerializer, MilestoneWriteSerializer, MilestoneIssueSerializer

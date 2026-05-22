@@ -1,0 +1,46 @@
+{
+  "milestone": {
+    "label": "{count, plural, one {Míľnik} few {Míľniky} other {Míľnikov}}",
+    "no_milestone": "Žiadny míľnik",
+    "page_title": "Míľniky",
+    "add_milestone": "Pridať míľnik",
+    "create_milestone": "Vytvoriť míľnik",
+    "edit_milestone": "Upraviť míľnik",
+    "issues_label": "úloh",
+    "fields": {
+      "name": "Názov",
+      "name_placeholder": "Napr. Spustenie Q4, Vydanie MVP",
+      "description": "Popis",
+      "description_placeholder": "Popíšte účel tohto míľnika...",
+      "target_date": "Cieľový dátum"
+    },
+    "validation": {
+      "name_required": "Názov míľnika je povinný."
+    },
+    "toast": {
+      "created_title": "Míľnik vytvorený",
+      "created_message": "Míľnik bol úspešne vytvorený.",
+      "updated_title": "Míľnik aktualizovaný",
+      "updated_message": "Míľnik bol úspešne aktualizovaný.",
+      "deleted_title": "Míľnik vymazaný",
+      "deleted_message": "\"{name}\" bol vymazaný.",
+      "delete_error": "Míľnik sa nedá vymazať. Skúste znova.",
+      "save_error": "Míľnik sa nedá uložiť. Skúste znova.",
+      "archived_title": "Míľnik archivovaný",
+      "unarchived_title": "Míľnik obnovený"
+    },
+    "delete": {
+      "title": "Vymazať míľnik",
+      "content": "Naozaj chcete vymazať \"{name}\"? Túto akciu nemožno vrátiť."
+    },
+    "empty_state": {
+      "title": "Zatiaľ žiadne míľniky",
+      "description": "Vytvorte míľnik na sledovanie kľúčových výstupov a termínov dokončenia."
+    },
+    "disabled": {
+      "title": "Míľniky sú zakázané",
+      "description": "Povolte míľniky v nastaveniach projektu.",
+      "cta": "Povoliť míľniky"
+    }
+  }
+}

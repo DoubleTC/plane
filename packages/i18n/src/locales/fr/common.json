@@ -836,7 +836,7 @@
   "in_app": "Dans l'application",
   "forms": "Formulaires",
   "milestones": "Jalons",
-  "milestones_description": "Les jalons offrent une couche permettant d’aligner les éléments de travail sur des dates d’achèvement partagées.",
+  "milestones_description": "Suivez les livrables clés et alignez les tâches sur des dates de fin partagées.",
   "file_upload": {
     "upload_text": "Cliquez ici pour télécharger le fichier",
     "drag_drop_text": "Glisser-déposer",
