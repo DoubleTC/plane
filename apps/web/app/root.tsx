@@ -4,11 +4,11 @@
  * See the LICENSE file for details.
  */
 
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import Script from "next/script";
 import { Links, Meta, Outlet, Scripts } from "react-router";
 import type { LinksFunction } from "react-router";
-import { ThemeProvider, useTheme } from "next-themes";
+import { ThemeProvider } from "next-themes";
 // plane imports
 import { SITE_DESCRIPTION, SITE_NAME } from "@plane/constants";
 import { cn } from "@plane/utils";
@@ -133,10 +133,18 @@ export default function Root() {
 }
 
 export function HydrateFallback() {
-  const { resolvedTheme } = useTheme();
+  // Use a mounted flag so the first render (during SSR hydration) always
+  // returns the same <div /> the server produced. next-themes resolves
+  // resolvedTheme synchronously from localStorage, so checking it directly
+  // causes a server/client mismatch. The effect runs only after hydration
+  // is complete, at which point React is already in client-render mode.
+  const [mounted, setMounted] = useState(false);
 
-  // if we are on the server or the theme is not resolved, return an empty div
-  if (typeof window === "undefined" || resolvedTheme === undefined) return <div />;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div />;
 
   return (
     <div className="relative flex h-screen w-full items-center justify-center bg-canvas">
