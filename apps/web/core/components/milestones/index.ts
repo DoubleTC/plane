@@ -7,4 +7,5 @@
 export * from "./create-update-milestone-modal";
 export * from "./delete-milestone-modal";
 export * from "./milestone-list-item";
+export * from "./milestone-quick-actions";
 export * from "./milestones-list-view";

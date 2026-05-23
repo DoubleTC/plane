@@ -20,12 +20,15 @@ export interface IMilestoneStore {
   fetchedMap: Record<string, boolean>;
   // Observables
   milestoneMap: Record<string, IMilestone>;
+  createMilestoneModalOpen: boolean;
   // Computed
   currentProjectMilestoneIds: string[] | null;
   // Computed actions
   getMilestoneFetchStatusByProjectId: (projectId: string) => boolean;
   getMilestoneById: (milestoneId: string) => IMilestone | null;
   getProjectMilestoneIds: (projectId: string) => string[] | null;
+  // Modal toggle
+  toggleCreateMilestoneModal: (value?: boolean) => void;
   // Fetch
   fetchMilestones: (workspaceSlug: string, projectId: string) => Promise<IMilestone[]>;
   fetchMilestoneDetails: (workspaceSlug: string, projectId: string, milestoneId: string) => Promise<IMilestone>;
@@ -62,6 +65,7 @@ export class MilestoneStore implements IMilestoneStore {
   loader: boolean = false;
   milestoneMap: Record<string, IMilestone> = {};
   fetchedMap: Record<string, boolean> = {};
+  createMilestoneModalOpen: boolean = false;
   // Root store
   rootStore: CoreRootStore;
   // Services
@@ -73,9 +77,11 @@ export class MilestoneStore implements IMilestoneStore {
       loader: observable.ref,
       milestoneMap: observable,
       fetchedMap: observable,
+      createMilestoneModalOpen: observable.ref,
       // Computed
       currentProjectMilestoneIds: computed,
       // Actions
+      toggleCreateMilestoneModal: action,
       fetchMilestones: action,
       fetchMilestoneDetails: action,
       createMilestone: action,
@@ -87,6 +93,14 @@ export class MilestoneStore implements IMilestoneStore {
     this.rootStore = _rootStore;
     this.milestoneService = new MilestoneService();
   }
+
+  // -------------------------------------------------------------------------
+  // Modal toggle
+  // -------------------------------------------------------------------------
+
+  toggleCreateMilestoneModal = (value?: boolean) => {
+    this.createMilestoneModalOpen = value ?? !this.createMilestoneModalOpen;
+  };
 
   // -------------------------------------------------------------------------
   // Computed

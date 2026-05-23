@@ -4,23 +4,22 @@
  * See the LICENSE file for details.
  */
 
-import { useState } from "react";
+import { useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
-import { Archive, CalendarDays, Link2, Pencil, Trash2 } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 // plane imports
 import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { ISearchIssueResponse } from "@plane/types";
-import { CircularProgressIndicator, CustomMenu } from "@plane/ui";
+import { CheckIcon } from "@plane/propel/icons";
+import { CircularProgressIndicator } from "@plane/ui";
 import { renderFormattedDate } from "@plane/utils";
 // components
-import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
-import { CreateUpdateMilestoneModal } from "@/components/milestones/create-update-milestone-modal";
-import { DeleteMilestoneModal } from "@/components/milestones/delete-milestone-modal";
+import { ListItem } from "@/components/core/list";
+import { MilestoneQuickActions } from "@/components/milestones/milestone-quick-actions";
 // hooks
 import { useMilestone } from "@/hooks/store/use-milestone";
+import { usePlatformOS } from "@/hooks/use-platform-os";
 
 type Props = {
   milestoneId: string;
@@ -28,16 +27,13 @@ type Props = {
 
 export const MilestoneListItem = observer(function MilestoneListItem(props: Props) {
   const { milestoneId } = props;
-  // states
-  const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [addIssuesModal, setAddIssuesModal] = useState(false);
-  const [linkedIssueIds, setLinkedIssueIds] = useState<string[]>([]);
+  // refs
+  const parentRef = useRef<HTMLDivElement>(null);
   // router
   const { workspaceSlug, projectId } = useParams();
   // store hooks
-  const { getMilestoneById, archiveMilestone, unarchiveMilestone, getMilestoneIssues, addIssuesToMilestone } =
-    useMilestone();
+  const { getMilestoneById } = useMilestone();
+  const { isMobile } = usePlatformOS();
   const { t } = useTranslation();
 
   const milestone = getMilestoneById(milestoneId);
@@ -51,103 +47,39 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
   const isOverdue =
     milestone.target_date != null && new Date(milestone.target_date) < new Date() && completionPercentage < 100;
 
-  const handleArchiveToggle = async () => {
-    if (!workspaceSlug || !projectId) return;
-    try {
-      if (milestone.archived_at) {
-        await unarchiveMilestone(workspaceSlug.toString(), projectId.toString(), milestoneId);
-        setToast({ type: TOAST_TYPE.SUCCESS, title: t("milestone.toast.unarchived_title") });
-      } else {
-        await archiveMilestone(workspaceSlug.toString(), projectId.toString(), milestoneId);
-        setToast({ type: TOAST_TYPE.SUCCESS, title: t("milestone.toast.archived_title") });
-      }
-    } catch {
-      setToast({ type: TOAST_TYPE.ERROR, title: t("common.error") });
-    }
-  };
-
-  const handleOpenAddIssues = async () => {
-    if (!workspaceSlug || !projectId) return;
-    // pre-fetch existing linked issues so we can hide them in the picker
-    try {
-      const existing = await getMilestoneIssues(workspaceSlug.toString(), projectId.toString(), milestoneId);
-      setLinkedIssueIds(existing.map((mi) => mi.issue));
-    } catch {
-      setLinkedIssueIds([]);
-    }
-    setAddIssuesModal(true);
-  };
-
-  const handleAddIssues = async (selected: ISearchIssueResponse[]) => {
-    if (!workspaceSlug || !projectId || selected.length === 0) return;
-    try {
-      await addIssuesToMilestone(
-        workspaceSlug.toString(),
-        projectId.toString(),
-        milestoneId,
-        selected.map((i) => i.id)
-      );
-      setToast({ type: TOAST_TYPE.SUCCESS, title: t("milestone.toast.issues_added") });
-    } catch {
-      setToast({ type: TOAST_TYPE.ERROR, title: t("milestone.toast.issues_add_error") });
-    }
-  };
-
   return (
-    <>
-      {/* Edit Modal */}
-      <CreateUpdateMilestoneModal
-        isOpen={editModal}
-        onClose={() => setEditModal(false)}
-        data={milestone}
-        workspaceSlug={workspaceSlug?.toString() ?? ""}
-        projectId={projectId?.toString() ?? ""}
-      />
-      {/* Delete Modal */}
-      <DeleteMilestoneModal data={milestone} isOpen={deleteModal} onClose={() => setDeleteModal(false)} />
-      {/* Add Issues Modal */}
-      <ExistingIssuesListModal
-        workspaceSlug={workspaceSlug?.toString()}
-        projectId={projectId?.toString()}
-        isOpen={addIssuesModal}
-        handleClose={() => setAddIssuesModal(false)}
-        searchParams={{}}
-        handleOnSubmit={handleAddIssues}
-        shouldHideIssue={(issue) => linkedIssueIds.includes(issue.id)}
-      />
+    <ListItem
+      title={milestone.name}
+      itemLink=""
+      disableLink
+      prependTitleElement={
+        <CircularProgressIndicator size={30} percentage={completionPercentage} strokeWidth={3}>
+          {completionPercentage === 100 ? (
+            <CheckIcon className="h-3 w-3 stroke-[2] text-accent-primary" />
+          ) : (
+            <span className="text-9 text-tertiary">{completionPercentage}%</span>
+          )}
+        </CircularProgressIndicator>
+      }
+      appendTitleElement={
+        milestone.color ? (
+          <span
+            className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full"
+            style={{ backgroundColor: milestone.color }}
+          />
+        ) : undefined
+      }
+      actionableItems={
+        <>
+          {/* Archived badge */}
+          {milestone.archived_at && (
+            <span className="bg-custom-background-80 text-xs text-custom-text-300 rounded px-1.5 py-0.5 whitespace-nowrap">
+              {t("common.archived")}
+            </span>
+          )}
 
-      <div className="group border-custom-border-200 bg-custom-background-100 hover:bg-custom-background-90 flex items-center justify-between gap-x-3 rounded-lg border px-4 py-3 transition-colors">
-        {/* Left: progress + info */}
-        <div className="flex min-w-0 items-center gap-x-3">
-          <CircularProgressIndicator size={36} percentage={completionPercentage} strokeWidth={3}>
-            <span className="text-custom-text-200 text-[9px] font-semibold">{completionPercentage}%</span>
-          </CircularProgressIndicator>
-
-          <div className="min-w-0">
-            <div className="flex items-center gap-x-2">
-              {milestone.color && (
-                <span
-                  className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: milestone.color }}
-                />
-              )}
-              <span className="text-custom-text-100 truncate font-medium">{milestone.name}</span>
-              {milestone.archived_at && (
-                <span className="bg-custom-background-80 text-xs text-custom-text-300 rounded px-1.5 py-0.5">
-                  {t("common.archived")}
-                </span>
-              )}
-            </div>
-            {milestone.description ? (
-              <p className="text-xs text-custom-text-300 mt-0.5 truncate">{milestone.description}</p>
-            ) : null}
-          </div>
-        </div>
-
-        {/* Right: stats + date + menu */}
-        <div className="flex flex-shrink-0 items-center gap-x-4">
-          {/* Issue counts */}
-          <div className="text-xs text-custom-text-300 hidden items-center gap-x-2 sm:flex">
+          {/* Issue count */}
+          <div className="text-xs text-custom-text-300 flex items-center gap-x-1 whitespace-nowrap">
             <span>
               {milestone.completed_issues}/{milestone.total_issues}
             </span>
@@ -157,44 +89,42 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
           {/* Target date */}
           {milestone.target_date && (
             <div
-              className={`text-xs hidden items-center gap-x-1 sm:flex ${
+              className={`text-xs flex items-center gap-x-1 whitespace-nowrap ${
                 isOverdue ? "text-red-500" : "text-custom-text-300"
               }`}
             >
-              <CalendarDays className="h-3 w-3" />
+              <CalendarDays className="h-3.5 w-3.5 flex-shrink-0" />
               <span>{renderFormattedDate(milestone.target_date)}</span>
             </div>
           )}
 
-          {/* Context menu */}
-          <CustomMenu ellipsis placement="bottom-end">
-            <CustomMenu.MenuItem onClick={handleOpenAddIssues}>
-              <span className="text-custom-text-200 flex items-center gap-x-2">
-                <Link2 className="h-3.5 w-3.5" />
-                {t("milestone.add_issues")}
-              </span>
-            </CustomMenu.MenuItem>
-            <CustomMenu.MenuItem onClick={() => setEditModal(true)}>
-              <span className="text-custom-text-200 flex items-center gap-x-2">
-                <Pencil className="h-3.5 w-3.5" />
-                {t("common.edit")}
-              </span>
-            </CustomMenu.MenuItem>
-            <CustomMenu.MenuItem onClick={handleArchiveToggle}>
-              <span className="text-custom-text-200 flex items-center gap-x-2">
-                <Archive className="h-3.5 w-3.5" />
-                {milestone.archived_at ? t("common.unarchive") : t("common.archive")}
-              </span>
-            </CustomMenu.MenuItem>
-            <CustomMenu.MenuItem onClick={() => setDeleteModal(true)}>
-              <span className="text-red-500 flex items-center gap-x-2">
-                <Trash2 className="h-3.5 w-3.5" />
-                {t("common.delete")}
-              </span>
-            </CustomMenu.MenuItem>
-          </CustomMenu>
-        </div>
-      </div>
-    </>
+          {/* Quick actions — desktop */}
+          {workspaceSlug && projectId && (
+            <div className="hidden md:block">
+              <MilestoneQuickActions
+                parentRef={parentRef}
+                milestoneId={milestoneId}
+                projectId={projectId.toString()}
+                workspaceSlug={workspaceSlug.toString()}
+              />
+            </div>
+          )}
+        </>
+      }
+      quickActionElement={
+        workspaceSlug && projectId ? (
+          <div className="block md:hidden">
+            <MilestoneQuickActions
+              parentRef={parentRef}
+              milestoneId={milestoneId}
+              projectId={projectId.toString()}
+              workspaceSlug={workspaceSlug.toString()}
+            />
+          </div>
+        ) : undefined
+      }
+      isMobile={isMobile}
+      parentRef={parentRef}
+    />
   );
 });

@@ -12,6 +12,7 @@ import { useTranslation } from "@plane/i18n";
 import { EUserProjectRoles } from "@plane/types";
 // components
 import { PageHead } from "@/components/core/page-title";
+import { CreateUpdateMilestoneModal } from "@/components/milestones/create-update-milestone-modal";
 import { MilestonesListView } from "@/components/milestones";
 // hooks
 import { useMilestone } from "@/hooks/store/use-milestone";
@@ -26,7 +27,12 @@ function ProjectMilestonesPage({ params }: Route.ComponentProps) {
   const { t } = useTranslation();
   // store
   const { getProjectById, currentProjectDetails } = useProject();
-  const { fetchMilestones, getMilestoneFetchStatusByProjectId } = useMilestone();
+  const {
+    fetchMilestones,
+    getMilestoneFetchStatusByProjectId,
+    createMilestoneModalOpen,
+    toggleCreateMilestoneModal,
+  } = useMilestone();
   const { allowPermissions } = useUserPermissions();
   const router = useAppRouter();
 
@@ -65,6 +71,12 @@ function ProjectMilestonesPage({ params }: Route.ComponentProps) {
   return (
     <>
       <PageHead title={pageTitle} />
+      <CreateUpdateMilestoneModal
+        isOpen={createMilestoneModalOpen}
+        onClose={() => toggleCreateMilestoneModal(false)}
+        workspaceSlug={workspaceSlug}
+        projectId={projectId}
+      />
       <MilestonesListView />
     </>
   );
