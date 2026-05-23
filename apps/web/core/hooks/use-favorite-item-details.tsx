@@ -16,6 +16,7 @@ import {
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useModule } from "@/hooks/store/use-module";
+import { usePhase } from "@/hooks/store/use-phase";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectView } from "@/hooks/store/use-project-view";
 // plane web hooks
@@ -23,17 +24,16 @@ import { EPageStoreType, usePage } from "@/plane-web/hooks/store";
 import { useAdditionalFavoriteItemDetails } from "@/plane-web/hooks/use-additional-favorite-item-details";
 
 export const useFavoriteItemDetails = (workspaceSlug: string, favorite: IFavorite) => {
-  const {
-    entity_identifier: favoriteItemId,
-    entity_data: { logo_props: favoriteItemLogoProps },
-    entity_type: favoriteItemEntityType,
-  } = favorite;
-  const favoriteItemName = favorite?.entity_data?.name || favorite?.name;
+  const { entity_identifier: favoriteItemId, entity_data: entityData, entity_type: favoriteItemEntityType } = favorite;
+  // entity_data can be null (e.g. for phase) — access logo_props defensively
+  const favoriteItemLogoProps = entityData?.logo_props ?? undefined;
+  const favoriteItemName = entityData?.name || favorite?.name;
   // store hooks
   const { getViewById } = useProjectView();
   const { getProjectById } = useProject();
   const { getCycleById } = useCycle();
   const { getModuleById } = useModule();
+  const { getPhaseById } = usePhase();
   // additional details
   const { getAdditionalFavoriteItemDetails } = useAdditionalFavoriteItemDetails();
   // derived values
@@ -44,6 +44,7 @@ export const useFavoriteItemDetails = (workspaceSlug: string, favorite: IFavorit
   const viewDetails = getViewById(favoriteItemId ?? "");
   const cycleDetail = getCycleById(favoriteItemId ?? "");
   const moduleDetail = getModuleById(favoriteItemId ?? "");
+  const phaseDetail = getPhaseById(favoriteItemId ?? "");
   const currentProjectDetails = getProjectById(favorite.project_id ?? "");
 
   let itemIcon;
@@ -70,6 +71,10 @@ export const useFavoriteItemDetails = (workspaceSlug: string, favorite: IFavorit
     case "module":
       itemTitle = moduleDetail?.name ?? favoriteItemName;
       itemIcon = getFavoriteItemIcon("module");
+      break;
+    case "phase":
+      itemTitle = phaseDetail?.name ?? favoriteItemName;
+      itemIcon = getFavoriteItemIcon("phase");
       break;
     default: {
       const additionalDetails = getAdditionalFavoriteItemDetails(workspaceSlug, favorite);
