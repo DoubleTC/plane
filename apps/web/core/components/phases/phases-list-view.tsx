@@ -31,7 +31,7 @@ export const PhasesListView = observer(function PhasesListView() {
   const phaseIds = getProjectPhaseIds(projectId?.toString() ?? "");
   const canCreate = allowPermissions([EUserPermissions.ADMIN, EUserPermissions.MEMBER], EUserPermissionsLevel.PROJECT);
 
-  if (loader || !phaseIds)
+  if (loader)
     return (
       <>
         {displayFilters?.layout === "list" && <CycleModuleListLayoutLoader />}
@@ -41,7 +41,7 @@ export const PhasesListView = observer(function PhasesListView() {
       </>
     );
 
-  if (phaseIds.length === 0)
+  if (!phaseIds || phaseIds.length === 0)
     return (
       <EmptyStateDetailed
         assetKey="module"
