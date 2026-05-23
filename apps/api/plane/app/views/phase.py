@@ -7,11 +7,22 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 
-from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission
+from plane.app.permissions import ProjectEntityPermission
 from plane.app.serializers import PhaseCycleSerializer, PhaseSerializer, PhaseWriteSerializer
 from plane.db.models import Cycle, Phase, PhaseCycle, Project
 
 from .base import BaseViewSet
+
+_CYCLE_COMPLETION = Q(phase_cycles__cycle__end_date__lt=timezone.now().date()) | Q(
+    phase_cycles__cycle__status="completed"
+)
+
+
+def _annotate_phases(qs):
+    return qs.annotate(
+        total_cycles=Count("phase_cycles", distinct=True),
+        completed_cycles=Count("phase_cycles", filter=_CYCLE_COMPLETION, distinct=True),
+    )
 
 
 class PhaseViewSet(BaseViewSet):
@@ -23,29 +34,20 @@ class PhaseViewSet(BaseViewSet):
     permission_classes = [ProjectEntityPermission]
     serializer_class = PhaseSerializer
 
+    def _get_project(self, project_id, slug):
+        return Project.objects.filter(pk=project_id, workspace__slug=slug).first()
+
     def get_queryset(self):
-        return (
+        return _annotate_phases(
             Phase.objects.filter(
                 workspace__slug=self.kwargs.get("slug"),
                 project_id=self.kwargs.get("project_id"),
                 archived_at__isnull=True,
             )
-            .annotate(
-                total_cycles=Count("phase_cycles", distinct=True),
-                completed_cycles=Count(
-                    "phase_cycles",
-                    filter=Q(
-                        phase_cycles__cycle__end_date__lt=timezone.now().date(),
-                    )
-                    | Q(phase_cycles__cycle__status="completed"),
-                    distinct=True,
-                ),
-            )
-            .order_by("sort_order")
-        )
+        ).order_by("sort_order")
 
     def _check_feature_flag(self, project_id, slug):
-        project = Project.objects.filter(pk=project_id, workspace__slug=slug).first()
+        project = self._get_project(project_id, slug)
         if not project or not project.phase_view:
             return Response(
                 {"error": "Phases are not enabled for this project."},
@@ -57,27 +59,32 @@ class PhaseViewSet(BaseViewSet):
         err = self._check_feature_flag(project_id, slug)
         if err:
             return err
-        phases = self.get_queryset()
-        serializer = PhaseSerializer(phases, many=True)
+        serializer = PhaseSerializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, slug, project_id):
         err = self._check_feature_flag(project_id, slug)
         if err:
             return err
-        serializer = PhaseWriteSerializer(data=request.data)
+        project = self._get_project(project_id, slug)
+        serializer = PhaseWriteSerializer(
+            data=request.data,
+            context={"project": project, "request": request},
+        )
         if serializer.is_valid():
-            serializer.save(project_id=project_id, workspace_id=request.user.workspacemember_set.get(workspace__slug=slug).workspace_id, created_by=request.user, updated_by=request.user)
-            # Re-fetch with annotations
-            phase = Phase.objects.filter(pk=serializer.instance.pk).annotate(
-                total_cycles=Count("phase_cycles", distinct=True),
-                completed_cycles=Count("phase_cycles", filter=Q(phase_cycles__cycle__end_date__lt=timezone.now().date()) | Q(phase_cycles__cycle__status="completed"), distinct=True),
-            ).first()
+            serializer.save(
+                workspace=project.workspace,
+                created_by=request.user,
+                updated_by=request.user,
+            )
+            phase = _annotate_phases(Phase.objects.filter(pk=serializer.instance.pk)).first()
             return Response(PhaseSerializer(phase).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, slug, project_id, pk):
-        phase = self.get_queryset().filter(pk=pk).first()
+        phase = _annotate_phases(
+            Phase.objects.filter(workspace__slug=slug, project_id=project_id, pk=pk)
+        ).first()
         if not phase:
             return Response({"error": "Phase not found."}, status=status.HTTP_404_NOT_FOUND)
         return Response(PhaseSerializer(phase).data, status=status.HTTP_200_OK)
@@ -86,13 +93,15 @@ class PhaseViewSet(BaseViewSet):
         phase = Phase.objects.filter(workspace__slug=slug, project_id=project_id, pk=pk).first()
         if not phase:
             return Response({"error": "Phase not found."}, status=status.HTTP_404_NOT_FOUND)
-        serializer = PhaseWriteSerializer(phase, data=request.data, partial=True)
+        serializer = PhaseWriteSerializer(
+            phase,
+            data=request.data,
+            partial=True,
+            context={"project": phase.project, "request": request},
+        )
         if serializer.is_valid():
             serializer.save(updated_by=request.user)
-            phase = Phase.objects.filter(pk=pk).annotate(
-                total_cycles=Count("phase_cycles", distinct=True),
-                completed_cycles=Count("phase_cycles", filter=Q(phase_cycles__cycle__end_date__lt=timezone.now().date()) | Q(phase_cycles__cycle__status="completed"), distinct=True),
-            ).first()
+            phase = _annotate_phases(Phase.objects.filter(pk=pk)).first()
             return Response(PhaseSerializer(phase).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

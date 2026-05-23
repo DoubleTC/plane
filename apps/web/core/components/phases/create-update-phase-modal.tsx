@@ -5,22 +5,28 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
+import { MODULE_STATUS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
+import { ModuleStatusIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IPhase, IPhaseCreate } from "@plane/types";
-import { EModalPosition, EModalWidth, Input, ModalCore, TextArea } from "@plane/ui";
-import { renderFormattedPayloadDate } from "@plane/utils";
+import type { IPhase, IPhaseCreate, TPhaseStatus } from "@plane/types";
+import { CustomSelect, EModalPosition, EModalWidth, Input, ModalCore, TextArea } from "@plane/ui";
+import { getDate, renderFormattedPayloadDate } from "@plane/utils";
 // components
-import { DateDropdown } from "@/components/dropdowns/date";
+import { DateRangeDropdown } from "@/components/dropdowns/date-range";
+import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 // hooks
 import { usePhase } from "@/hooks/store/use-phase";
 
 type FormValues = {
   name: string;
   description: string;
+  status: TPhaseStatus;
   start_date: string | null;
   end_date: string | null;
+  lead_id: string | null;
+  member_ids: string[];
 };
 
 type Props = {
@@ -38,7 +44,6 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
   const { t } = useTranslation();
   // form
   const {
-    register,
     handleSubmit,
     control,
     reset,
@@ -47,8 +52,11 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
     defaultValues: {
       name: "",
       description: "",
+      status: "planned",
       start_date: null,
       end_date: null,
+      lead_id: null,
+      member_ids: [],
     },
   });
 
@@ -57,11 +65,22 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
       reset({
         name: data.name,
         description: data.description ?? "",
+        status: data.status ?? "planned",
         start_date: data.start_date ?? null,
         end_date: data.end_date ?? null,
+        lead_id: data.lead_id ?? null,
+        member_ids: data.member_ids ?? [],
       });
     } else {
-      reset({ name: "", description: "", start_date: null, end_date: null });
+      reset({
+        name: "",
+        description: "",
+        status: "planned",
+        start_date: null,
+        end_date: null,
+        lead_id: null,
+        member_ids: [],
+      });
     }
   }, [data, isOpen, reset]);
 
@@ -74,8 +93,11 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
     const payload: IPhaseCreate = {
       name: values.name.trim(),
       description: values.description,
+      status: values.status,
       start_date: values.start_date || null,
       end_date: values.end_date || null,
+      lead_id: values.lead_id || null,
+      member_ids: values.member_ids,
     };
     try {
       if (data) {
@@ -92,80 +114,189 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
   };
 
   return (
-    <ModalCore isOpen={isOpen} handleClose={handleClose} position={EModalPosition.CENTER} width={EModalWidth.XXL}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-5">
-        <h3 className="text-base text-custom-text-100 font-semibold">
-          {data ? t("phase.edit_phase") : t("phase.create_phase")}
-        </h3>
+    <ModalCore isOpen={isOpen} handleClose={handleClose} position={EModalPosition.TOP} width={EModalWidth.XXL}>
+      {/*
+       * Use a plain <div> instead of <form> to prevent React Router 7
+       * (framework mode) from intercepting the submission as a route action.
+       * The submit button calls handleSubmit(onSubmit) directly via onClick.
+       */}
+      <div>
+        <div className="space-y-5 p-5">
+          <h3 className="text-18 font-medium text-secondary">
+            {data ? t("phase.edit_phase") : t("phase.create_phase")}
+          </h3>
 
-        {/* Name */}
-        <div>
-          <Input
-            id="name"
-            type="text"
-            placeholder={t("phase.fields.name_placeholder")}
-            {...register("name", { required: t("phase.validation.name_required") })}
-            className={`w-full ${errors.name ? "border-red-500" : ""}`}
-          />
-          {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
-        </div>
+          <div className="space-y-3">
+            {/* Name */}
+            <div className="space-y-1">
+              <Controller
+                control={control}
+                name="name"
+                rules={{
+                  required: t("phase.validation.name_required"),
+                  maxLength: { value: 255, message: "Phase name must be under 255 characters." },
+                }}
+                render={({ field: { value, onChange } }) => (
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={value}
+                    onChange={onChange}
+                    hasError={Boolean(errors?.name)}
+                    placeholder={t("phase.fields.name_placeholder")}
+                    className="w-full text-14"
+                  />
+                )}
+              />
+              {errors?.name && <span className="text-11 text-danger-primary">{errors.name.message}</span>}
+            </div>
 
-        {/* Description */}
-        <TextArea
-          id="description"
-          placeholder={t("phase.fields.description_placeholder")}
-          {...register("description")}
-          className="min-h-[80px] w-full resize-none"
-        />
-
-        {/* Date range */}
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <label className="text-xs text-custom-text-300 mb-1 block">{t("phase.fields.start_date")}</label>
+            {/* Description */}
             <Controller
-              name="start_date"
+              name="description"
               control={control}
-              render={({ field }) => (
-                <DateDropdown
-                  value={field.value ?? null}
-                  onChange={(date) => field.onChange(date ? renderFormattedPayloadDate(date) : null)}
-                  placeholder={t("phase.fields.start_date")}
-                  buttonVariant="border-with-text"
-                  className="w-full"
-                  clearIconClassName="h-3 w-3"
+              render={({ field: { value, onChange } }) => (
+                <TextArea
+                  id="description"
+                  name="description"
+                  value={value}
+                  onChange={onChange}
+                  placeholder={t("phase.fields.description_placeholder")}
+                  className="min-h-24 w-full resize-none text-14"
                 />
               )}
             />
-          </div>
-          <div className="flex-1">
-            <label className="text-xs text-custom-text-300 mb-1 block">{t("phase.fields.end_date")}</label>
-            <Controller
-              name="end_date"
-              control={control}
-              render={({ field }) => (
-                <DateDropdown
-                  value={field.value ?? null}
-                  onChange={(date) => field.onChange(date ? renderFormattedPayloadDate(date) : null)}
-                  placeholder={t("phase.fields.end_date")}
-                  buttonVariant="border-with-text"
-                  className="w-full"
-                  clearIconClassName="h-3 w-3"
+
+            {/* Date range + Status + Lead + Members */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Combined date range picker */}
+              <Controller
+                control={control}
+                name="start_date"
+                render={({ field: { value: startVal, onChange: onChangeStart } }) => (
+                  <Controller
+                    control={control}
+                    name="end_date"
+                    render={({ field: { value: endVal, onChange: onChangeEnd } }) => (
+                      <DateRangeDropdown
+                        buttonVariant="border-with-text"
+                        className="h-7"
+                        value={{
+                          from: getDate(startVal),
+                          to: getDate(endVal),
+                        }}
+                        onSelect={(val) => {
+                          onChangeStart(val?.from ? renderFormattedPayloadDate(val.from) : null);
+                          onChangeEnd(val?.to ? renderFormattedPayloadDate(val.to) : null);
+                        }}
+                        placeholder={{
+                          from: t("phase.fields.start_date"),
+                          to: t("phase.fields.end_date"),
+                        }}
+                        hideIcon={{ to: true }}
+                      />
+                    )}
+                  />
+                )}
+              />
+
+              {/* Status */}
+              <div className="h-7">
+                <Controller
+                  control={control}
+                  name="status"
+                  render={({ field: { value, onChange } }) => {
+                    const selected = MODULE_STATUS.find((s) => s.value === value);
+                    return (
+                      <CustomSelect
+                        value={value}
+                        label={
+                          <div className="flex items-center gap-2 py-0.5 text-11">
+                            <ModuleStatusIcon status={value as TPhaseStatus} />
+                            {selected ? t(selected.i18n_label) : <span className="text-secondary">Status</span>}
+                          </div>
+                        }
+                        onChange={onChange}
+                        noChevron
+                      >
+                        {MODULE_STATUS.map((s) => (
+                          <CustomSelect.Option key={s.value} value={s.value}>
+                            <div className="flex items-center gap-2">
+                              <ModuleStatusIcon status={s.value as TPhaseStatus} />
+                              {t(s.i18n_label)}
+                            </div>
+                          </CustomSelect.Option>
+                        ))}
+                      </CustomSelect>
+                    );
+                  }}
                 />
-              )}
-            />
+              </div>
+
+              {/* Lead */}
+              <Controller
+                control={control}
+                name="lead_id"
+                render={({ field: { value, onChange } }) => (
+                  <div className="h-7">
+                    <MemberDropdown
+                      value={value}
+                      onChange={onChange}
+                      projectId={projectId}
+                      multiple={false}
+                      buttonVariant="border-with-text"
+                      placeholder={t("lead")}
+                    />
+                  </div>
+                )}
+              />
+
+              {/* Members */}
+              <Controller
+                control={control}
+                name="member_ids"
+                render={({ field: { value, onChange } }) => (
+                  <div className="h-7">
+                    <MemberDropdown
+                      value={value}
+                      onChange={onChange}
+                      projectId={projectId}
+                      multiple
+                      buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
+                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
+                      placeholder={t("members")}
+                    />
+                  </div>
+                )}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center justify-end gap-2 pt-2">
+        {/* Footer actions */}
+        <div className="flex items-center justify-end gap-2 border-t-[0.5px] border-subtle px-5 py-4">
           <Button type="button" variant="secondary" size="lg" onClick={handleClose}>
             {t("common.cancel")}
           </Button>
-          <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={isSubmitting}>
-            {data ? t("common.save") : t("phase.create_phase")}
+          <Button
+            type="button"
+            variant="primary"
+            size="lg"
+            loading={isSubmitting}
+            disabled={isSubmitting}
+            onClick={handleSubmit(onSubmit)}
+          >
+            {data
+              ? isSubmitting
+                ? t("common.saving")
+                : t("common.save")
+              : isSubmitting
+                ? t("common.creating")
+                : t("phase.create_phase")}
           </Button>
         </div>
-      </form>
+      </div>
     </ModalCore>
   );
 });

@@ -93,4 +93,4 @@ from .description import Description, DescriptionVersion
 
 from .roles import CustomRole
 
-from .phase import Phase, PhaseCycle
+from .phase import Phase, PhaseMember, PhaseCycle

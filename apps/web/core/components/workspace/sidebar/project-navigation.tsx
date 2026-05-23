@@ -158,8 +158,10 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
     };
 
     // sort navigation items by sortOrder
-    const sortedNavigationItems = navigationItems(workspaceSlug, projectId).toSorted(
-      (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)
+    const unsorted = navigationItems(workspaceSlug, projectId);
+    // eslint-disable-next-line no-array-sort-mutation
+    const sortedNavigationItems = Array.from(unsorted).sort(
+      (a: TNavigationItem, b: TNavigationItem) => (a.sortOrder || 0) - (b.sortOrder || 0)
     );
 
     return sortedNavigationItems;
