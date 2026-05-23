@@ -56,6 +56,7 @@ export const ProjectAuthWrapper = observer(function ProjectAuthWrapper(props: IP
   const { fetchAllCycles } = useCycle();
   const { fetchModulesSlim, fetchModules } = useModule();
   const { initGantt } = useTimeLineChart(GANTT_TIMELINE_TYPE.MODULE);
+  const { initGantt: initPhaseGantt } = useTimeLineChart(GANTT_TIMELINE_TYPE.PHASE);
   const { fetchViews } = useProjectView();
   const {
     project: { fetchProjectMembers, fetchProjectUserProperties },
@@ -73,9 +74,10 @@ export const ProjectAuthWrapper = observer(function ProjectAuthWrapper(props: IP
   );
   const currentProjectRole = getProjectRoleByWorkspaceSlugAndProjectId(workspaceSlug, projectId);
   const isWorkspaceAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE, workspaceSlug);
-  // Initialize module timeline chart
+  // Initialize module and phase timeline charts
   useEffect(() => {
     initGantt();
+    initPhaseGantt();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

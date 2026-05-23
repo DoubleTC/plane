@@ -9,6 +9,7 @@ import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { Breadcrumbs, Header } from "@plane/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
+import { PhaseViewHeader } from "@/components/phases/phase-view-header";
 import { usePhase } from "@/hooks/store/use-phase";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -43,14 +44,15 @@ export const PhasesListHeader = observer(function PhasesListHeader() {
           />
         </Breadcrumbs>
       </Header.LeftItem>
-      {canCreate && (
-        <Header.RightItem>
+      <Header.RightItem>
+        <PhaseViewHeader />
+        {canCreate && (
           <Button variant="primary" size="lg" onClick={() => toggleCreatePhaseModal(true)}>
             <div className="block sm:hidden">{t("add")}</div>
             <div className="hidden sm:block">{t("phase.add_phase")}</div>
           </Button>
-        </Header.RightItem>
-      )}
+        )}
+      </Header.RightItem>
     </Header>
   );
 });

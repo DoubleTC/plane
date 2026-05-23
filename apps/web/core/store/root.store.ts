@@ -63,6 +63,8 @@ import type { IRolesStore } from "./roles.store";
 import { RolesStore } from "./roles.store";
 import type { IPhaseStore } from "./phase.store";
 import { PhaseStore } from "./phase.store";
+import type { IPhaseFilterStore } from "./phase_filter.store";
+import { PhaseFilterStore } from "./phase_filter.store";
 import type { IRouterStore } from "./router.store";
 import { RouterStore } from "./router.store";
 import type { IStickyStore } from "./sticky/sticky.store";
@@ -107,6 +109,7 @@ export class CoreRootStore {
   powerK: IPowerKStore;
   roles: IRolesStore;
   phase: IPhaseStore;
+  phaseFilter: IPhaseFilterStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -140,6 +143,7 @@ export class CoreRootStore {
     this.powerK = new PowerKStore();
     this.roles = new RolesStore();
     this.phase = new PhaseStore(this);
+    this.phaseFilter = new PhaseFilterStore(this);
   }
 
   resetOnSignOut() {
@@ -175,5 +179,6 @@ export class CoreRootStore {
     this.powerK = new PowerKStore();
     this.roles = new RolesStore();
     this.phase = new PhaseStore(this);
+    this.phaseFilter = new PhaseFilterStore(this);
   }
 }

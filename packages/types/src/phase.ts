@@ -3,6 +3,12 @@
 
 export type TPhaseStatus = "backlog" | "planned" | "in-progress" | "paused" | "completed" | "cancelled";
 
+export type TPhaseLayoutOptions = "list" | "board" | "gantt";
+
+export type TPhaseDisplayFilters = {
+  layout?: TPhaseLayoutOptions;
+};
+
 export interface IPhase {
   id: string;
   name: string;
