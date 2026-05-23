@@ -2,26 +2,63 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # See the LICENSE file for details.
 
-from django.db.models import Count, Q
-from django.utils import timezone
+from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Subquery
+from django.db.models.functions import Coalesce
 from rest_framework import status
 from rest_framework.response import Response
 
 from plane.app.permissions import ProjectEntityPermission
 from plane.app.serializers import PhaseCycleSerializer, PhaseSerializer, PhaseWriteSerializer
-from plane.db.models import Cycle, Phase, PhaseCycle, Project
+from plane.db.models import Cycle, CycleIssue, Phase, PhaseCycle, Project
 
 from .base import BaseViewSet
 
+
 def _annotate_phases(qs):
-    now = timezone.now()
+    """
+    Annotate each Phase with:
+      - total_cycles   : number of linked PhaseCycles
+      - completed_cycles: number of linked cycles where EVERY work item
+                         has state.group = 'completed'
+                         (cycles with zero issues are NOT counted as complete)
+    """
+    # Inner exists: does this cycle have at least one CycleIssue?
+    cycle_has_any_issue = CycleIssue.objects.filter(
+        cycle_id=OuterRef("cycle_id"),
+        deleted_at__isnull=True,
+    )
+
+    # Inner exists: does this cycle have any issue whose state is NOT 'completed'?
+    cycle_has_incomplete_issue = CycleIssue.objects.filter(
+        cycle_id=OuterRef("cycle_id"),
+        deleted_at__isnull=True,
+    ).exclude(issue__state__group="completed")
+
+    # Subquery: for a given Phase PK, count PhaseCycles whose linked cycle is
+    # "completed" (has ≥1 issue AND no incomplete issues).
+    completed_cycles_subq = Subquery(
+        PhaseCycle.objects.filter(
+            phase_id=OuterRef("pk"),
+            deleted_at__isnull=True,
+        )
+        .annotate(
+            has_any=Exists(cycle_has_any_issue),
+            has_incomplete=Exists(cycle_has_incomplete_issue),
+        )
+        .filter(has_any=True, has_incomplete=False)
+        .values("phase_id")
+        .annotate(cnt=Count("id"))
+        .values("cnt"),
+        output_field=IntegerField(),
+    )
+
     return qs.annotate(
-        total_cycles=Count("phase_cycles", distinct=True),
-        completed_cycles=Count(
+        total_cycles=Count(
             "phase_cycles",
-            filter=Q(phase_cycles__cycle__end_date__lt=now, phase_cycles__cycle__end_date__isnull=False),
+            filter=Q(phase_cycles__deleted_at__isnull=True),
             distinct=True,
         ),
+        completed_cycles=Coalesce(completed_cycles_subq, 0),
     )
 
 
