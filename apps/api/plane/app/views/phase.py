@@ -7,11 +7,12 @@ from django.db.models.functions import Coalesce
 from rest_framework import status
 from rest_framework.response import Response
 
-from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission
+from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission, allow_permission, ROLE
 from plane.app.serializers import PhaseCycleSerializer, PhaseSerializer, PhaseWriteSerializer
 from plane.db.models import Cycle, CycleIssue, Phase, PhaseCycle, Project, UserFavorite
+from plane.utils.timezone_converter import convert_to_utc
 
-from .base import BaseViewSet
+from .base import BaseAPIView, BaseViewSet
 
 
 def _annotate_phases(qs, user=None, project_id=None, slug=None):
@@ -283,3 +284,53 @@ class PhaseCycleViewSet(BaseViewSet):
             return Response({"error": "PhaseCycle not found."}, status=status.HTTP_404_NOT_FOUND)
         pc.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PhaseDateCheckEndpoint(BaseAPIView):
+    """
+    POST /workspaces/{slug}/projects/{project_id}/phases/date-check/
+
+    Body: { "start_date": "YYYY-MM-DD", "end_date": "YYYY-MM-DD", "phase_id"?: "<uuid>" }
+
+    Returns { "status": true } when no overlap exists, or { "status": false, "error": "..." }.
+    Excludes the phase identified by phase_id so editing an existing phase with the same
+    dates does not falsely report a conflict.
+    """
+
+    @allow_permission([ROLE.ADMIN, ROLE.MEMBER])
+    def post(self, request, slug, project_id):
+        start_date = request.data.get("start_date", False)
+        end_date = request.data.get("end_date", False)
+        phase_id = request.data.get("phase_id")
+
+        if not start_date or not end_date:
+            return Response(
+                {"error": "start_date and end_date are both required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        start_date = convert_to_utc(date=str(start_date), project_id=project_id, is_start_date=True)
+        end_date = convert_to_utc(date=str(end_date), project_id=project_id)
+
+        # Check if any non-archived phase overlaps the requested interval
+        overlapping = Phase.objects.filter(
+            Q(workspace__slug=slug)
+            & Q(project_id=project_id)
+            & Q(archived_at__isnull=True)
+            & Q(start_date__isnull=False)
+            & Q(end_date__isnull=False)
+            & (
+                Q(start_date__lte=start_date, end_date__gte=start_date)
+                | Q(start_date__lte=end_date, end_date__gte=end_date)
+                | Q(start_date__gte=start_date, end_date__lte=end_date)
+            )
+        ).exclude(pk=phase_id)
+
+        if overlapping.exists():
+            return Response(
+                {
+                    "status": False,
+                    "error": "A phase already exists on the given dates. Please choose a different date range.",
+                }
+            )
+        return Response({"status": True}, status=status.HTTP_200_OK)

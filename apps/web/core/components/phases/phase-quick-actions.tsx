@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { Archive, ExternalLink, Layers, Link, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Archive, ExternalLink, Link, Milestone, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { IconButton } from "@plane/propel/icon-button";
@@ -104,7 +104,7 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
     {
       key: "add-cycles",
       title: t("phase.add_cycles"),
-      icon: Layers,
+      icon: Milestone,
       action: handleOpenAddCycles,
       shouldRender: isEditingAllowed && !phase.archived_at,
     },

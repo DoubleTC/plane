@@ -5,6 +5,12 @@ import { API_BASE_URL } from "@plane/constants";
 import type { IPhase, IPhaseCreate, IPhaseUpdate, IPhaseCycle } from "@plane/types";
 import { APIService } from "@/services/api.service";
 
+export type PhaseDateCheckData = {
+  start_date: string;
+  end_date: string;
+  phase_id?: string;
+};
+
 export class PhaseService extends APIService {
   constructor() {
     super(API_BASE_URL);
@@ -42,6 +48,12 @@ export class PhaseService extends APIService {
 
   unarchivePhase(workspaceSlug: string, projectId: string, phaseId: string): Promise<void> {
     return this.delete(`${this.base(workspaceSlug, projectId)}/${phaseId}/archive/`).then(() => undefined);
+  }
+
+  phaseDateCheck(workspaceSlug: string, projectId: string, data: PhaseDateCheckData): Promise<{ status: boolean }> {
+    return this.post(`${this.base(workspaceSlug, projectId)}/date-check/`, data).then(
+      (r) => r.data as { status: boolean }
+    );
   }
 
   // Favorites

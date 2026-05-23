@@ -44,7 +44,8 @@
       "Bash(grep -v \"^$\")",
       "Bash(git commit *)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/api/workspaces/rggergre/projects/0c03737e-3b4e-4474-8f47-ddbf05c7d82b/phases/\")",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(python -c ' *)"
     ]
   }
 }

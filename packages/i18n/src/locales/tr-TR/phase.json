@@ -38,7 +38,8 @@
       "favorited": "Phase added to favorites.",
       "unfavoriting": "Removing phase from favorites...",
       "unfavorited": "Phase removed from favorites.",
-      "favorite_error": "Could not update favorites. Please try again."
+      "favorite_error": "Could not update favorites. Please try again.",
+      "date_overlap_error": "A phase already exists on the given dates. Please choose a different date range."
     },
     "delete": {
       "title": "Aşamayı sil",

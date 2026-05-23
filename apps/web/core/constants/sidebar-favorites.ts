@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { Layers } from "lucide-react";
+import { Milestone } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 // plane imports
 import type { ISvgIcons } from "@plane/propel/icons";
@@ -17,7 +17,7 @@ export const FAVORITE_ITEM_ICONS: Record<string, React.FC<ISvgIcons> | LucideIco
   view: ViewsIcon,
   module: ModuleIcon,
   cycle: CycleIcon,
-  phase: Layers,
+  phase: Milestone,
   folder: FavoriteFolderIcon,
 };
 

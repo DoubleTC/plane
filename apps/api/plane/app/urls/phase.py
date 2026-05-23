@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from plane.app.views import PhaseViewSet, PhaseArchiveViewSet, PhaseCycleViewSet, PhaseFavoriteViewSet
+from plane.app.views import PhaseViewSet, PhaseArchiveViewSet, PhaseCycleViewSet, PhaseFavoriteViewSet, PhaseDateCheckEndpoint
 
 urlpatterns = [
     # Phase CRUD
@@ -29,6 +29,12 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/phases/<uuid:phase_id>/favorite/",
         PhaseFavoriteViewSet.as_view({"post": "create", "delete": "destroy"}),
         name="phase-favorite",
+    ),
+    # Date overlap check
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/phases/date-check/",
+        PhaseDateCheckEndpoint.as_view(),
+        name="phase-date-check",
     ),
     # Phase ↔ Cycle linking
     path(

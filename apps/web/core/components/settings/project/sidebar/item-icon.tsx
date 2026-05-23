@@ -5,7 +5,7 @@
  */
 
 import type { LucideIcon } from "lucide-react";
-import { Layers, Users, Zap } from "lucide-react";
+import { Milestone, Users, Zap } from "lucide-react";
 // plane imports
 import type { ISvgIcons } from "@plane/propel/icons";
 import {
@@ -26,7 +26,7 @@ export const PROJECT_SETTINGS_ICONS: Record<TProjectSettingsTabs, LucideIcon | R
   general: SettingIcon,
   members: Users,
   features_cycles: CycleIcon,
-  features_phases: Layers,
+  features_phases: Milestone,
   features_modules: ModuleIcon,
   features_views: ViewsIcon,
   features_pages: PageIcon,

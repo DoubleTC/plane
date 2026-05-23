@@ -4,7 +4,7 @@
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { Layers, PanelRight } from "lucide-react";
+import { Milestone, PanelRight } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
@@ -74,7 +74,7 @@ export const PhaseDetailHeader = observer(function PhaseDetailHeader() {
                 <BreadcrumbLink
                   label={t("phase.page_title")}
                   href={`/${workspaceSlug}/projects/${projectId}/phases/`}
-                  icon={<Layers className="h-4 w-4 text-tertiary" />}
+                  icon={<Milestone className="h-4 w-4 text-tertiary" />}
                 />
               }
             />
@@ -83,7 +83,7 @@ export const PhaseDetailHeader = observer(function PhaseDetailHeader() {
                 <BreadcrumbLink
                   label={phase?.name ?? "..."}
                   href={`/${workspaceSlug}/projects/${projectId}/phases/${phaseId}`}
-                  icon={<Layers className="h-4 w-4 text-tertiary" />}
+                  icon={<Milestone className="h-4 w-4 text-tertiary" />}
                   isLast
                 />
               }

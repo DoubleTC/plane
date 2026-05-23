@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { EUserPermissionsLevel, EUserPermissions } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
-import { Layers } from "lucide-react";
+import { Milestone } from "lucide-react";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@plane/propel/icons";
 import type { EUserProjectRoles } from "@plane/types";
 // plane ui
@@ -92,6 +92,16 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         sortOrder: 2,
       },
       {
+        i18n_key: "sidebar.phases",
+        key: "phases",
+        name: "Phases",
+        href: `/${wsSlug}/projects/${projId}/phases`,
+        icon: Milestone,
+        access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
+        shouldRender: project?.phase_view ?? false,
+        sortOrder: 3,
+      },
+      {
         i18n_key: "sidebar.modules",
         key: "modules",
         name: "Modules",
@@ -99,16 +109,6 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         icon: ModuleIcon,
         access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
         shouldRender: project?.module_view ?? false,
-        sortOrder: 3,
-      },
-      {
-        i18n_key: "sidebar.phases",
-        key: "phases",
-        name: "Phases",
-        href: `/${wsSlug}/projects/${projId}/phases`,
-        icon: Layers,
-        access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
-        shouldRender: project?.phase_view ?? false,
         sortOrder: 4,
       },
       {

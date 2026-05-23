@@ -1,7 +1,7 @@
 // Copyright (c) 2023-present Plane Software, Inc. and contributors
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
@@ -16,8 +16,14 @@ import { getDate, renderFormattedPayloadDate } from "@plane/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
+import { ProjectDropdown } from "@/components/dropdowns/project/dropdown";
 // hooks
 import { usePhase } from "@/hooks/store/use-phase";
+import { useUser } from "@/hooks/store/user/user-user";
+// services
+import { PhaseService } from "@/services/phase.service";
+
+const phaseService = new PhaseService();
 
 type FormValues = {
   name: string;
@@ -26,6 +32,7 @@ type FormValues = {
   start_date: string | null;
   end_date: string | null;
   lead_id: string | null;
+  project_id: string;
 };
 
 type Props = {
@@ -38,8 +45,11 @@ type Props = {
 
 export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(props: Props) {
   const { isOpen, onClose, workspaceSlug, projectId, data } = props;
+  // states
+  const [activeProject, setActiveProject] = useState<string>(projectId);
   // store
   const { createPhase, updatePhase } = usePhase();
+  const { projectsWithCreatePermissions } = useUser();
   const { t } = useTranslation();
   // form
   const {
@@ -55,11 +65,17 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
       start_date: null,
       end_date: null,
       lead_id: null,
+      project_id: projectId,
     },
   });
 
   useEffect(() => {
+    if (!isOpen) {
+      setActiveProject(projectId);
+      return;
+    }
     if (data) {
+      setActiveProject(data.project ?? projectId);
       reset({
         name: data.name,
         description: data.description ?? "",
@@ -67,6 +83,7 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
         start_date: data.start_date ?? null,
         end_date: data.end_date ?? null,
         lead_id: data.lead_id ?? null,
+        project_id: data.project ?? projectId,
       });
     } else {
       reset({
@@ -76,13 +93,32 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
         start_date: null,
         end_date: null,
         lead_id: null,
+        project_id: projectId,
       });
     }
-  }, [data, isOpen, reset]);
+  }, [data, isOpen, projectId, reset]);
 
   const handleClose = () => {
     reset();
     onClose();
+  };
+
+  const checkDateOverlap = async (
+    targetProjectId: string,
+    startDate: string,
+    endDate: string,
+    phaseId?: string
+  ): Promise<boolean> => {
+    try {
+      const res = await phaseService.phaseDateCheck(workspaceSlug, targetProjectId, {
+        start_date: startDate,
+        end_date: endDate,
+        ...(phaseId ? { phase_id: phaseId } : {}),
+      });
+      return res.status;
+    } catch {
+      return true; // allow submit on network error — backend will catch it
+    }
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -94,12 +130,48 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
       end_date: values.end_date || null,
       lead_id: values.lead_id || null,
     };
+
+    // Validate date overlap when both dates are provided
+    if (payload.start_date && payload.end_date) {
+      const targetProjectId = data ? (data.project ?? projectId) : activeProject;
+
+      if (data) {
+        // Edit: only check if dates have changed
+        const originalStart = data.start_date ?? null;
+        const originalEnd = data.end_date ?? null;
+        const datesChanged = payload.start_date !== originalStart || payload.end_date !== originalEnd;
+
+        if (datesChanged) {
+          const isValid = await checkDateOverlap(targetProjectId, payload.start_date, payload.end_date, data.id);
+          if (!isValid) {
+            setToast({
+              type: TOAST_TYPE.ERROR,
+              title: t("common.error"),
+              message: t("phase.toast.date_overlap_error"),
+            });
+            return;
+          }
+        }
+      } else {
+        // Create: always check
+        const isValid = await checkDateOverlap(targetProjectId, payload.start_date, payload.end_date);
+        if (!isValid) {
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: t("common.error"),
+            message: t("phase.toast.date_overlap_error"),
+          });
+          return;
+        }
+      }
+    }
+
     try {
       if (data) {
-        await updatePhase(workspaceSlug, projectId, data.id, payload);
+        await updatePhase(workspaceSlug, data.project ?? projectId, data.id, payload);
         setToast({ type: TOAST_TYPE.SUCCESS, title: t("phase.toast.updated_title") });
       } else {
-        await createPhase(workspaceSlug, projectId, payload);
+        await createPhase(workspaceSlug, activeProject, payload);
         setToast({ type: TOAST_TYPE.SUCCESS, title: t("phase.toast.created_title") });
       }
       handleClose();
@@ -117,9 +189,33 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
        */}
       <div>
         <div className="space-y-5 p-5">
-          <h3 className="text-18 font-medium text-secondary">
-            {data ? t("phase.edit_phase") : t("phase.create_phase")}
-          </h3>
+          <div className="flex items-center gap-x-3">
+            {!data && (
+              <Controller
+                control={control}
+                name="project_id"
+                render={({ field: { onChange } }) => (
+                  <div className="h-7">
+                    <ProjectDropdown
+                      value={activeProject}
+                      onChange={(val) => {
+                        if (!Array.isArray(val)) {
+                          onChange(val);
+                          setActiveProject(val);
+                        }
+                      }}
+                      multiple={false}
+                      buttonVariant="border-with-text"
+                      renderCondition={(pid) => !!projectsWithCreatePermissions?.[pid]}
+                    />
+                  </div>
+                )}
+              />
+            )}
+            <h3 className="text-18 font-medium text-secondary">
+              {data ? t("phase.edit_phase") : t("phase.create_phase")}
+            </h3>
+          </div>
 
           <div className="space-y-3">
             {/* Name */}
@@ -238,7 +334,7 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
                     <MemberDropdown
                       value={value}
                       onChange={onChange}
-                      projectId={projectId}
+                      projectId={activeProject}
                       multiple={false}
                       buttonVariant="border-with-text"
                       placeholder={t("lead")}

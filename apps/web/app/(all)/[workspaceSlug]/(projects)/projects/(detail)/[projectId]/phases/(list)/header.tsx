@@ -3,7 +3,7 @@
 
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { Layers } from "lucide-react";
+import { Milestone } from "lucide-react";
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
@@ -35,7 +35,7 @@ export const PhasesListHeader = observer(function PhasesListHeader() {
               <BreadcrumbLink
                 label={t("phase.page_title")}
                 href={`/${workspaceSlug}/projects/${projectId}/phases/`}
-                icon={<Layers className="h-4 w-4 text-tertiary" />}
+                icon={<Milestone className="h-4 w-4 text-tertiary" />}
                 isLast
               />
             }
