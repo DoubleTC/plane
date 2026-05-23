@@ -837,6 +837,8 @@
   "forms": "表單",
   "milestones": "里程碑",
   "milestones_description": "追蹤關鍵交付物，並將工作項目與共用完成日期保持一致。",
+  "phases": "階段",
+  "phases_description": "將週期分組為階段，以建構專案時間表。",
   "file_upload": {
     "upload_text": "點擊此處上傳文件",
     "drag_drop_text": "拖放",

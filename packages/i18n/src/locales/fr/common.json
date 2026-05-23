@@ -837,6 +837,8 @@
   "forms": "Formulaires",
   "milestones": "Jalons",
   "milestones_description": "Suivez les livrables clés et alignez les tâches sur des dates de fin partagées.",
+  "phases": "Phases",
+  "phases_description": "Regroupez les cycles en phases pour structurer la chronologie de votre projet.",
   "file_upload": {
     "upload_text": "Cliquez ici pour télécharger le fichier",
     "drag_drop_text": "Glisser-déposer",

@@ -837,6 +837,8 @@
   "forms": "Forms",
   "milestones": "Milestones",
   "milestones_description": "Track key deliverables and align work items toward shared completion dates.",
+  "phases": "Phases",
+  "phases_description": "Group cycles into phases to structure your project timeline.",
   "file_upload": {
     "upload_text": "Click here to upload file",
     "drag_drop_text": "Drag and Drop",

@@ -837,6 +837,8 @@
   "forms": "폼스",
   "milestones": "마일스톤",
   "milestones_description": "주요 산출물을 추적하고 작업 항목을 공유 완료 날짜에 맞게 조정합니다.",
+  "phases": "단계",
+  "phases_description": "사이클을 단계로 묶어 프로젝트 타임라인을 구성합니다.",
   "file_upload": {
     "upload_text": "파일을 업로드하려면 여기를 클릭하세요",
     "drag_drop_text": "드래그 앤 드롭",

@@ -837,6 +837,8 @@
   "forms": "Formuláre",
   "milestones": "Míľniky",
   "milestones_description": "Sledujte kľúčové výstupy a zosúlaďte úlohy so spoločnými termínmi dokončenia.",
+  "phases": "Fázy",
+  "phases_description": "Zoskupte cykly do fáz pre štruktúrovanie časovej osi projektu.",
   "file_upload": {
     "upload_text": "Kliknite sem na nahratie súboru",
     "drag_drop_text": "Drag and Drop",

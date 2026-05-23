@@ -837,6 +837,8 @@
   "forms": "Biểu mẫu",
   "milestones": "Cột mốc",
   "milestones_description": "Theo dõi các mốc quan trọng và liên kết công việc với ngày hoàn thành chung.",
+  "phases": "Giai đoạn",
+  "phases_description": "Nhóm các chu kỳ thành giai đoạn để cấu trúc dòng thời gian dự án.",
   "file_upload": {
     "upload_text": "Nhấp vào đây để tải lên tệp",
     "drag_drop_text": "Kéo và thả",

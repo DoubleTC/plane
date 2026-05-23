@@ -837,6 +837,8 @@
   "forms": "Formulários",
   "milestones": "Marcos",
   "milestones_description": "Acompanhe os principais entregáveis e alinhe as tarefas às datas de conclusão compartilhadas.",
+  "phases": "Fases",
+  "phases_description": "Agrupe ciclos em fases para estruturar a linha do tempo do projeto.",
   "file_upload": {
     "upload_text": "Clique aqui para fazer upload do arquivo",
     "drag_drop_text": "Arraste e Solte",

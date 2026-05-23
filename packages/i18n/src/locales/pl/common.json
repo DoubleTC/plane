@@ -837,6 +837,8 @@
   "forms": "Formularze",
   "milestones": "Kamienie milowe",
   "milestones_description": "Śledź kluczowe elementy dostarczane i dostosuj zadania do wspólnych dat ukończenia.",
+  "phases": "Fazy",
+  "phases_description": "Grupuj cykle w fazy, aby ustrukturyzować oś czasu projektu.",
   "file_upload": {
     "upload_text": "Kliknij tutaj, aby przesłać plik",
     "drag_drop_text": "Przeciągnij i upuść",

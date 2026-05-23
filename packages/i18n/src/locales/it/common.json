@@ -837,6 +837,8 @@
   "forms": "Moduli",
   "milestones": "Milestone",
   "milestones_description": "Monitora i deliverable chiave e allinea le attività alle date di completamento condivise.",
+  "phases": "Fasi",
+  "phases_description": "Raggruppa i cicli in fasi per strutturare la timeline del progetto.",
   "file_upload": {
     "upload_text": "Clicca qui per caricare il file",
     "drag_drop_text": "Trascina e rilascia",

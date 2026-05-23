@@ -837,6 +837,8 @@
   "forms": "Formuláře",
   "milestones": "Milníky",
   "milestones_description": "Sledujte klíčové výstupy a slaďte úkoly se sdílenými termíny dokončení.",
+  "phases": "Fáze",
+  "phases_description": "Seskupte cykly do fází pro strukturování časové osy projektu.",
   "file_upload": {
     "upload_text": "Klikněte zde pro nahrání souboru",
     "drag_drop_text": "Přetáhnout a upustit",

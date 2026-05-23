@@ -837,6 +837,8 @@
   "forms": "フォーム",
   "milestones": "マイルストーン",
   "milestones_description": "主要な成果物を追跡し、作業項目を共有の完了日に向けて調整します。",
+  "phases": "フェーズ",
+  "phases_description": "サイクルをフェーズにグループ化して、プロジェクトのタイムラインを構成します。",
   "file_upload": {
     "upload_text": "クリックしてファイルをアップロード",
     "drag_drop_text": "ドラッグ＆ドロップ",

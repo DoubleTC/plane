@@ -837,6 +837,8 @@
   "forms": "Formulir",
   "milestones": "Tonggak",
   "milestones_description": "Lacak kiriman kunci dan selaraskan item pekerjaan dengan tanggal penyelesaian bersama.",
+  "phases": "Fase",
+  "phases_description": "Kelompokkan siklus ke dalam fase untuk menyusun linimasa proyek.",
   "file_upload": {
     "upload_text": "Klik di sini untuk mengunggah file",
     "drag_drop_text": "Tarik dan Lepas",

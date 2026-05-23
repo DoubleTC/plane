@@ -837,6 +837,8 @@
   "forms": "Formulare",
   "milestones": "Jaloane",
   "milestones_description": "Urmăriți livrabilele cheie și aliniați sarcinile cu datele de finalizare comune.",
+  "phases": "Faze",
+  "phases_description": "Grupați ciclurile în faze pentru a structura cronologia proiectului.",
   "file_upload": {
     "upload_text": "Click aici pentru a încărca fișierul",
     "drag_drop_text": "Trage și Plasează",
