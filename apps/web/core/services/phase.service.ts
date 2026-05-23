@@ -1,14 +1,13 @@
 // Copyright (c) 2023-present Plane Software, Inc. and contributors
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { API_BASE_URL } from "@plane/constants";
 import type { IPhase, IPhaseCreate, IPhaseUpdate, IPhaseCycle } from "@plane/types";
 import { APIService } from "@/services/api.service";
 
-const { VITE_BASE_PATH = "" } = import.meta.env;
-
 export class PhaseService extends APIService {
   constructor() {
-    super(`${VITE_BASE_PATH}/api`);
+    super(API_BASE_URL);
   }
 
   private base(workspaceSlug: string, projectId: string) {
