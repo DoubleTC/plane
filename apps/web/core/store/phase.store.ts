@@ -215,30 +215,37 @@ export class PhaseStore implements IPhaseStore {
   // ── Favorites ─────────────────────────────────────────────────────────────
 
   addPhaseToFavorites = async (workspaceSlug: string, projectId: string, phaseId: string): Promise<void> => {
-    const existing = this.phaseMap[phaseId];
+    const phase = this.phaseMap[phaseId];
+    if (phase?.is_favorite) return;
     runInAction(() => {
-      if (existing) this.phaseMap[phaseId] = { ...existing, is_favorite: true };
+      if (phase) this.phaseMap[phaseId] = { ...phase, is_favorite: true };
     });
     try {
-      await this.phaseService.addPhaseToFavorites(workspaceSlug, projectId, phaseId);
+      await this.rootStore.favorite.addFavorite(workspaceSlug, {
+        entity_type: "phase",
+        entity_identifier: phaseId,
+        project_id: projectId,
+        entity_data: { name: phase?.name ?? "" },
+      });
     } catch (error) {
       runInAction(() => {
-        if (existing) this.phaseMap[phaseId] = existing;
+        if (phase) this.phaseMap[phaseId] = phase;
       });
       throw error;
     }
   };
 
   removePhaseFromFavorites = async (workspaceSlug: string, projectId: string, phaseId: string): Promise<void> => {
-    const existing = this.phaseMap[phaseId];
+    const phase = this.phaseMap[phaseId];
+    if (!phase?.is_favorite) return;
     runInAction(() => {
-      if (existing) this.phaseMap[phaseId] = { ...existing, is_favorite: false };
+      if (phase) this.phaseMap[phaseId] = { ...phase, is_favorite: false };
     });
     try {
-      await this.phaseService.removePhaseFromFavorites(workspaceSlug, projectId, phaseId);
+      await this.rootStore.favorite.removeFavoriteEntity(workspaceSlug, phaseId);
     } catch (error) {
       runInAction(() => {
-        if (existing) this.phaseMap[phaseId] = existing;
+        if (phase) this.phaseMap[phaseId] = phase;
       });
       throw error;
     }
