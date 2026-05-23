@@ -95,9 +95,7 @@ export class MilestoneStore implements IMilestoneStore {
   get currentProjectMilestoneIds(): string[] | null {
     const projectId = this.rootStore.router.projectId;
     if (!projectId) return null;
-    const milestones = Object.values(this.milestoneMap).filter(
-      (m) => m.project === projectId && !m.archived_at
-    );
+    const milestones = Object.values(this.milestoneMap).filter((m) => m.project === projectId && !m.archived_at);
     return sortBy(milestones, "sort_order").map((m) => m.id);
   }
 
@@ -110,9 +108,7 @@ export class MilestoneStore implements IMilestoneStore {
   });
 
   getProjectMilestoneIds = computedFn((projectId: string): string[] | null => {
-    const milestones = Object.values(this.milestoneMap).filter(
-      (m) => m.project === projectId && !m.archived_at
-    );
+    const milestones = Object.values(this.milestoneMap).filter((m) => m.project === projectId && !m.archived_at);
     if (!milestones.length) return null;
     return sortBy(milestones, "sort_order").map((m) => m.id);
   });
@@ -157,11 +153,7 @@ export class MilestoneStore implements IMilestoneStore {
   // CRUD
   // -------------------------------------------------------------------------
 
-  createMilestone = async (
-    workspaceSlug: string,
-    projectId: string,
-    data: IMilestoneCreate
-  ): Promise<IMilestone> => {
+  createMilestone = async (workspaceSlug: string, projectId: string, data: IMilestoneCreate): Promise<IMilestone> => {
     const milestone = await this.milestoneService.createMilestone(workspaceSlug, projectId, data);
     runInAction(() => {
       this.milestoneMap[milestone.id] = milestone;

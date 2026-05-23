@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Jalons",
         "short_title": "Jalons",
-        "description": "Les jalons fournissent une couche pour aligner les éléments de travail vers des dates d'achèvement partagées.",
+        "description": "Suivez les livrables clés et alignez les tâches sur des dates de fin partagées.",
         "toggle_title": "Activer les jalons",
-        "toggle_description": "Organisez les éléments de travail par échéances de jalons."
+        "toggle_description": "Les membres du projet pourront créer et modifier des jalons."
       },
       "toasts": {
         "loading": "Mise à jour de la fonctionnalité du projet...",

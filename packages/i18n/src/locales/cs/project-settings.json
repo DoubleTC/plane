@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Milníky",
         "short_title": "Milníky",
-        "description": "Milníky poskytují vrstvu pro sladění pracovních položek směrem ke sdíleným termínům dokončení.",
+        "description": "Sledujte klíčové výstupy a slaďte úkoly se sdílenými termíny dokončení.",
         "toggle_title": "Povolit milníky",
-        "toggle_description": "Organizujte pracovní položky podle termínů milníků."
+        "toggle_description": "Členové projektu budou moci vytvářet a upravovat milníky."
       },
       "toasts": {
         "loading": "Aktualizace funkce projektu...",

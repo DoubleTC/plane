@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Tonggak",
         "short_title": "Tonggak",
-        "description": "Tonggak menyediakan lapisan untuk menyelaraskan item kerja menuju tanggal penyelesaian bersama.",
+        "description": "Lacak kiriman kunci dan selaraskan item pekerjaan dengan tanggal penyelesaian bersama.",
         "toggle_title": "Aktifkan tonggak",
-        "toggle_description": "Organisir item kerja berdasarkan tenggat tonggak."
+        "toggle_description": "Anggota proyek akan dapat membuat dan mengedit tonggak."
       },
       "toasts": {
         "loading": "Memperbarui fitur proyek...",

@@ -23,6 +23,7 @@ export type TProjectSettingsTabs =
   | "general"
   | "members"
   | "features_cycles"
+  | "features_milestones"
   | "features_modules"
   | "features_views"
   | "features_pages"

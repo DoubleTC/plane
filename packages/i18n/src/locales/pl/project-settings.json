@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Kamienie milowe",
         "short_title": "Kamienie milowe",
-        "description": "Kamienie milowe zapewniają warstwę do wyrównania elementów pracy w kierunku wspólnych dat zakończenia.",
+        "description": "Śledź kluczowe elementy dostarczane i dostosuj zadania do wspólnych dat ukończenia.",
         "toggle_title": "Włącz kamienie milowe",
-        "toggle_description": "Organizuj elementy pracy według terminów kamieni milowych."
+        "toggle_description": "Członkowie projektu będą mogli tworzyć i edytować kamienie milowe."
       },
       "toasts": {
         "loading": "Aktualizowanie funkcji projektu...",

@@ -418,11 +418,11 @@
         "toggle_description": "I membri del progetto potranno registrare il tempo lavorato."
       },
       "milestones": {
-        "title": "Traguardi",
-        "short_title": "Traguardi",
-        "description": "I traguardi forniscono un livello per allineare gli elementi di lavoro verso date di completamento condivise.",
-        "toggle_title": "Abilita traguardi",
-        "toggle_description": "Organizza gli elementi di lavoro per scadenze dei traguardi."
+        "title": "Milestone",
+        "short_title": "Milestone",
+        "description": "Monitora i deliverable chiave e allinea le attività alle date di completamento condivise.",
+        "toggle_title": "Abilita milestone",
+        "toggle_description": "I membri del progetto potranno creare e modificare le milestone."
       },
       "toasts": {
         "loading": "Aggiornamento funzionalità progetto...",

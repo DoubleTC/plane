@@ -96,7 +96,7 @@ export const CreateUpdateMilestoneModal = observer(function CreateUpdateMileston
   return (
     <ModalCore isOpen={isOpen} handleClose={handleClose} position={EModalPosition.CENTER} width={EModalWidth.XL}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4 p-5">
-        <h3 className="text-xl font-medium text-custom-text-200">
+        <h3 className="text-xl text-custom-text-200 font-medium">
           {isEditing ? t("milestone.edit_milestone") : t("milestone.create_milestone")}
         </h3>
 
@@ -131,7 +131,7 @@ export const CreateUpdateMilestoneModal = observer(function CreateUpdateMileston
                 {...field}
                 value={field.value ?? ""}
                 placeholder={t("milestone.fields.description_placeholder")}
-                className="min-h-[80px] w-full resize-none text-sm"
+                className="text-sm min-h-[80px] w-full resize-none"
               />
             )}
           />
@@ -149,7 +149,7 @@ export const CreateUpdateMilestoneModal = observer(function CreateUpdateMileston
                 type="date"
                 value={field.value ?? ""}
                 onChange={(e) => field.onChange(e.target.value || null)}
-                className="w-full rounded border border-custom-border-200 bg-custom-background-100 px-3 py-2 text-sm text-custom-text-200 outline-none focus:border-custom-primary"
+                className="border-custom-border-200 bg-custom-background-100 text-sm text-custom-text-200 focus:border-custom-primary w-full rounded border px-3 py-2 outline-none"
               />
             )}
           />

@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Meilensteine",
         "short_title": "Meilensteine",
-        "description": "Meilensteine bieten eine Ebene, um Arbeitselemente auf gemeinsame Fertigstellungstermine auszurichten.",
+        "description": "Verfolgen Sie wichtige Liefergegenstände und richten Sie Aufgaben auf gemeinsame Fertigstellungsdaten aus.",
         "toggle_title": "Meilensteine aktivieren",
-        "toggle_description": "Organisieren Sie Arbeitselemente nach Meilenstein-Fristen."
+        "toggle_description": "Projektmitglieder können Meilensteine erstellen und bearbeiten."
       },
       "toasts": {
         "loading": "Projektfunktion wird aktualisiert...",

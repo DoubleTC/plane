@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Míľniky",
         "short_title": "Míľniky",
-        "description": "Míľniky poskytujú vrstvu na zladenie pracovných položiek smerom k spoločným termínom dokončenia.",
+        "description": "Sledujte kľúčové výstupy a zosúlaďte úlohy so spoločnými termínmi dokončenia.",
         "toggle_title": "Povoliť míľniky",
-        "toggle_description": "Organizujte pracovné položky podľa termínov míľnikov."
+        "toggle_description": "Členovia projektu budú môcť vytvárať a upravovať míľniky."
       },
       "toasts": {
         "loading": "Aktualizácia funkcie projektu...",

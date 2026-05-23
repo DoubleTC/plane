@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Marcos",
         "short_title": "Marcos",
-        "description": "Os marcos fornecem uma camada para alinhar itens de trabalho em direção a datas de conclusão compartilhadas.",
+        "description": "Acompanhe os principais entregáveis e alinhe as tarefas às datas de conclusão compartilhadas.",
         "toggle_title": "Ativar marcos",
-        "toggle_description": "Organize itens de trabalho por prazos de marcos."
+        "toggle_description": "Os membros do projeto poderão criar e editar marcos."
       },
       "toasts": {
         "loading": "Atualizando recurso do projeto...",

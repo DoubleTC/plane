@@ -50,8 +50,8 @@ export const MilestonesListView = observer(function MilestonesListView() {
 
       <div className="flex h-full flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-custom-border-200 px-6 py-4">
-          <h2 className="text-lg font-semibold text-custom-text-100">{t("milestone.page_title")}</h2>
+        <div className="border-custom-border-200 flex items-center justify-between border-b px-6 py-4">
+          <h2 className="text-lg text-custom-text-100 font-semibold">{t("milestone.page_title")}</h2>
           {canCreateMilestone && (
             <Button
               variant="primary"
@@ -74,8 +74,8 @@ export const MilestonesListView = observer(function MilestonesListView() {
             </Loader>
           ) : !milestoneIds || milestoneIds.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-y-3 py-20">
-              <p className="text-center text-sm text-custom-text-400">{t("milestone.empty_state.title")}</p>
-              <p className="text-center text-xs text-custom-text-400">{t("milestone.empty_state.description")}</p>
+              <p className="text-sm text-custom-text-400 text-center">{t("milestone.empty_state.title")}</p>
+              <p className="text-xs text-custom-text-400 text-center">{t("milestone.empty_state.description")}</p>
               {canCreateMilestone && (
                 <Button
                   variant="neutral-primary"

@@ -324,6 +324,10 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/cycles/page.tsx"
             ),
             route(
+              ":workspaceSlug/settings/projects/:projectId/features/milestones",
+              "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/milestones/page.tsx"
+            ),
+            route(
               ":workspaceSlug/settings/projects/:projectId/features/modules",
               "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/modules/page.tsx"
             ),

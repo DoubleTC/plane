@@ -418,11 +418,11 @@
         "toggle_description": "Proje üyeleri çalışılan zamanı kaydedebilecektir."
       },
       "milestones": {
-        "title": "Kilometre taşları",
-        "short_title": "Kilometre taşları",
-        "description": "Kilometre taşları, iş öğelerini ortak tamamlanma tarihlerine doğru hizalamak için bir katman sağlar.",
+        "title": "Kilometre Taşları",
+        "short_title": "Kilometre Taşları",
+        "description": "Temel teslimatları takip edin ve iş öğelerini paylaşılan tamamlanma tarihlerine göre hizalayın.",
         "toggle_title": "Kilometre taşlarını etkinleştir",
-        "toggle_description": "İş öğelerini kilometre taşı son tarihleri ile organize edin."
+        "toggle_description": "Proje üyeleri kilometre taşları oluşturabilir ve düzenleyebilir."
       },
       "toasts": {
         "loading": "Proje özelliği güncelleniyor...",

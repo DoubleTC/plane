@@ -76,10 +76,7 @@ export class MilestoneService extends APIService {
     projectId: string,
     milestoneId: string
   ): Promise<{ archived_at: string }> {
-    return this.post(
-      `/api/workspaces/${workspaceSlug}/projects/${projectId}/milestones/${milestoneId}/archive/`,
-      {}
-    )
+    return this.post(`/api/workspaces/${workspaceSlug}/projects/${projectId}/milestones/${milestoneId}/archive/`, {})
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
@@ -87,9 +84,7 @@ export class MilestoneService extends APIService {
   }
 
   async unarchiveMilestone(workspaceSlug: string, projectId: string, milestoneId: string): Promise<void> {
-    return this.delete(
-      `/api/workspaces/${workspaceSlug}/projects/${projectId}/milestones/${milestoneId}/archive/`
-    )
+    return this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/milestones/${milestoneId}/archive/`)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
@@ -100,11 +95,7 @@ export class MilestoneService extends APIService {
   // Milestone Issues
   // -------------------------------------------------------------------------
 
-  async getMilestoneIssues(
-    workspaceSlug: string,
-    projectId: string,
-    milestoneId: string
-  ): Promise<IMilestoneIssue[]> {
+  async getMilestoneIssues(workspaceSlug: string, projectId: string, milestoneId: string): Promise<IMilestoneIssue[]> {
     return this.get(
       `/api/workspaces/${workspaceSlug}/projects/${projectId}/milestones/${milestoneId}/milestone-issues/`
     )

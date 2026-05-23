@@ -48,8 +48,8 @@ function ProjectMilestonesPage({ params }: Route.ComponentProps) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <div className="flex flex-col items-center gap-y-4 py-20 text-center">
-          <p className="text-lg font-semibold text-custom-text-200">{t("milestone.disabled.title")}</p>
-          <p className="max-w-sm text-sm text-custom-text-400">{t("milestone.disabled.description")}</p>
+          <p className="text-lg text-custom-text-200 font-semibold">{t("milestone.disabled.title")}</p>
+          <p className="text-sm text-custom-text-400 max-w-sm">{t("milestone.disabled.description")}</p>
           {canPerformEmptyStateActions && (
             <button
               className="text-sm text-custom-primary-100 underline"

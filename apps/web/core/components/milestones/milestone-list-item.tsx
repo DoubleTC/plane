@@ -44,9 +44,7 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
       : 0;
 
   const isOverdue =
-    milestone.target_date != null &&
-    new Date(milestone.target_date) < new Date() &&
-    completionPercentage < 100;
+    milestone.target_date != null && new Date(milestone.target_date) < new Date() && completionPercentage < 100;
 
   const handleArchiveToggle = async () => {
     if (!workspaceSlug || !projectId) return;
@@ -74,17 +72,13 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
         projectId={projectId?.toString() ?? ""}
       />
       {/* Delete Modal */}
-      <DeleteMilestoneModal
-        data={milestone}
-        isOpen={deleteModal}
-        onClose={() => setDeleteModal(false)}
-      />
+      <DeleteMilestoneModal data={milestone} isOpen={deleteModal} onClose={() => setDeleteModal(false)} />
 
-      <div className="group flex items-center justify-between gap-x-3 rounded-lg border border-custom-border-200 bg-custom-background-100 px-4 py-3 hover:bg-custom-background-90 transition-colors">
+      <div className="group border-custom-border-200 bg-custom-background-100 hover:bg-custom-background-90 flex items-center justify-between gap-x-3 rounded-lg border px-4 py-3 transition-colors">
         {/* Left: progress + info */}
-        <div className="flex items-center gap-x-3 min-w-0">
+        <div className="flex min-w-0 items-center gap-x-3">
           <CircularProgressIndicator size={36} percentage={completionPercentage} strokeWidth={3}>
-            <span className="text-[9px] font-semibold text-custom-text-200">{completionPercentage}%</span>
+            <span className="text-custom-text-200 text-[9px] font-semibold">{completionPercentage}%</span>
           </CircularProgressIndicator>
 
           <div className="min-w-0">
@@ -95,15 +89,15 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
                   style={{ backgroundColor: milestone.color }}
                 />
               )}
-              <span className="truncate font-medium text-custom-text-100">{milestone.name}</span>
+              <span className="text-custom-text-100 truncate font-medium">{milestone.name}</span>
               {milestone.archived_at && (
-                <span className="rounded bg-custom-background-80 px-1.5 py-0.5 text-xs text-custom-text-300">
+                <span className="bg-custom-background-80 text-xs text-custom-text-300 rounded px-1.5 py-0.5">
                   {t("common.archived")}
                 </span>
               )}
             </div>
             {milestone.description ? (
-              <p className="mt-0.5 truncate text-xs text-custom-text-300">{milestone.description}</p>
+              <p className="text-xs text-custom-text-300 mt-0.5 truncate">{milestone.description}</p>
             ) : null}
           </div>
         </div>
@@ -111,15 +105,17 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
         {/* Right: stats + date + menu */}
         <div className="flex flex-shrink-0 items-center gap-x-4">
           {/* Issue counts */}
-          <div className="hidden sm:flex items-center gap-x-2 text-xs text-custom-text-300">
-            <span>{milestone.completed_issues}/{milestone.total_issues}</span>
+          <div className="text-xs text-custom-text-300 hidden items-center gap-x-2 sm:flex">
+            <span>
+              {milestone.completed_issues}/{milestone.total_issues}
+            </span>
             <span>{t("milestone.issues_label")}</span>
           </div>
 
           {/* Target date */}
           {milestone.target_date && (
             <div
-              className={`hidden sm:flex items-center gap-x-1 text-xs ${
+              className={`text-xs hidden items-center gap-x-1 sm:flex ${
                 isOverdue ? "text-red-500" : "text-custom-text-300"
               }`}
             >
@@ -131,19 +127,19 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
           {/* Context menu */}
           <CustomMenu ellipsis placement="bottom-end">
             <CustomMenu.MenuItem onClick={() => setEditModal(true)}>
-              <span className="flex items-center gap-x-2 text-custom-text-200">
+              <span className="text-custom-text-200 flex items-center gap-x-2">
                 <Pencil className="h-3.5 w-3.5" />
                 {t("common.edit")}
               </span>
             </CustomMenu.MenuItem>
             <CustomMenu.MenuItem onClick={handleArchiveToggle}>
-              <span className="flex items-center gap-x-2 text-custom-text-200">
+              <span className="text-custom-text-200 flex items-center gap-x-2">
                 <Archive className="h-3.5 w-3.5" />
                 {milestone.archived_at ? t("common.unarchive") : t("common.archive")}
               </span>
             </CustomMenu.MenuItem>
             <CustomMenu.MenuItem onClick={() => setDeleteModal(true)}>
-              <span className="flex items-center gap-x-2 text-red-500">
+              <span className="text-red-500 flex items-center gap-x-2">
                 <Trash2 className="h-3.5 w-3.5" />
                 {t("common.delete")}
               </span>

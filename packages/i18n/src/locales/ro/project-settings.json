@@ -418,11 +418,11 @@
         "toggle_description": "Membrii proiectului vor putea înregistra timpul lucrat."
       },
       "milestones": {
-        "title": "Etape importante",
-        "short_title": "Etape importante",
-        "description": "Etapele importante oferă un strat pentru a alinia elementele de lucru către date comune de finalizare.",
-        "toggle_title": "Activați etapele importante",
-        "toggle_description": "Organizați elementele de lucru după termenele etapelor importante."
+        "title": "Jaloane",
+        "short_title": "Jaloane",
+        "description": "Urmăriți livrabilele cheie și aliniați sarcinile cu datele de finalizare comune.",
+        "toggle_title": "Activați jaloanele",
+        "toggle_description": "Membrii proiectului vor putea crea și edita jaloane."
       },
       "toasts": {
         "loading": "Se actualizează funcționalitatea proiectului...",

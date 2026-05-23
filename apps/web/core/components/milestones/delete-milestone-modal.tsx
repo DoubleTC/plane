@@ -68,11 +68,7 @@ export const DeleteMilestoneModal = observer(function DeleteMilestoneModal(props
       isSubmitting={isDeleteLoading}
       isOpen={isOpen}
       title={t("milestone.delete.title")}
-      content={
-        <p className="text-sm text-custom-text-200">
-          {t("milestone.delete.content", { name: data.name })}
-        </p>
-      }
+      content={<p className="text-sm text-custom-text-200">{t("milestone.delete.content", { name: data.name })}</p>}
     />
   );
 });

@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Hitos",
         "short_title": "Hitos",
-        "description": "Los hitos proporcionan una capa para alinear los elementos de trabajo hacia fechas de finalización compartidas.",
-        "toggle_title": "Habilitar hitos",
-        "toggle_description": "Organiza elementos de trabajo por plazos de hitos."
+        "description": "Realice un seguimiento de los entregables clave y alinee las tareas con las fechas de finalización compartidas.",
+        "toggle_title": "Activar hitos",
+        "toggle_description": "Los miembros del proyecto podrán crear y editar hitos."
       },
       "toasts": {
         "loading": "Actualizando función del proyecto...",

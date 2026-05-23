@@ -420,9 +420,9 @@
       "milestones": {
         "title": "Cột mốc",
         "short_title": "Cột mốc",
-        "description": "Cột mốc cung cấp một lớp để điều chỉnh các mục công việc theo các ngày hoàn thành chung.",
+        "description": "Theo dõi các mốc quan trọng và liên kết công việc với ngày hoàn thành chung.",
         "toggle_title": "Bật cột mốc",
-        "toggle_description": "Tổ chức các mục công việc theo thời hạn cột mốc."
+        "toggle_description": "Thành viên dự án sẽ có thể tạo và chỉnh sửa cột mốc."
       },
       "toasts": {
         "loading": "Đang cập nhật tính năng dự án...",
