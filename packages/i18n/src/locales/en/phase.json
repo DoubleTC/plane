@@ -19,6 +19,7 @@
     "validation": {
       "name_required": "Phase name is required."
     },
+    "no_lead": "No lead",
     "toast": {
       "created_title": "Phase created",
       "created_message": "Phase has been created successfully.",
@@ -33,7 +34,12 @@
       "cycles_added": "Cycles added",
       "cycles_add_error": "Could not add cycles. Please try again.",
       "cycle_removed": "Cycle removed from phase",
-      "cycle_remove_error": "Could not remove cycle. Please try again."
+      "cycle_remove_error": "Could not remove cycle. Please try again.",
+      "favoriting": "Adding phase to favorites...",
+      "favorited": "Phase added to favorites.",
+      "unfavoriting": "Removing phase from favorites...",
+      "unfavorited": "Phase removed from favorites.",
+      "favorite_error": "Could not update favorites. Please try again."
     },
     "delete": {
       "title": "Delete phase",

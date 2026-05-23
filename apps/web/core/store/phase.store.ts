@@ -35,6 +35,9 @@ export interface IPhaseStore {
   // Archive
   archivePhase: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<void>;
   unarchivePhase: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<void>;
+  // Favorites
+  addPhaseToFavorites: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<void>;
+  removePhaseFromFavorites: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<void>;
   // Cycles
   getPhaseCycles: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<IPhaseCycle[]>;
   addCyclesToPhase: (
@@ -207,6 +210,38 @@ export class PhaseStore implements IPhaseStore {
     runInAction(() => {
       if (this.phaseMap[phaseId]) this.phaseMap[phaseId] = { ...this.phaseMap[phaseId], archived_at: null };
     });
+  };
+
+  // ── Favorites ─────────────────────────────────────────────────────────────
+
+  addPhaseToFavorites = async (workspaceSlug: string, projectId: string, phaseId: string): Promise<void> => {
+    const existing = this.phaseMap[phaseId];
+    runInAction(() => {
+      if (existing) this.phaseMap[phaseId] = { ...existing, is_favorite: true };
+    });
+    try {
+      await this.phaseService.addPhaseToFavorites(workspaceSlug, projectId, phaseId);
+    } catch (error) {
+      runInAction(() => {
+        if (existing) this.phaseMap[phaseId] = existing;
+      });
+      throw error;
+    }
+  };
+
+  removePhaseFromFavorites = async (workspaceSlug: string, projectId: string, phaseId: string): Promise<void> => {
+    const existing = this.phaseMap[phaseId];
+    runInAction(() => {
+      if (existing) this.phaseMap[phaseId] = { ...existing, is_favorite: false };
+    });
+    try {
+      await this.phaseService.removePhaseFromFavorites(workspaceSlug, projectId, phaseId);
+    } catch (error) {
+      runInAction(() => {
+        if (existing) this.phaseMap[phaseId] = existing;
+      });
+      throw error;
+    }
   };
 
   // ── Cycles ─────────────────────────────────────────────────────────────────

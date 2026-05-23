@@ -3,14 +3,14 @@
 
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { Archive, Layers, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Archive, ExternalLink, Layers, Link, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { IconButton } from "@plane/propel/icon-button";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TContextMenuItem } from "@plane/ui";
 import { ContextMenu, CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { cn, copyUrlToClipboard } from "@plane/utils";
 import { useTranslation } from "@plane/i18n";
 // components
 import { AddCyclesToPhaseModal } from "@/components/phases/add-cycles-to-phase-modal";
@@ -47,6 +47,14 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
 
   if (!phase) return null;
 
+  const phaseLink = `${workspaceSlug}/projects/${projectId}/phases/${phaseId}`;
+  const handleCopyLink = () =>
+    copyUrlToClipboard(phaseLink).then(() => {
+      setToast({ type: TOAST_TYPE.SUCCESS, title: t("common.link_copied") ?? "Link copied!" });
+      return undefined;
+    });
+  const handleOpenInNewTab = () => window.open(`/${phaseLink}`, "_blank");
+
   const handleArchiveToggle = async () => {
     try {
       if (phase.archived_at) {
@@ -72,6 +80,20 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
   };
 
   const MENU_ITEMS: TContextMenuItem[] = [
+    {
+      key: "open-new-tab",
+      title: t("common.open_in_new_tab"),
+      icon: ExternalLink,
+      action: handleOpenInNewTab,
+      shouldRender: true,
+    },
+    {
+      key: "copy-link",
+      title: t("common.copy_link"),
+      icon: Link,
+      action: handleCopyLink,
+      shouldRender: true,
+    },
     {
       key: "add-cycles",
       title: t("phase.add_cycles"),

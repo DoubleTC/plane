@@ -20,9 +20,10 @@ export interface IPhase {
   updated_at: string;
   created_by?: string;
   updated_by?: string;
-  // Annotated counts from the backend
+  // Annotated counts and flags from the backend
   total_cycles: number;
   completed_cycles: number;
+  is_favorite: boolean;
 }
 
 export interface IPhaseCreate {

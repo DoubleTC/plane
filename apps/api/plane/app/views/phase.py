@@ -7,14 +7,15 @@ from django.db.models.functions import Coalesce
 from rest_framework import status
 from rest_framework.response import Response
 
-from plane.app.permissions import ProjectEntityPermission
+from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission
 from plane.app.serializers import PhaseCycleSerializer, PhaseSerializer, PhaseWriteSerializer
-from plane.db.models import Cycle, CycleIssue, Phase, PhaseCycle, Project
+from plane.db.models import Cycle, CycleIssue, Phase, PhaseCycle, Project, UserFavorite
 
 from .base import BaseViewSet
 
 
-def _annotate_phases(qs):
+def _annotate_phases(qs, user=None, project_id=None, slug=None):
+    """user, project_id, slug: when provided, also annotate is_favorite."""
     """
     Annotate each Phase with:
       - total_cycles   : number of linked PhaseCycles
@@ -52,7 +53,7 @@ def _annotate_phases(qs):
         output_field=IntegerField(),
     )
 
-    return qs.annotate(
+    annotations = dict(
         total_cycles=Count(
             "phase_cycles",
             filter=Q(phase_cycles__deleted_at__isnull=True),
@@ -60,6 +61,18 @@ def _annotate_phases(qs):
         ),
         completed_cycles=Coalesce(completed_cycles_subq, 0),
     )
+
+    if user is not None:
+        favorite_subquery = UserFavorite.objects.filter(
+            user=user,
+            entity_type="phase",
+            entity_identifier=OuterRef("pk"),
+            project_id=project_id,
+            workspace__slug=slug,
+        )
+        annotations["is_favorite"] = Exists(favorite_subquery)
+
+    return qs.annotate(**annotations)
 
 
 class PhaseViewSet(BaseViewSet):
@@ -80,8 +93,11 @@ class PhaseViewSet(BaseViewSet):
                 workspace__slug=self.kwargs.get("slug"),
                 project_id=self.kwargs.get("project_id"),
                 archived_at__isnull=True,
-            )
-        ).order_by("sort_order")
+            ),
+            user=self.request.user,
+            project_id=self.kwargs.get("project_id"),
+            slug=self.kwargs.get("slug"),
+        ).order_by("-is_favorite", "sort_order")
 
     def _check_feature_flag(self, project_id, slug):
         project = self._get_project(project_id, slug)
@@ -114,13 +130,21 @@ class PhaseViewSet(BaseViewSet):
                 created_by=request.user,
                 updated_by=request.user,
             )
-            phase = _annotate_phases(Phase.objects.filter(pk=serializer.instance.pk)).first()
+            phase = _annotate_phases(
+                Phase.objects.filter(pk=serializer.instance.pk),
+                user=request.user,
+                project_id=project_id,
+                slug=slug,
+            ).first()
             return Response(PhaseSerializer(phase).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, slug, project_id, pk):
         phase = _annotate_phases(
-            Phase.objects.filter(workspace__slug=slug, project_id=project_id, pk=pk)
+            Phase.objects.filter(workspace__slug=slug, project_id=project_id, pk=pk),
+            user=request.user,
+            project_id=project_id,
+            slug=slug,
         ).first()
         if not phase:
             return Response({"error": "Phase not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -138,7 +162,12 @@ class PhaseViewSet(BaseViewSet):
         )
         if serializer.is_valid():
             serializer.save(updated_by=request.user)
-            phase = _annotate_phases(Phase.objects.filter(pk=pk)).first()
+            phase = _annotate_phases(
+                Phase.objects.filter(pk=pk),
+                user=request.user,
+                project_id=project_id,
+                slug=slug,
+            ).first()
             return Response(PhaseSerializer(phase).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -171,6 +200,35 @@ class PhaseArchiveViewSet(BaseViewSet):
             return Response({"error": "Phase not found."}, status=status.HTTP_404_NOT_FOUND)
         phase.archived_at = None
         phase.save(update_fields=["archived_at"])
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PhaseFavoriteViewSet(BaseViewSet):
+    """Add / remove a Phase from the current user's favorites."""
+
+    permission_classes = [ProjectLitePermission]
+    model = UserFavorite
+
+    def create(self, request, slug, project_id, phase_id):
+        UserFavorite.objects.create(
+            project_id=project_id,
+            user=request.user,
+            entity_type="phase",
+            entity_identifier=phase_id,
+        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, slug, project_id, phase_id):
+        favorite = UserFavorite.objects.filter(
+            project_id=project_id,
+            user=request.user,
+            workspace__slug=slug,
+            entity_type="phase",
+            entity_identifier=phase_id,
+        ).first()
+        if not favorite:
+            return Response({"error": "Favorite not found."}, status=status.HTTP_404_NOT_FOUND)
+        favorite.delete(soft=False)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

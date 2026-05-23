@@ -7,5 +7,6 @@ export * from "./delete-phase-modal";
 export * from "./phase-cycles-list";
 export * from "./phase-detail-sidebar";
 export * from "./phase-list-item";
+export * from "./phase-list-item-action";
 export * from "./phase-quick-actions";
 export * from "./phases-list-view";

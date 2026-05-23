@@ -33,7 +33,12 @@
       "cycles_added": "サイクルを追加しました",
       "cycles_add_error": "サイクルを追加できませんでした。もう一度お試しください。",
       "cycle_removed": "Cycle removed from phase",
-      "cycle_remove_error": "Could not remove cycle. Please try again."
+      "cycle_remove_error": "Could not remove cycle. Please try again.",
+      "favoriting": "Adding phase to favorites...",
+      "favorited": "Phase added to favorites.",
+      "unfavoriting": "Removing phase from favorites...",
+      "unfavorited": "Phase removed from favorites.",
+      "favorite_error": "Could not update favorites. Please try again."
     },
     "delete": {
       "title": "フェーズを削除",
@@ -54,6 +59,7 @@
       "no_cycles": "No cycles linked to this phase yet.",
       "progress": "Progress",
       "remove_cycle": "Remove cycle"
-    }
+    },
+    "no_lead": "No lead"
   }
 }

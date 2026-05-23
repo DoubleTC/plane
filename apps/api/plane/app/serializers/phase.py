@@ -10,10 +10,11 @@ from .base import BaseSerializer, DynamicBaseSerializer
 
 
 class PhaseSerializer(DynamicBaseSerializer):
-    """Read serializer — includes annotated cycle counts and member info."""
+    """Read serializer — includes annotated cycle counts, member info, and is_favorite."""
 
     total_cycles = serializers.IntegerField(read_only=True, default=0)
     completed_cycles = serializers.IntegerField(read_only=True, default=0)
+    is_favorite = serializers.BooleanField(read_only=True, default=False)
     member_ids = serializers.SerializerMethodField()
 
     class Meta:

@@ -33,7 +33,12 @@
       "cycles_added": "Ciclos adicionados",
       "cycles_add_error": "Não foi possível adicionar ciclos. Tente novamente.",
       "cycle_removed": "Cycle removed from phase",
-      "cycle_remove_error": "Could not remove cycle. Please try again."
+      "cycle_remove_error": "Could not remove cycle. Please try again.",
+      "favoriting": "Adding phase to favorites...",
+      "favorited": "Phase added to favorites.",
+      "unfavoriting": "Removing phase from favorites...",
+      "unfavorited": "Phase removed from favorites.",
+      "favorite_error": "Could not update favorites. Please try again."
     },
     "delete": {
       "title": "Excluir fase",
@@ -54,6 +59,7 @@
       "no_cycles": "No cycles linked to this phase yet.",
       "progress": "Progress",
       "remove_cycle": "Remove cycle"
-    }
+    },
+    "no_lead": "No lead"
   }
 }

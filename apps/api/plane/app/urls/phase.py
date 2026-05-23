@@ -4,7 +4,7 @@
 
 from django.urls import path
 
-from plane.app.views import PhaseViewSet, PhaseArchiveViewSet, PhaseCycleViewSet
+from plane.app.views import PhaseViewSet, PhaseArchiveViewSet, PhaseCycleViewSet, PhaseFavoriteViewSet
 
 urlpatterns = [
     # Phase CRUD
@@ -23,6 +23,12 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/phases/<uuid:phase_id>/archive/",
         PhaseArchiveViewSet.as_view({"post": "create", "delete": "destroy"}),
         name="phase-archive",
+    ),
+    # Favorites
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/phases/<uuid:phase_id>/favorite/",
+        PhaseFavoriteViewSet.as_view({"post": "create", "delete": "destroy"}),
+        name="phase-favorite",
     ),
     # Phase ↔ Cycle linking
     path(

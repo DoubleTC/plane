@@ -44,6 +44,15 @@ export class PhaseService extends APIService {
     return this.delete(`${this.base(workspaceSlug, projectId)}/${phaseId}/archive/`).then(() => undefined);
   }
 
+  // Favorites
+  addPhaseToFavorites(workspaceSlug: string, projectId: string, phaseId: string): Promise<void> {
+    return this.post(`${this.base(workspaceSlug, projectId)}/${phaseId}/favorite/`).then(() => undefined);
+  }
+
+  removePhaseFromFavorites(workspaceSlug: string, projectId: string, phaseId: string): Promise<void> {
+    return this.delete(`${this.base(workspaceSlug, projectId)}/${phaseId}/favorite/`).then(() => undefined);
+  }
+
   // Cycles
   getPhaseCycles(workspaceSlug: string, projectId: string, phaseId: string): Promise<IPhaseCycle[]> {
     return this.get(`${this.base(workspaceSlug, projectId)}/${phaseId}/cycles/`).then((r) => r.data as IPhaseCycle[]);
