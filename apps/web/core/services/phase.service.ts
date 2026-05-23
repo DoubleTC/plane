@@ -11,7 +11,7 @@ export class PhaseService extends APIService {
   }
 
   private base(workspaceSlug: string, projectId: string) {
-    return `/workspaces/${workspaceSlug}/projects/${projectId}/phases`;
+    return `/api/workspaces/${workspaceSlug}/projects/${projectId}/phases`;
   }
 
   getPhases(workspaceSlug: string, projectId: string): Promise<IPhase[]> {
