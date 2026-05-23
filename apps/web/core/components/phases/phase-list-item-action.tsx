@@ -13,14 +13,15 @@ import type { IPhase, IPhaseUpdate, TPhaseStatus } from "@plane/types";
 import { ModuleStatusIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setPromiseToast, setToast } from "@plane/propel/toast";
 import { Tooltip } from "@plane/propel/tooltip";
-import { CustomSelect, FavoriteStar } from "@plane/ui";
-import { getDate, renderFormattedPayloadDate } from "@plane/utils";
+import { Avatar, AvatarGroup, CustomSelect, FavoriteStar } from "@plane/ui";
+import { getDate, getFileURL, renderFormattedPayloadDate } from "@plane/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";
 import { PhaseQuickActions } from "@/components/phases/phase-quick-actions";
 // hooks
 import { usePhase } from "@/hooks/store/use-phase";
+import { useMember } from "@/hooks/store/use-member";
 import { useUserPermissions } from "@/hooks/store/user";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 
@@ -38,6 +39,7 @@ export const PhaseListItemAction = observer(function PhaseListItemAction(props: 
   const { t } = useTranslation();
   const { allowPermissions } = useUserPermissions();
   const { updatePhase, addPhaseToFavorites, removePhaseFromFavorites } = usePhase();
+  const { getUserDetails } = useMember();
   const { isMobile } = usePlatformOS();
 
   // local storage — open favorites sidebar when favoriting
@@ -157,6 +159,20 @@ export const PhaseListItemAction = observer(function PhaseListItemAction(props: 
           <SquareUser className="h-4 w-4 text-tertiary" />
         </Tooltip>
       )}
+
+      {/* Member avatars — computed from all assignees across phase cycles */}
+      {phase.member_ids && phase.member_ids.length > 0 ? (
+        <Tooltip isMobile={isMobile} tooltipContent={`${phase.member_ids.length} ${t("members")}`} position="bottom">
+          <div className="flex cursor-default items-center justify-center">
+            <AvatarGroup showTooltip={false}>
+              {phase.member_ids.map((memberId) => {
+                const member = getUserDetails(memberId);
+                return <Avatar key={memberId} name={member?.display_name} src={getFileURL(member?.avatar_url ?? "")} />;
+              })}
+            </AvatarGroup>
+          </div>
+        </Tooltip>
+      ) : null}
 
       {/* Favorite star */}
       {isEditingAllowed && !phase.archived_at && (

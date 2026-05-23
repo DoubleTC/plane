@@ -33,7 +33,6 @@ export interface IPhaseCreate {
   start_date?: string | null;
   end_date?: string | null;
   lead_id?: string | null;
-  member_ids?: string[];
 }
 
 export interface IPhaseUpdate extends Partial<IPhaseCreate> {

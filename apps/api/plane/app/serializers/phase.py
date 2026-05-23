@@ -4,13 +4,13 @@
 
 from rest_framework import serializers
 
-from plane.db.models import Phase, PhaseMember, PhaseCycle, User
+from plane.db.models import IssueAssignee, Phase, PhaseCycle, User
 
 from .base import BaseSerializer, DynamicBaseSerializer
 
 
 class PhaseSerializer(DynamicBaseSerializer):
-    """Read serializer — includes annotated cycle counts, member info, and is_favorite."""
+    """Read serializer — includes annotated cycle counts, computed member info, and is_favorite."""
 
     total_cycles = serializers.IntegerField(read_only=True, default=0)
     completed_cycles = serializers.IntegerField(read_only=True, default=0)
@@ -24,19 +24,32 @@ class PhaseSerializer(DynamicBaseSerializer):
         read_only_fields = ["workspace", "project", "created_by", "updated_by", "deleted_at"]
 
     def get_member_ids(self, obj):
-        return [str(m.id) for m in obj.members.all()]
+        """
+        Computed: union of all assignees of all work items in all cycles of this phase.
+        Phase → PhaseCycle → Cycle → CycleIssue → IssueAssignee → User
+        """
+        cycle_ids = PhaseCycle.objects.filter(
+            phase=obj,
+            deleted_at__isnull=True,
+        ).values_list("cycle_id", flat=True)
+
+        assignee_ids = (
+            IssueAssignee.objects.filter(
+                issue__issue_cycle__cycle_id__in=cycle_ids,
+                issue__issue_cycle__deleted_at__isnull=True,
+                deleted_at__isnull=True,
+            )
+            .values_list("assignee_id", flat=True)
+            .distinct()
+        )
+        return [str(uid) for uid in assignee_ids]
 
 
 class PhaseWriteSerializer(BaseSerializer):
-    """Write serializer that accepts lead_id and member_ids."""
+    """Write serializer — accepts lead_id only; member_ids are now computed."""
 
     lead_id = serializers.PrimaryKeyRelatedField(
         source="lead", queryset=User.objects.all(), required=False, allow_null=True
-    )
-    member_ids = serializers.ListField(
-        child=serializers.PrimaryKeyRelatedField(queryset=User.objects.all()),
-        write_only=True,
-        required=False,
     )
 
     class Meta:
@@ -49,7 +62,6 @@ class PhaseWriteSerializer(BaseSerializer):
             "start_date",
             "end_date",
             "lead_id",
-            "member_ids",
             "sort_order",
             "archived_at",
         ]
@@ -57,39 +69,13 @@ class PhaseWriteSerializer(BaseSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["lead_id"] = str(instance.lead_id) if instance.lead_id else None
-        data["member_ids"] = [str(m.id) for m in instance.members.all()]
         return data
 
-    def _sync_members(self, phase, members, project):
-        if members is None:
-            return
-        PhaseMember.objects.filter(phase=phase, deleted_at__isnull=True).delete()
-        PhaseMember.objects.bulk_create(
-            [
-                PhaseMember(
-                    phase=phase,
-                    member=member,
-                    project=project,
-                    workspace=project.workspace,
-                    created_by=phase.created_by,
-                    updated_by=phase.updated_by,
-                )
-                for member in members
-            ],
-            batch_size=10,
-            ignore_conflicts=True,
-        )
-
     def create(self, validated_data):
-        members = validated_data.pop("member_ids", None)
         project = self.context["project"]
-        phase = Phase.objects.create(**validated_data, project=project)
-        self._sync_members(phase, members, project)
-        return phase
+        return Phase.objects.create(**validated_data, project=project)
 
     def update(self, instance, validated_data):
-        members = validated_data.pop("member_ids", None)
-        self._sync_members(instance, members, instance.project)
         return super().update(instance, validated_data)
 
 

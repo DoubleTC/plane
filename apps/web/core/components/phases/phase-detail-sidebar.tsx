@@ -9,25 +9,32 @@ import { SquareUser } from "lucide-react";
 // plane imports
 import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
-import { MembersPropertyIcon, ModuleStatusIcon, StartDatePropertyIcon, ChevronRightIcon } from "@plane/propel/icons";
+import {
+  MembersPropertyIcon,
+  ModuleStatusIcon,
+  StartDatePropertyIcon,
+  ChevronRightIcon,
+  CheckIcon,
+} from "@plane/propel/icons";
+import { Tooltip } from "@plane/propel/tooltip";
 import type { TPhaseStatus } from "@plane/types";
-import { CustomSelect, Loader, TextArea } from "@plane/ui";
+import { Avatar, AvatarGroup, CustomSelect, Loader, TextArea } from "@plane/ui";
 import { CircularProgressIndicator } from "@plane/ui";
-import { CheckIcon } from "@plane/propel/icons";
-import { getDate, renderFormattedPayloadDate } from "@plane/utils";
+import { getDate, getFileURL, renderFormattedPayloadDate } from "@plane/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 // hooks
 import { usePhase } from "@/hooks/store/use-phase";
+import { useMember } from "@/hooks/store/use-member";
 import { useUserPermissions } from "@/hooks/store/user";
+import { usePlatformOS } from "@/hooks/use-platform-os";
 
 type FormValues = {
   status: TPhaseStatus;
   start_date: string | null;
   end_date: string | null;
   lead_id: string | null;
-  member_ids: string[];
 };
 
 type Props = {
@@ -42,7 +49,9 @@ export const PhaseDetailSidebar = observer(function PhaseDetailSidebar(props: Pr
   // store hooks
   const { t } = useTranslation();
   const { getPhaseById, updatePhase } = usePhase();
+  const { getUserDetails } = useMember();
   const { allowPermissions } = useUserPermissions();
+  const { isMobile } = usePlatformOS();
 
   const phase = getPhaseById(phaseId);
 
@@ -52,7 +61,6 @@ export const PhaseDetailSidebar = observer(function PhaseDetailSidebar(props: Pr
       start_date: null,
       end_date: null,
       lead_id: null,
-      member_ids: [],
     },
   });
 
@@ -63,7 +71,6 @@ export const PhaseDetailSidebar = observer(function PhaseDetailSidebar(props: Pr
         start_date: phase.start_date ?? null,
         end_date: phase.end_date ?? null,
         lead_id: phase.lead_id ?? null,
-        member_ids: phase.member_ids ?? [],
       });
     }
   }, [phase, reset]);
@@ -228,31 +235,28 @@ export const PhaseDetailSidebar = observer(function PhaseDetailSidebar(props: Pr
           />
         </div>
 
-        {/* Members */}
+        {/* Members — computed read-only: union of all assignees across all phase cycles */}
         <div className="flex items-center justify-start gap-1">
           <div className="flex w-2/5 items-center justify-start gap-2 text-tertiary">
             <MembersPropertyIcon className="h-4 w-4" />
             <span className="text-14">{t("members")}</span>
           </div>
-          <Controller
-            control={control}
-            name="member_ids"
-            render={({ field: { value } }) => (
-              <div className="h-7 w-3/5">
-                <MemberDropdown
-                  value={value ?? []}
-                  onChange={(val: string[]) => {
-                    submitChanges({ member_ids: val });
-                  }}
-                  multiple
-                  projectId={projectId?.toString() ?? ""}
-                  buttonVariant={value && value.length > 0 ? "transparent-without-text" : "background-with-text"}
-                  buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
-                  disabled={!isEditingAllowed}
-                />
-              </div>
+          <div className="flex h-7 w-3/5 items-center">
+            {phase.member_ids && phase.member_ids.length > 0 ? (
+              <Tooltip isMobile={isMobile} tooltipContent={`${phase.member_ids.length} ${t("members")}`} position="top">
+                <AvatarGroup showTooltip={false}>
+                  {phase.member_ids.map((memberId) => {
+                    const member = getUserDetails(memberId);
+                    return (
+                      <Avatar key={memberId} name={member?.display_name} src={getFileURL(member?.avatar_url ?? "")} />
+                    );
+                  })}
+                </AvatarGroup>
+              </Tooltip>
+            ) : (
+              <span className="text-13 text-tertiary italic">—</span>
             )}
-          />
+          </div>
         </div>
 
         {/* Progress */}

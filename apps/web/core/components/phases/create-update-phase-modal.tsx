@@ -26,7 +26,6 @@ type FormValues = {
   start_date: string | null;
   end_date: string | null;
   lead_id: string | null;
-  member_ids: string[];
 };
 
 type Props = {
@@ -56,7 +55,6 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
       start_date: null,
       end_date: null,
       lead_id: null,
-      member_ids: [],
     },
   });
 
@@ -69,7 +67,6 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
         start_date: data.start_date ?? null,
         end_date: data.end_date ?? null,
         lead_id: data.lead_id ?? null,
-        member_ids: data.member_ids ?? [],
       });
     } else {
       reset({
@@ -79,7 +76,6 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
         start_date: null,
         end_date: null,
         lead_id: null,
-        member_ids: [],
       });
     }
   }, [data, isOpen, reset]);
@@ -97,7 +93,6 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
       start_date: values.start_date || null,
       end_date: values.end_date || null,
       lead_id: values.lead_id || null,
-      member_ids: values.member_ids,
     };
     try {
       if (data) {
@@ -168,7 +163,7 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
               )}
             />
 
-            {/* Date range + Status + Lead + Members */}
+            {/* Date range + Status + Lead */}
             <div className="flex flex-wrap items-center gap-2">
               {/* Combined date range picker */}
               <Controller
@@ -247,25 +242,6 @@ export const CreateUpdatePhaseModal = observer(function CreateUpdatePhaseModal(p
                       multiple={false}
                       buttonVariant="border-with-text"
                       placeholder={t("lead")}
-                    />
-                  </div>
-                )}
-              />
-
-              {/* Members */}
-              <Controller
-                control={control}
-                name="member_ids"
-                render={({ field: { value, onChange } }) => (
-                  <div className="h-7">
-                    <MemberDropdown
-                      value={value}
-                      onChange={onChange}
-                      projectId={projectId}
-                      multiple
-                      buttonVariant={value && value.length > 0 ? "transparent-without-text" : "border-with-text"}
-                      buttonClassName={value && value.length > 0 ? "hover:bg-transparent px-0" : ""}
-                      placeholder={t("members")}
                     />
                   </div>
                 )}
