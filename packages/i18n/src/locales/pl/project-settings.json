@@ -417,13 +417,6 @@
         "toggle_title": "Włącz śledzenie czasu",
         "toggle_description": "Członkowie projektu będą mogli rejestrować przepracowany czas."
       },
-      "milestones": {
-        "title": "Kamienie milowe",
-        "short_title": "Kamienie milowe",
-        "description": "Śledź kluczowe elementy dostarczane i dostosuj zadania do wspólnych dat ukończenia.",
-        "toggle_title": "Włącz kamienie milowe",
-        "toggle_description": "Członkowie projektu będą mogli tworzyć i edytować kamienie milowe."
-      },
       "toasts": {
         "loading": "Aktualizowanie funkcji projektu...",
         "success": "Funkcja projektu zaktualizowana pomyślnie.",

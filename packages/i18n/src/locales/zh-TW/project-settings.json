@@ -417,13 +417,6 @@
         "toggle_title": "啟用時間追蹤",
         "toggle_description": "專案成員將能夠記錄工作時間。"
       },
-      "milestones": {
-        "title": "里程碑",
-        "short_title": "里程碑",
-        "description": "追蹤關鍵交付物，並將工作項目與共用完成日期保持一致。",
-        "toggle_title": "啟用里程碑",
-        "toggle_description": "專案成員將能夠建立和編輯里程碑。"
-      },
       "toasts": {
         "loading": "正在更新專案功能...",
         "success": "專案功能更新成功。",

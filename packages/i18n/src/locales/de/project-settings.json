@@ -417,13 +417,6 @@
         "toggle_title": "Zeiterfassung aktivieren",
         "toggle_description": "Projektmitglieder können die geleistete Arbeit protokollieren."
       },
-      "milestones": {
-        "title": "Meilensteine",
-        "short_title": "Meilensteine",
-        "description": "Verfolgen Sie wichtige Liefergegenstände und richten Sie Aufgaben auf gemeinsame Fertigstellungsdaten aus.",
-        "toggle_title": "Meilensteine aktivieren",
-        "toggle_description": "Projektmitglieder können Meilensteine erstellen und bearbeiten."
-      },
       "toasts": {
         "loading": "Projektfunktion wird aktualisiert...",
         "success": "Projektfunktion erfolgreich aktualisiert.",

@@ -417,13 +417,6 @@
         "toggle_title": "Activer le suivi du temps",
         "toggle_description": "Les membres du projet pourront enregistrer le temps travaillé."
       },
-      "milestones": {
-        "title": "Jalons",
-        "short_title": "Jalons",
-        "description": "Suivez les livrables clés et alignez les tâches sur des dates de fin partagées.",
-        "toggle_title": "Activer les jalons",
-        "toggle_description": "Les membres du projet pourront créer et modifier des jalons."
-      },
       "toasts": {
         "loading": "Mise à jour de la fonctionnalité du projet...",
         "success": "Fonctionnalité du projet mise à jour avec succès.",

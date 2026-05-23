@@ -835,8 +835,6 @@
   "pi_chat": "Plane AI",
   "in_app": "In-app",
   "forms": "Forms",
-  "milestones": "Milestones",
-  "milestones_description": "Track key deliverables and align work items toward shared completion dates.",
   "phases": "Phases",
   "phases_description": "Group cycles into phases to structure your project timeline.",
   "file_upload": {

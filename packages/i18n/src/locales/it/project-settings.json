@@ -417,13 +417,6 @@
         "toggle_title": "Abilita monitoraggio del tempo",
         "toggle_description": "I membri del progetto potranno registrare il tempo lavorato."
       },
-      "milestones": {
-        "title": "Milestone",
-        "short_title": "Milestone",
-        "description": "Monitora i deliverable chiave e allinea le attività alle date di completamento condivise.",
-        "toggle_title": "Abilita milestone",
-        "toggle_description": "I membri del progetto potranno creare e modificare le milestone."
-      },
       "toasts": {
         "loading": "Aggiornamento funzionalità progetto...",
         "success": "Funzionalità progetto aggiornata con successo.",

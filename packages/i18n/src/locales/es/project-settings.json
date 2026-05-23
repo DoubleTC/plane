@@ -417,13 +417,6 @@
         "toggle_title": "Habilitar seguimiento de tiempo",
         "toggle_description": "Los miembros del proyecto podrán registrar el tiempo trabajado."
       },
-      "milestones": {
-        "title": "Hitos",
-        "short_title": "Hitos",
-        "description": "Realice un seguimiento de los entregables clave y alinee las tareas con las fechas de finalización compartidas.",
-        "toggle_title": "Activar hitos",
-        "toggle_description": "Los miembros del proyecto podrán crear y editar hitos."
-      },
       "toasts": {
         "loading": "Actualizando función del proyecto...",
         "success": "Función del proyecto actualizada correctamente.",

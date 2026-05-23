@@ -417,13 +417,6 @@
         "toggle_title": "Povolit sledování času",
         "toggle_description": "Členové projektu budou moci zaznamenávat odpracovaný čas."
       },
-      "milestones": {
-        "title": "Milníky",
-        "short_title": "Milníky",
-        "description": "Sledujte klíčové výstupy a slaďte úkoly se sdílenými termíny dokončení.",
-        "toggle_title": "Povolit milníky",
-        "toggle_description": "Členové projektu budou moci vytvářet a upravovat milníky."
-      },
       "toasts": {
         "loading": "Aktualizace funkce projektu...",
         "success": "Funkce projektu byla úspěšně aktualizována.",

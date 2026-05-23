@@ -835,8 +835,6 @@
   "pi_chat": "Plane AI",
   "in_app": "Uygulama İçi",
   "forms": "Formlar",
-  "milestones": "Kilometre Taşları",
-  "milestones_description": "Temel teslimatları takip edin ve iş öğelerini paylaşılan tamamlanma tarihlerine göre hizalayın.",
   "phases": "Aşamalar",
   "phases_description": "Proje zaman çizelgenizi yapılandırmak için döngüleri aşamalar halinde gruplandırın.",
   "file_upload": {

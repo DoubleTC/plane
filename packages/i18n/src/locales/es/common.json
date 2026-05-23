@@ -835,8 +835,6 @@
   "pi_chat": "Plane AI",
   "in_app": "En la aplicación",
   "forms": "Formularios",
-  "milestones": "Hitos",
-  "milestones_description": "Realice un seguimiento de los entregables clave y alinee las tareas con las fechas de finalización compartidas.",
   "phases": "Fases",
   "phases_description": "Agrupa ciclos en fases para estructurar la línea de tiempo del proyecto.",
   "file_upload": {

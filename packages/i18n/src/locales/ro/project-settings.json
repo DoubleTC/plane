@@ -417,13 +417,6 @@
         "toggle_title": "Activați urmărirea timpului",
         "toggle_description": "Membrii proiectului vor putea înregistra timpul lucrat."
       },
-      "milestones": {
-        "title": "Jaloane",
-        "short_title": "Jaloane",
-        "description": "Urmăriți livrabilele cheie și aliniați sarcinile cu datele de finalizare comune.",
-        "toggle_title": "Activați jaloanele",
-        "toggle_description": "Membrii proiectului vor putea crea și edita jaloane."
-      },
       "toasts": {
         "loading": "Se actualizează funcționalitatea proiectului...",
         "success": "Funcționalitatea proiectului a fost actualizată cu succes.",

@@ -835,8 +835,6 @@
   "pi_chat": "Plane AI",
   "in_app": "In-app",
   "forms": "Moduli",
-  "milestones": "Milestone",
-  "milestones_description": "Monitora i deliverable chiave e allinea le attività alle date di completamento condivise.",
   "phases": "Fasi",
   "phases_description": "Raggruppa i cicli in fasi per strutturare la timeline del progetto.",
   "file_upload": {

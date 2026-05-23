@@ -835,8 +835,6 @@
   "pi_chat": "AI 聊天",
   "in_app": "应用内",
   "forms": "表单",
-  "milestones": "里程碑",
-  "milestones_description": "跟踪关键交付物，并将工作项与共享的完成日期保持一致。",
   "phases": "阶段",
   "phases_description": "将周期分组为阶段，以构建项目时间线。",
   "file_upload": {

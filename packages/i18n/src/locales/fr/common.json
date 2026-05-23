@@ -835,8 +835,6 @@
   "pi_chat": "Plane AI",
   "in_app": "Dans l'application",
   "forms": "Formulaires",
-  "milestones": "Jalons",
-  "milestones_description": "Suivez les livrables clés et alignez les tâches sur des dates de fin partagées.",
   "phases": "Phases",
   "phases_description": "Regroupez les cycles en phases pour structurer la chronologie de votre projet.",
   "file_upload": {

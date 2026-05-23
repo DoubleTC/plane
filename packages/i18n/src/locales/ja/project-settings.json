@@ -417,13 +417,6 @@
         "toggle_title": "時間追跡を有効にする",
         "toggle_description": "プロジェクトメンバーは作業時間を記録できるようになります。"
       },
-      "milestones": {
-        "title": "マイルストーン",
-        "short_title": "マイルストーン",
-        "description": "主要な成果物を追跡し、作業項目を共有の完了日に向けて調整します。",
-        "toggle_title": "マイルストーンを有効にする",
-        "toggle_description": "プロジェクトメンバーはマイルストーンを作成・編集できます。"
-      },
       "toasts": {
         "loading": "プロジェクト機能を更新中...",
         "success": "プロジェクト機能が正常に更新されました。",

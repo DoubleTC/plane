@@ -417,13 +417,6 @@
         "toggle_title": "시간 추적 활성화",
         "toggle_description": "프로젝트 멤버가 작업 시간을 기록할 수 있습니다."
       },
-      "milestones": {
-        "title": "마일스톤",
-        "short_title": "마일스톤",
-        "description": "주요 산출물을 추적하고 작업 항목을 공유 완료 날짜에 맞게 조정합니다.",
-        "toggle_title": "마일스톤 활성화",
-        "toggle_description": "프로젝트 구성원이 마일스톤을 만들고 편집할 수 있습니다."
-      },
       "toasts": {
         "loading": "프로젝트 기능 업데이트 중...",
         "success": "프로젝트 기능이 성공적으로 업데이트되었습니다.",

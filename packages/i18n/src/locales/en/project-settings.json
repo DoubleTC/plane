@@ -417,13 +417,6 @@
         "toggle_title": "Enable time tracking",
         "toggle_description": "Project members will be able to log time worked."
       },
-      "milestones": {
-        "title": "Milestones",
-        "short_title": "Milestones",
-        "description": "Track key deliverables and align work items toward shared completion dates.",
-        "toggle_title": "Enable milestones",
-        "toggle_description": "Project members will be able to create and edit milestones."
-      },
       "toasts": {
         "loading": "Updating project feature...",
         "success": "Project feature updated successfully.",

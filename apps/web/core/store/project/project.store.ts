@@ -18,7 +18,7 @@ import { ProjectService, ProjectStateService, ProjectArchiveService } from "@/se
 // store
 import type { CoreRootStore } from "../root.store";
 
-type ProjectOverviewCollapsible = "links" | "attachments" | "milestones";
+type ProjectOverviewCollapsible = "links" | "attachments";
 
 export interface IProjectStore {
   // observables
@@ -83,7 +83,7 @@ export class ProjectStore implements IProjectStore {
   fetchStatus: TFetchStatus = undefined;
   projectMap: Record<string, TProject> = {};
   projectAnalyticsCountMap: Record<string, TProjectAnalyticsCount> = {};
-  openCollapsibleSection: ProjectOverviewCollapsible[] = ["milestones"];
+  openCollapsibleSection: ProjectOverviewCollapsible[] = ["links"];
   lastCollapsibleAction: ProjectOverviewCollapsible | null = null;
 
   // root store
@@ -607,6 +607,7 @@ export class ProjectStore implements IProjectStore {
           set(this.projectMap, [projectId, "archived_at"], response.archived_at);
           this.rootStore.favorite.removeFavoriteFromStore(projectId);
         });
+        return undefined;
       })
       .catch((error) => {
         console.log("Failed to archive project from project store");
@@ -627,6 +628,7 @@ export class ProjectStore implements IProjectStore {
         runInAction(() => {
           set(this.projectMap, [projectId, "archived_at"], null);
         });
+        return undefined;
       })
       .catch((error) => {
         console.log("Failed to restore project from project store");

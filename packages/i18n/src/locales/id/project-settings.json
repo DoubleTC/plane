@@ -417,13 +417,6 @@
         "toggle_title": "Aktifkan pelacakan waktu",
         "toggle_description": "Anggota proyek akan dapat mencatat waktu yang dikerjakan."
       },
-      "milestones": {
-        "title": "Tonggak",
-        "short_title": "Tonggak",
-        "description": "Lacak kiriman kunci dan selaraskan item pekerjaan dengan tanggal penyelesaian bersama.",
-        "toggle_title": "Aktifkan tonggak",
-        "toggle_description": "Anggota proyek akan dapat membuat dan mengedit tonggak."
-      },
       "toasts": {
         "loading": "Memperbarui fitur proyek...",
         "success": "Fitur proyek berhasil diperbarui.",
