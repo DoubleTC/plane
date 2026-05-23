@@ -27,7 +27,7 @@ function PhaseDetailPage({ params }: Route.ComponentProps) {
   const { fetchPhaseDetails, fetchPhaseCycles, getPhaseById } = usePhase();
   const { getProjectById } = useProject();
   // sidebar state
-  const { storedValue } = useLocalStorage("phase_detail_sidebar_collapsed", "false");
+  const { storedValue, setValue: setSidebarCollapsed } = useLocalStorage("phase_detail_sidebar_collapsed", "false");
   const isSidebarCollapsed = storedValue === "true";
 
   // Fetch phase details
@@ -66,13 +66,7 @@ function PhaseDetailPage({ params }: Route.ComponentProps) {
                 "vertical-scrollbar absolute right-0 z-13 flex scrollbar-sm h-full w-[24rem] flex-shrink-0 flex-col overflow-y-auto border-l border-subtle bg-surface-1 px-6 shadow-raised-200 duration-300"
               )}
             >
-              <PhaseDetailSidebar
-                phaseId={phaseId}
-                handleClose={() => {
-                  localStorage.setItem("phase_detail_sidebar_collapsed", "true");
-                  window.dispatchEvent(new Event("storage"));
-                }}
-              />
+              <PhaseDetailSidebar phaseId={phaseId} handleClose={() => setSidebarCollapsed("true")} />
             </div>
           )}
         </div>
