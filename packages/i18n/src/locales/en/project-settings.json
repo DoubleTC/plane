@@ -428,6 +428,13 @@
         "loading": "Updating project feature...",
         "success": "Project feature updated successfully.",
         "error": "Something went wrong while updating project feature. Please try again."
+      },
+      "phases": {
+        "title": "Phases",
+        "short_title": "Phases",
+        "description": "Group cycles into phases to structure your project timeline.",
+        "toggle_title": "Enable phases",
+        "toggle_description": "Project members will be able to create and manage phases."
       }
     },
     "project_updates": {

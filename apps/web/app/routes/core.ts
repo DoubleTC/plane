@@ -178,11 +178,11 @@ export const coreRoutes: RouteConfigEntry[] = [
             ),
           ]),
 
-          // Milestones List
-          layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/milestones/(list)/layout.tsx", [
+          // Phases List
+          layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/phases/(list)/layout.tsx", [
             route(
-              ":workspaceSlug/projects/:projectId/milestones",
-              "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/milestones/(list)/page.tsx"
+              ":workspaceSlug/projects/:projectId/phases",
+              "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/phases/(list)/page.tsx"
             ),
           ]),
 
@@ -324,8 +324,8 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/cycles/page.tsx"
             ),
             route(
-              ":workspaceSlug/settings/projects/:projectId/features/milestones",
-              "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/milestones/page.tsx"
+              ":workspaceSlug/settings/projects/:projectId/features/phases",
+              "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/phases/page.tsx"
             ),
             route(
               ":workspaceSlug/settings/projects/:projectId/features/modules",

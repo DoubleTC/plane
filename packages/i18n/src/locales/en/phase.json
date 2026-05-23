@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Phase} other {Phases}}",
+    "no_phase": "No phase",
+    "page_title": "Phases",
+    "add_phase": "Add phase",
+    "create_phase": "Create phase",
+    "edit_phase": "Edit phase",
+    "cycles_label": "cycles",
+    "add_cycles": "Add cycles",
+    "fields": {
+      "name": "Name",
+      "name_placeholder": "e.g. Q1 Launch, MVP Phase",
+      "description": "Description",
+      "description_placeholder": "Describe the purpose of this phase...",
+      "start_date": "Start date",
+      "end_date": "End date"
+    },
+    "validation": {
+      "name_required": "Phase name is required."
+    },
+    "toast": {
+      "created_title": "Phase created",
+      "created_message": "Phase has been created successfully.",
+      "updated_title": "Phase updated",
+      "updated_message": "Phase has been updated successfully.",
+      "deleted_title": "Phase deleted",
+      "deleted_message": "\"{name}\" has been deleted.",
+      "delete_error": "Could not delete phase. Please try again.",
+      "save_error": "Could not save phase. Please try again.",
+      "archived_title": "Phase archived",
+      "unarchived_title": "Phase restored",
+      "cycles_added": "Cycles added",
+      "cycles_add_error": "Could not add cycles. Please try again."
+    },
+    "delete": {
+      "title": "Delete phase",
+      "content": "Are you sure you want to delete \"{name}\"? This cannot be undone."
+    },
+    "empty_state": {
+      "title": "No phases yet",
+      "description": "Create a phase to group cycles into meaningful milestones."
+    },
+    "disabled": {
+      "title": "Phases are disabled",
+      "description": "Enable phases in project settings to organize your cycles.",
+      "cta": "Enable phases"
+    }
+  }
+}

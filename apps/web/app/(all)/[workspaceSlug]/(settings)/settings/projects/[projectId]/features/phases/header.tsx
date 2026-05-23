@@ -1,25 +1,18 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
+// Copyright (c) 2023-present Plane Software, Inc. and contributors
+// SPDX-License-Identifier: AGPL-3.0-only
 
 import { observer } from "mobx-react";
-// plane imports
 import { PROJECT_SETTINGS } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { Breadcrumbs } from "@plane/ui";
-// components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SettingsPageHeader } from "@/components/settings/page-header";
 import { PROJECT_SETTINGS_ICONS } from "@/components/settings/project/sidebar/item-icon";
 
-export const FeaturesMilestonesProjectSettingsHeader = observer(function FeaturesMilestonesProjectSettingsHeader() {
-  // translation
+export const FeaturesPhaseProjectSettingsHeader = observer(function FeaturesPhaseProjectSettingsHeader() {
   const { t } = useTranslation();
-  // derived values
-  const settingsDetails = PROJECT_SETTINGS.features_milestones;
-  const Icon = PROJECT_SETTINGS_ICONS.features_milestones;
+  const settingsDetails = PROJECT_SETTINGS.features_phases;
+  const Icon = PROJECT_SETTINGS_ICONS.features_phases;
 
   return (
     <SettingsPageHeader

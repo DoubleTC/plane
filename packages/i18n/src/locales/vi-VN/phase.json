@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Giai đoạn} other {Giai đoạn}}",
+    "no_phase": "Không có giai đoạn",
+    "page_title": "Giai đoạn",
+    "add_phase": "Thêm giai đoạn",
+    "create_phase": "Tạo giai đoạn",
+    "edit_phase": "Chỉnh sửa giai đoạn",
+    "cycles_label": "chu kỳ",
+    "add_cycles": "Thêm chu kỳ",
+    "fields": {
+      "name": "Tên",
+      "name_placeholder": "Ví dụ: Ra mắt Q1, Giai đoạn MVP",
+      "description": "Mô tả",
+      "description_placeholder": "Mô tả mục đích của giai đoạn này...",
+      "start_date": "Ngày bắt đầu",
+      "end_date": "Ngày kết thúc"
+    },
+    "validation": {
+      "name_required": "Tên giai đoạn là bắt buộc."
+    },
+    "toast": {
+      "created_title": "Giai đoạn đã được tạo",
+      "created_message": "Giai đoạn đã được tạo thành công.",
+      "updated_title": "Giai đoạn đã được cập nhật",
+      "updated_message": "Giai đoạn đã được cập nhật thành công.",
+      "deleted_title": "Giai đoạn đã bị xóa",
+      "deleted_message": "\"{name}\" đã bị xóa.",
+      "delete_error": "Không thể xóa giai đoạn. Vui lòng thử lại.",
+      "save_error": "Không thể lưu giai đoạn. Vui lòng thử lại.",
+      "archived_title": "Giai đoạn đã được lưu trữ",
+      "unarchived_title": "Giai đoạn đã được khôi phục",
+      "cycles_added": "Đã thêm chu kỳ",
+      "cycles_add_error": "Không thể thêm chu kỳ. Vui lòng thử lại."
+    },
+    "delete": {
+      "title": "Xóa giai đoạn",
+      "content": "Bạn có chắc muốn xóa \"{name}\"? Hành động này không thể hoàn tác."
+    },
+    "empty_state": {
+      "title": "Chưa có giai đoạn nào",
+      "description": "Tạo giai đoạn để nhóm các chu kỳ thành các cột mốc có ý nghĩa."
+    },
+    "disabled": {
+      "title": "Giai đoạn bị tắt",
+      "description": "Bật giai đoạn trong cài đặt dự án để tổ chức các chu kỳ của bạn.",
+      "cta": "Bật giai đoạn"
+    }
+  }
+}

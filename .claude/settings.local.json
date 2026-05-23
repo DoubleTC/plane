@@ -38,7 +38,11 @@
       "Bash(docker compose *)",
       "Bash(grep -v \"^$\\\\|Warning\\\\|MODULE_TYPELESS\\\\|Reparsing\\\\|performance\\\\|eliminate\\\\|node --trace\")",
       "Bash(HUSKY=0 git commit -m 'fix\\(root\\): resolve HydrateFallback SSR hydration mismatch *)",
-      "Bash(HUSKY=0 git commit -m 'feat\\(milestones\\): redesign UI to match Modules layout *)"
+      "Bash(HUSKY=0 git commit -m 'feat\\(milestones\\): redesign UI to match Modules layout *)",
+      "Bash(mkdir -p \"/home/doubletc/dtc-x-plane/apps/web/app/\\(all\\)/[workspaceSlug]/\\(settings\\)/settings/projects/[projectId]/features/phases\")",
+      "Bash(mkdir -p \"/home/doubletc/dtc-x-plane/apps/web/app/\\(all\\)/[workspaceSlug]/\\(projects\\)/projects/\\(detail\\)/[projectId]/phases/\\(list\\)\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(git commit *)"
     ]
   }
 }

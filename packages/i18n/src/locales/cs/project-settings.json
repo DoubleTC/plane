@@ -428,6 +428,13 @@
         "loading": "Aktualizace funkce projektu...",
         "success": "Funkce projektu byla úspěšně aktualizována.",
         "error": "Při aktualizaci funkce projektu se něco pokazilo. Zkuste to prosím znovu."
+      },
+      "phases": {
+        "title": "Fáze",
+        "short_title": "Fáze",
+        "description": "Seskupte cykly do fází pro strukturování časového plánu projektu.",
+        "toggle_title": "Povolit fáze",
+        "toggle_description": "Členové projektu budou moci vytvářet a spravovat fáze."
       }
     },
     "project_updates": {

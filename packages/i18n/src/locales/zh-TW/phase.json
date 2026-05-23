@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {階段} other {階段}}",
+    "no_phase": "無階段",
+    "page_title": "階段",
+    "add_phase": "新增階段",
+    "create_phase": "建立階段",
+    "edit_phase": "編輯階段",
+    "cycles_label": "週期",
+    "add_cycles": "新增週期",
+    "fields": {
+      "name": "名稱",
+      "name_placeholder": "例如：Q1發布、MVP階段",
+      "description": "描述",
+      "description_placeholder": "描述此階段的目的...",
+      "start_date": "開始日期",
+      "end_date": "結束日期"
+    },
+    "validation": {
+      "name_required": "階段名稱為必填項。"
+    },
+    "toast": {
+      "created_title": "階段已建立",
+      "created_message": "階段已成功建立。",
+      "updated_title": "階段已更新",
+      "updated_message": "階段已成功更新。",
+      "deleted_title": "階段已刪除",
+      "deleted_message": "\"{name}\"已被刪除。",
+      "delete_error": "無法刪除階段。請重試。",
+      "save_error": "無法儲存階段。請重試。",
+      "archived_title": "階段已封存",
+      "unarchived_title": "階段已還原",
+      "cycles_added": "週期已新增",
+      "cycles_add_error": "無法新增週期。請重試。"
+    },
+    "delete": {
+      "title": "刪除階段",
+      "content": "確定要刪除\"{name}\"嗎？此操作無法復原。"
+    },
+    "empty_state": {
+      "title": "尚無階段",
+      "description": "建立階段以將週期分組為有意義的里程碑。"
+    },
+    "disabled": {
+      "title": "階段已停用",
+      "description": "在專案設定中啟用階段以組織您的週期。",
+      "cta": "啟用階段"
+    }
+  }
+}

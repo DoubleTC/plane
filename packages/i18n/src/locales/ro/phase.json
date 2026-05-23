@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Fază} other {Faze}}",
+    "no_phase": "Nicio fază",
+    "page_title": "Faze",
+    "add_phase": "Adaugă fază",
+    "create_phase": "Creează fază",
+    "edit_phase": "Editează faza",
+    "cycles_label": "cicluri",
+    "add_cycles": "Adaugă cicluri",
+    "fields": {
+      "name": "Nume",
+      "name_placeholder": "ex. Lansare Q1, Faza MVP",
+      "description": "Descriere",
+      "description_placeholder": "Descrieți scopul acestei faze...",
+      "start_date": "Data de început",
+      "end_date": "Data de sfârșit"
+    },
+    "validation": {
+      "name_required": "Numele fazei este obligatoriu."
+    },
+    "toast": {
+      "created_title": "Faza creată",
+      "created_message": "Faza a fost creată cu succes.",
+      "updated_title": "Faza actualizată",
+      "updated_message": "Faza a fost actualizată cu succes.",
+      "deleted_title": "Faza ștearsă",
+      "deleted_message": "\"{name}\" a fost ștearsă.",
+      "delete_error": "Nu s-a putut șterge faza. Vă rugăm să încercați din nou.",
+      "save_error": "Nu s-a putut salva faza. Vă rugăm să încercați din nou.",
+      "archived_title": "Faza arhivată",
+      "unarchived_title": "Faza restaurată",
+      "cycles_added": "Cicluri adăugate",
+      "cycles_add_error": "Nu s-au putut adăuga cicluri. Vă rugăm să încercați din nou."
+    },
+    "delete": {
+      "title": "Șterge faza",
+      "content": "Sigur doriți să ștergeți \"{name}\"? Această acțiune nu poate fi anulată."
+    },
+    "empty_state": {
+      "title": "Nicio fază încă",
+      "description": "Creați o fază pentru a grupa ciclurile în jaloane semnificative."
+    },
+    "disabled": {
+      "title": "Fazele sunt dezactivate",
+      "description": "Activați fazele în setările proiectului pentru a vă organiza ciclurile.",
+      "cta": "Activează fazele"
+    }
+  }
+}

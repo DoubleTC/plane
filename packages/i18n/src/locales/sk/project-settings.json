@@ -428,6 +428,13 @@
         "loading": "Aktualizácia funkcie projektu...",
         "success": "Funkcia projektu bola úspešne aktualizovaná.",
         "error": "Pri aktualizácii funkcie projektu sa niečo pokazilo. Skúste to prosím znova."
+      },
+      "phases": {
+        "title": "Fázy",
+        "short_title": "Fázy",
+        "description": "Zoskupte cykly do fáz pre štruktúrovanie časového harmonogramu projektu.",
+        "toggle_title": "Povoliť fázy",
+        "toggle_description": "Členovia projektu budú môcť vytvárať a spravovať fázy."
       }
     },
     "project_updates": {

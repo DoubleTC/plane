@@ -428,6 +428,13 @@
         "loading": "Atualizando recurso do projeto...",
         "success": "Recurso do projeto atualizado com sucesso.",
         "error": "Algo deu errado ao atualizar o recurso do projeto. Por favor, tente novamente."
+      },
+      "phases": {
+        "title": "Fases",
+        "short_title": "Fases",
+        "description": "Agrupe ciclos em fases para estruturar o cronograma do seu projeto.",
+        "toggle_title": "Ativar fases",
+        "toggle_description": "Os membros do projeto poderão criar e gerenciar fases."
       }
     },
     "project_updates": {

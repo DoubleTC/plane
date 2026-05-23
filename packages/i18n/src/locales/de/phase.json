@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Phase} other {Phasen}}",
+    "no_phase": "Keine Phase",
+    "page_title": "Phasen",
+    "add_phase": "Phase hinzufügen",
+    "create_phase": "Phase erstellen",
+    "edit_phase": "Phase bearbeiten",
+    "cycles_label": "Zyklen",
+    "add_cycles": "Zyklen hinzufügen",
+    "fields": {
+      "name": "Name",
+      "name_placeholder": "z.B. Q1-Launch, MVP-Phase",
+      "description": "Beschreibung",
+      "description_placeholder": "Beschreiben Sie den Zweck dieser Phase...",
+      "start_date": "Startdatum",
+      "end_date": "Enddatum"
+    },
+    "validation": {
+      "name_required": "Phasenname ist erforderlich."
+    },
+    "toast": {
+      "created_title": "Phase erstellt",
+      "created_message": "Die Phase wurde erfolgreich erstellt.",
+      "updated_title": "Phase aktualisiert",
+      "updated_message": "Die Phase wurde erfolgreich aktualisiert.",
+      "deleted_title": "Phase gelöscht",
+      "deleted_message": "\"{name}\" wurde gelöscht.",
+      "delete_error": "Phase konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.",
+      "save_error": "Phase konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+      "archived_title": "Phase archiviert",
+      "unarchived_title": "Phase wiederhergestellt",
+      "cycles_added": "Zyklen hinzugefügt",
+      "cycles_add_error": "Zyklen konnten nicht hinzugefügt werden. Bitte versuchen Sie es erneut."
+    },
+    "delete": {
+      "title": "Phase löschen",
+      "content": "Möchten Sie \"{name}\" wirklich löschen? Dies kann nicht rückgängig gemacht werden."
+    },
+    "empty_state": {
+      "title": "Noch keine Phasen",
+      "description": "Erstellen Sie eine Phase, um Zyklen zu bedeutungsvollen Meilensteinen zu gruppieren."
+    },
+    "disabled": {
+      "title": "Phasen sind deaktiviert",
+      "description": "Aktivieren Sie Phasen in den Projekteinstellungen, um Ihre Zyklen zu organisieren.",
+      "cta": "Phasen aktivieren"
+    }
+  }
+}

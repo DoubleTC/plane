@@ -428,6 +428,13 @@
         "loading": "正在更新專案功能...",
         "success": "專案功能更新成功。",
         "error": "更新專案功能時發生錯誤。請再試一次。"
+      },
+      "phases": {
+        "title": "階段",
+        "short_title": "階段",
+        "description": "將週期分組為階段以構建專案時間線。",
+        "toggle_title": "啟用階段",
+        "toggle_description": "專案成員將能夠建立和管理階段。"
       }
     },
     "project_updates": {

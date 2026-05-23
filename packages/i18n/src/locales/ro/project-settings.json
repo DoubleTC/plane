@@ -428,6 +428,13 @@
         "loading": "Se actualizează funcționalitatea proiectului...",
         "success": "Funcționalitatea proiectului a fost actualizată cu succes.",
         "error": "Ceva a mers greșit la actualizarea funcționalității proiectului. Vă rugăm să încercați din nou."
+      },
+      "phases": {
+        "title": "Faze",
+        "short_title": "Faze",
+        "description": "Grupați ciclurile în faze pentru a structura calendarul proiectului.",
+        "toggle_title": "Activează fazele",
+        "toggle_description": "Membrii proiectului vor putea crea și gestiona faze."
       }
     },
     "project_updates": {

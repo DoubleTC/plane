@@ -1,43 +1,29 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
+// Copyright (c) 2023-present Plane Software, Inc. and contributors
+// SPDX-License-Identifier: AGPL-3.0-only
 
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// icons
-import { Milestone } from "lucide-react";
-// plane imports
+import { Layers } from "lucide-react";
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { Breadcrumbs, Header } from "@plane/ui";
-// components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
-// hooks
-import { useMilestone } from "@/hooks/store/use-milestone";
+import { usePhase } from "@/hooks/store/use-phase";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
 import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
 
-export const MilestonesListHeader = observer(function MilestonesListHeader() {
-  // router
+export const PhasesListHeader = observer(function PhasesListHeader() {
   const router = useAppRouter();
   const { workspaceSlug, projectId } = useParams();
-  // store hooks
   const { loader } = useProject();
-  const { toggleCreateMilestoneModal } = useMilestone();
+  const { toggleCreatePhaseModal } = usePhase();
   const { allowPermissions } = useUserPermissions();
   const { t } = useTranslation();
 
-  // auth
-  const canCreateMilestone = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-    EUserPermissionsLevel.PROJECT
-  );
+  const canCreate = allowPermissions([EUserPermissions.ADMIN, EUserPermissions.MEMBER], EUserPermissionsLevel.PROJECT);
 
   return (
     <Header>
@@ -47,9 +33,9 @@ export const MilestonesListHeader = observer(function MilestonesListHeader() {
           <Breadcrumbs.Item
             component={
               <BreadcrumbLink
-                label={t("milestone.page_title")}
-                href={`/${workspaceSlug}/projects/${projectId}/milestones/`}
-                icon={<Milestone className="h-4 w-4 text-tertiary" />}
+                label={t("phase.page_title")}
+                href={`/${workspaceSlug}/projects/${projectId}/phases/`}
+                icon={<Layers className="h-4 w-4 text-tertiary" />}
                 isLast
               />
             }
@@ -57,15 +43,11 @@ export const MilestonesListHeader = observer(function MilestonesListHeader() {
           />
         </Breadcrumbs>
       </Header.LeftItem>
-      {canCreateMilestone && (
+      {canCreate && (
         <Header.RightItem>
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => toggleCreateMilestoneModal(true)}
-          >
+          <Button variant="primary" size="lg" onClick={() => toggleCreatePhaseModal(true)}>
             <div className="block sm:hidden">{t("add")}</div>
-            <div className="hidden sm:block">{t("milestone.add_milestone")}</div>
+            <div className="hidden sm:block">{t("phase.add_phase")}</div>
           </Button>
         </Header.RightItem>
       )}

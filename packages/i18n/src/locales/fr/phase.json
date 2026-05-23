@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Phase} other {Phases}}",
+    "no_phase": "Aucune phase",
+    "page_title": "Phases",
+    "add_phase": "Ajouter une phase",
+    "create_phase": "Créer une phase",
+    "edit_phase": "Modifier la phase",
+    "cycles_label": "cycles",
+    "add_cycles": "Ajouter des cycles",
+    "fields": {
+      "name": "Nom",
+      "name_placeholder": "ex. Lancement Q1, Phase MVP",
+      "description": "Description",
+      "description_placeholder": "Décrivez l'objectif de cette phase...",
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    },
+    "validation": {
+      "name_required": "Le nom de la phase est requis."
+    },
+    "toast": {
+      "created_title": "Phase créée",
+      "created_message": "La phase a été créée avec succès.",
+      "updated_title": "Phase mise à jour",
+      "updated_message": "La phase a été mise à jour avec succès.",
+      "deleted_title": "Phase supprimée",
+      "deleted_message": "\"{name}\" a été supprimée.",
+      "delete_error": "Impossible de supprimer la phase. Veuillez réessayer.",
+      "save_error": "Impossible d'enregistrer la phase. Veuillez réessayer.",
+      "archived_title": "Phase archivée",
+      "unarchived_title": "Phase restaurée",
+      "cycles_added": "Cycles ajoutés",
+      "cycles_add_error": "Impossible d'ajouter des cycles. Veuillez réessayer."
+    },
+    "delete": {
+      "title": "Supprimer la phase",
+      "content": "Êtes-vous sûr de vouloir supprimer \"{name}\" ? Cette action est irréversible."
+    },
+    "empty_state": {
+      "title": "Aucune phase pour l'instant",
+      "description": "Créez une phase pour regrouper des cycles en jalons significatifs."
+    },
+    "disabled": {
+      "title": "Les phases sont désactivées",
+      "description": "Activez les phases dans les paramètres du projet pour organiser vos cycles.",
+      "cta": "Activer les phases"
+    }
+  }
+}

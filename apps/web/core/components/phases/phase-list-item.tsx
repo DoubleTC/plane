@@ -1,8 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
+// Copyright (c) 2023-present Plane Software, Inc. and contributors
+// SPDX-License-Identifier: AGPL-3.0-only
 
 import { useRef } from "react";
 import { observer } from "mobx-react";
@@ -16,94 +13,78 @@ import { CircularProgressIndicator } from "@plane/ui";
 import { renderFormattedDate } from "@plane/utils";
 // components
 import { ListItem } from "@/components/core/list";
-import { MilestoneQuickActions } from "@/components/milestones/milestone-quick-actions";
+import { PhaseQuickActions } from "@/components/phases/phase-quick-actions";
 // hooks
-import { useMilestone } from "@/hooks/store/use-milestone";
+import { usePhase } from "@/hooks/store/use-phase";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 
-type Props = {
-  milestoneId: string;
-};
+type Props = { phaseId: string };
 
-export const MilestoneListItem = observer(function MilestoneListItem(props: Props) {
-  const { milestoneId } = props;
-  // refs
+export const PhaseListItem = observer(function PhaseListItem(props: Props) {
+  const { phaseId } = props;
   const parentRef = useRef<HTMLDivElement>(null);
-  // router
   const { workspaceSlug, projectId } = useParams();
-  // store hooks
-  const { getMilestoneById } = useMilestone();
+  const { getPhaseById } = usePhase();
   const { isMobile } = usePlatformOS();
   const { t } = useTranslation();
 
-  const milestone = getMilestoneById(milestoneId);
-  if (!milestone) return null;
+  const phase = getPhaseById(phaseId);
+  if (!phase) return null;
 
-  const completionPercentage =
-    milestone.total_issues > 0
-      ? Math.floor(((milestone.completed_issues + milestone.cancelled_issues) / milestone.total_issues) * 100)
-      : 0;
+  const progress = phase.total_cycles > 0 ? Math.floor((phase.completed_cycles / phase.total_cycles) * 100) : 0;
 
-  const isOverdue =
-    milestone.target_date != null && new Date(milestone.target_date) < new Date() && completionPercentage < 100;
+  const isOverdue = phase.end_date != null && new Date(phase.end_date) < new Date() && progress < 100;
 
   return (
     <ListItem
-      title={milestone.name}
+      title={phase.name}
       itemLink=""
       disableLink
       prependTitleElement={
-        <CircularProgressIndicator size={30} percentage={completionPercentage} strokeWidth={3}>
-          {completionPercentage === 100 ? (
+        <CircularProgressIndicator size={30} percentage={progress} strokeWidth={3}>
+          {progress === 100 ? (
             <CheckIcon className="h-3 w-3 stroke-[2] text-accent-primary" />
           ) : (
-            <span className="text-9 text-tertiary">{completionPercentage}%</span>
+            <span className="text-9 text-tertiary">{progress}%</span>
           )}
         </CircularProgressIndicator>
       }
-      appendTitleElement={
-        milestone.color ? (
-          <span
-            className="inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full"
-            style={{ backgroundColor: milestone.color }}
-          />
-        ) : undefined
-      }
       actionableItems={
         <>
-          {/* Archived badge */}
-          {milestone.archived_at && (
+          {phase.archived_at && (
             <span className="bg-custom-background-80 text-xs text-custom-text-300 rounded px-1.5 py-0.5 whitespace-nowrap">
               {t("common.archived")}
             </span>
           )}
 
-          {/* Issue count */}
+          {/* Cycle count */}
           <div className="text-xs text-custom-text-300 flex items-center gap-x-1 whitespace-nowrap">
             <span>
-              {milestone.completed_issues}/{milestone.total_issues}
+              {phase.completed_cycles}/{phase.total_cycles}
             </span>
-            <span>{t("milestone.issues_label")}</span>
+            <span>{t("phase.cycles_label")}</span>
           </div>
 
-          {/* Target date */}
-          {milestone.target_date && (
+          {/* Date range */}
+          {(phase.start_date || phase.end_date) && (
             <div
-              className={`text-xs flex items-center gap-x-1 whitespace-nowrap ${
-                isOverdue ? "text-red-500" : "text-custom-text-300"
-              }`}
+              className={`text-xs flex items-center gap-x-1 whitespace-nowrap ${isOverdue ? "text-red-500" : "text-custom-text-300"}`}
             >
               <CalendarDays className="h-3.5 w-3.5 flex-shrink-0" />
-              <span>{renderFormattedDate(milestone.target_date)}</span>
+              <span>
+                {phase.start_date ? renderFormattedDate(phase.start_date) : "—"}
+                {" → "}
+                {phase.end_date ? renderFormattedDate(phase.end_date) : "—"}
+              </span>
             </div>
           )}
 
           {/* Quick actions — desktop */}
           {workspaceSlug && projectId && (
             <div className="hidden md:block">
-              <MilestoneQuickActions
+              <PhaseQuickActions
                 parentRef={parentRef}
-                milestoneId={milestoneId}
+                phaseId={phaseId}
                 projectId={projectId.toString()}
                 workspaceSlug={workspaceSlug.toString()}
               />
@@ -114,9 +95,9 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
       quickActionElement={
         workspaceSlug && projectId ? (
           <div className="block md:hidden">
-            <MilestoneQuickActions
+            <PhaseQuickActions
               parentRef={parentRef}
-              milestoneId={milestoneId}
+              phaseId={phaseId}
               projectId={projectId.toString()}
               workspaceSlug={workspaceSlug.toString()}
             />

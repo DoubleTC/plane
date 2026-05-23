@@ -428,6 +428,13 @@
         "loading": "Aggiornamento funzionalità progetto...",
         "success": "Funzionalità progetto aggiornata con successo.",
         "error": "Qualcosa è andato storto durante l'aggiornamento della funzionalità progetto. Riprova."
+      },
+      "phases": {
+        "title": "Fasi",
+        "short_title": "Fasi",
+        "description": "Raggruppa i cicli in fasi per strutturare la timeline del tuo progetto.",
+        "toggle_title": "Abilita fasi",
+        "toggle_description": "I membri del progetto potranno creare e gestire le fasi."
       }
     },
     "project_updates": {

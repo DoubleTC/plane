@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Fase} other {Fases}}",
+    "no_phase": "Sin fase",
+    "page_title": "Fases",
+    "add_phase": "Agregar fase",
+    "create_phase": "Crear fase",
+    "edit_phase": "Editar fase",
+    "cycles_label": "ciclos",
+    "add_cycles": "Agregar ciclos",
+    "fields": {
+      "name": "Nombre",
+      "name_placeholder": "p.ej. Lanzamiento Q1, Fase MVP",
+      "description": "Descripción",
+      "description_placeholder": "Describe el propósito de esta fase...",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha de fin"
+    },
+    "validation": {
+      "name_required": "El nombre de la fase es obligatorio."
+    },
+    "toast": {
+      "created_title": "Fase creada",
+      "created_message": "La fase ha sido creada exitosamente.",
+      "updated_title": "Fase actualizada",
+      "updated_message": "La fase ha sido actualizada exitosamente.",
+      "deleted_title": "Fase eliminada",
+      "deleted_message": "\"{name}\" ha sido eliminada.",
+      "delete_error": "No se pudo eliminar la fase. Por favor, inténtelo de nuevo.",
+      "save_error": "No se pudo guardar la fase. Por favor, inténtelo de nuevo.",
+      "archived_title": "Fase archivada",
+      "unarchived_title": "Fase restaurada",
+      "cycles_added": "Ciclos agregados",
+      "cycles_add_error": "No se pudieron agregar ciclos. Por favor, inténtelo de nuevo."
+    },
+    "delete": {
+      "title": "Eliminar fase",
+      "content": "¿Está seguro de que desea eliminar \"{name}\"? Esto no se puede deshacer."
+    },
+    "empty_state": {
+      "title": "Aún no hay fases",
+      "description": "Cree una fase para agrupar ciclos en hitos significativos."
+    },
+    "disabled": {
+      "title": "Las fases están desactivadas",
+      "description": "Active las fases en la configuración del proyecto para organizar sus ciclos.",
+      "cta": "Activar fases"
+    }
+  }
+}

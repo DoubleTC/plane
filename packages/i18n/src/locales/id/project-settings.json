@@ -428,6 +428,13 @@
         "loading": "Memperbarui fitur proyek...",
         "success": "Fitur proyek berhasil diperbarui.",
         "error": "Terjadi kesalahan saat memperbarui fitur proyek. Silakan coba lagi."
+      },
+      "phases": {
+        "title": "Fase",
+        "short_title": "Fase",
+        "description": "Kelompokkan siklus ke dalam fase untuk menyusun linimasa proyek Anda.",
+        "toggle_title": "Aktifkan fase",
+        "toggle_description": "Anggota proyek akan dapat membuat dan mengelola fase."
       }
     },
     "project_updates": {

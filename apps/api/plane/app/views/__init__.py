@@ -241,4 +241,4 @@ from .timezone.base import TimezoneEndpoint
 
 from .workspace.roles import CustomRoleViewSet
 
-from .milestone import MilestoneViewSet, MilestoneArchiveViewSet, MilestoneIssueViewSet
+from .phase import PhaseViewSet, PhaseArchiveViewSet, PhaseCycleViewSet

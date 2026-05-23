@@ -136,4 +136,4 @@ from .draft import (
 
 from .roles import CustomRoleSerializer
 
-from .milestone import MilestoneSerializer, MilestoneWriteSerializer, MilestoneIssueSerializer
+from .phase import PhaseSerializer, PhaseWriteSerializer, PhaseCycleSerializer

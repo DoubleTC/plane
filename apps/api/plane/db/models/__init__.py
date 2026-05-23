@@ -93,4 +93,4 @@ from .description import Description, DescriptionVersion
 
 from .roles import CustomRole
 
-from .milestone import Milestone, MilestoneIssue
+from .phase import Phase, PhaseCycle

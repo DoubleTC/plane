@@ -428,6 +428,13 @@
         "loading": "Proje özelliği güncelleniyor...",
         "success": "Proje özelliği başarıyla güncellendi.",
         "error": "Proje özelliği güncellenirken bir şeyler yanlış gitti. Lütfen tekrar deneyin."
+      },
+      "phases": {
+        "title": "Aşamalar",
+        "short_title": "Aşamalar",
+        "description": "Proje zaman çizelgenizi yapılandırmak için döngüleri aşamalara göre gruplandırın.",
+        "toggle_title": "Aşamaları etkinleştir",
+        "toggle_description": "Proje üyeleri aşama oluşturabilir ve yönetebilir."
       }
     },
     "project_updates": {

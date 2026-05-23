@@ -59,4 +59,4 @@ export * from "./workspace-views";
 export * from "./base-layouts";
 export * from "./pagination";
 export * from "./roles";
-export * from "./milestone";
+export * from "./phase";

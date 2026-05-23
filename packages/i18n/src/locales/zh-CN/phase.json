@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {阶段} other {阶段}}",
+    "no_phase": "无阶段",
+    "page_title": "阶段",
+    "add_phase": "添加阶段",
+    "create_phase": "创建阶段",
+    "edit_phase": "编辑阶段",
+    "cycles_label": "周期",
+    "add_cycles": "添加周期",
+    "fields": {
+      "name": "名称",
+      "name_placeholder": "例如：Q1发布、MVP阶段",
+      "description": "描述",
+      "description_placeholder": "描述此阶段的目的...",
+      "start_date": "开始日期",
+      "end_date": "结束日期"
+    },
+    "validation": {
+      "name_required": "阶段名称为必填项。"
+    },
+    "toast": {
+      "created_title": "阶段已创建",
+      "created_message": "阶段已成功创建。",
+      "updated_title": "阶段已更新",
+      "updated_message": "阶段已成功更新。",
+      "deleted_title": "阶段已删除",
+      "deleted_message": "\"{name}\"已被删除。",
+      "delete_error": "无法删除阶段。请重试。",
+      "save_error": "无法保存阶段。请重试。",
+      "archived_title": "阶段已归档",
+      "unarchived_title": "阶段已恢复",
+      "cycles_added": "周期已添加",
+      "cycles_add_error": "无法添加周期。请重试。"
+    },
+    "delete": {
+      "title": "删除阶段",
+      "content": "确定要删除\"{name}\"吗？此操作无法撤销。"
+    },
+    "empty_state": {
+      "title": "暂无阶段",
+      "description": "创建阶段以将周期分组为有意义的里程碑。"
+    },
+    "disabled": {
+      "title": "阶段已禁用",
+      "description": "在项目设置中启用阶段以组织您的周期。",
+      "cta": "启用阶段"
+    }
+  }
+}

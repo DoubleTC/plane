@@ -428,6 +428,13 @@
         "loading": "Actualizando función del proyecto...",
         "success": "Función del proyecto actualizada correctamente.",
         "error": "Algo salió mal al actualizar la función del proyecto. Por favor, inténtalo de nuevo."
+      },
+      "phases": {
+        "title": "Fases",
+        "short_title": "Fases",
+        "description": "Agrupe ciclos en fases para estructurar el cronograma de su proyecto.",
+        "toggle_title": "Activar fases",
+        "toggle_description": "Los miembros del proyecto podrán crear y gestionar fases."
       }
     },
     "project_updates": {

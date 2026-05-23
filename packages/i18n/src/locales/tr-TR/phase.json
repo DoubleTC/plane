@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Aşama} other {Aşamalar}}",
+    "no_phase": "Aşama yok",
+    "page_title": "Aşamalar",
+    "add_phase": "Aşama ekle",
+    "create_phase": "Aşama oluştur",
+    "edit_phase": "Aşamayı düzenle",
+    "cycles_label": "döngüler",
+    "add_cycles": "Döngü ekle",
+    "fields": {
+      "name": "Ad",
+      "name_placeholder": "örn. Q1 Lansmanı, MVP Aşaması",
+      "description": "Açıklama",
+      "description_placeholder": "Bu aşamanın amacını açıklayın...",
+      "start_date": "Başlangıç tarihi",
+      "end_date": "Bitiş tarihi"
+    },
+    "validation": {
+      "name_required": "Aşama adı zorunludur."
+    },
+    "toast": {
+      "created_title": "Aşama oluşturuldu",
+      "created_message": "Aşama başarıyla oluşturuldu.",
+      "updated_title": "Aşama güncellendi",
+      "updated_message": "Aşama başarıyla güncellendi.",
+      "deleted_title": "Aşama silindi",
+      "deleted_message": "\"{name}\" silindi.",
+      "delete_error": "Aşama silinemedi. Lütfen tekrar deneyin.",
+      "save_error": "Aşama kaydedilemedi. Lütfen tekrar deneyin.",
+      "archived_title": "Aşama arşivlendi",
+      "unarchived_title": "Aşama geri yüklendi",
+      "cycles_added": "Döngüler eklendi",
+      "cycles_add_error": "Döngüler eklenemedi. Lütfen tekrar deneyin."
+    },
+    "delete": {
+      "title": "Aşamayı sil",
+      "content": "\"{name}\" öğesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+    },
+    "empty_state": {
+      "title": "Henüz aşama yok",
+      "description": "Döngüleri anlamlı kilometre taşlarına gruplamak için bir aşama oluşturun."
+    },
+    "disabled": {
+      "title": "Aşamalar devre dışı",
+      "description": "Döngülerinizi düzenlemek için proje ayarlarında aşamaları etkinleştirin.",
+      "cta": "Aşamaları etkinleştir"
+    }
+  }
+}

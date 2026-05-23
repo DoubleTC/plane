@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Faza} few {Fazy} other {Faz}}",
+    "no_phase": "Brak fazy",
+    "page_title": "Fazy",
+    "add_phase": "Dodaj fazę",
+    "create_phase": "Utwórz fazę",
+    "edit_phase": "Edytuj fazę",
+    "cycles_label": "cykle",
+    "add_cycles": "Dodaj cykle",
+    "fields": {
+      "name": "Nazwa",
+      "name_placeholder": "np. Premiera Q1, Faza MVP",
+      "description": "Opis",
+      "description_placeholder": "Opisz cel tej fazy...",
+      "start_date": "Data rozpoczęcia",
+      "end_date": "Data zakończenia"
+    },
+    "validation": {
+      "name_required": "Nazwa fazy jest wymagana."
+    },
+    "toast": {
+      "created_title": "Faza utworzona",
+      "created_message": "Faza została pomyślnie utworzona.",
+      "updated_title": "Faza zaktualizowana",
+      "updated_message": "Faza została pomyślnie zaktualizowana.",
+      "deleted_title": "Faza usunięta",
+      "deleted_message": "\"{name}\" została usunięta.",
+      "delete_error": "Nie można usunąć fazy. Spróbuj ponownie.",
+      "save_error": "Nie można zapisać fazy. Spróbuj ponownie.",
+      "archived_title": "Faza zarchiwizowana",
+      "unarchived_title": "Faza przywrócona",
+      "cycles_added": "Cykle dodane",
+      "cycles_add_error": "Nie można dodać cykli. Spróbuj ponownie."
+    },
+    "delete": {
+      "title": "Usuń fazę",
+      "content": "Czy na pewno chcesz usunąć \"{name}\"? Tego nie można cofnąć."
+    },
+    "empty_state": {
+      "title": "Brak faz",
+      "description": "Utwórz fazę, aby grupować cykle w znaczące kamienie milowe."
+    },
+    "disabled": {
+      "title": "Fazy są wyłączone",
+      "description": "Włącz fazy w ustawieniach projektu, aby zorganizować swoje cykle.",
+      "cta": "Włącz fazy"
+    }
+  }
+}

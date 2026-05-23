@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Фаза} few {Фази} other {Фаз}}",
+    "no_phase": "Немає фази",
+    "page_title": "Фази",
+    "add_phase": "Додати фазу",
+    "create_phase": "Створити фазу",
+    "edit_phase": "Редагувати фазу",
+    "cycles_label": "цикли",
+    "add_cycles": "Додати цикли",
+    "fields": {
+      "name": "Назва",
+      "name_placeholder": "напр. Запуск Q1, MVP-фаза",
+      "description": "Опис",
+      "description_placeholder": "Опишіть мету цієї фази...",
+      "start_date": "Дата початку",
+      "end_date": "Дата завершення"
+    },
+    "validation": {
+      "name_required": "Назва фази є обов'язковою."
+    },
+    "toast": {
+      "created_title": "Фазу створено",
+      "created_message": "Фазу успішно створено.",
+      "updated_title": "Фазу оновлено",
+      "updated_message": "Фазу успішно оновлено.",
+      "deleted_title": "Фазу видалено",
+      "deleted_message": "\"{name}\" видалено.",
+      "delete_error": "Не вдалося видалити фазу. Будь ласка, спробуйте ще раз.",
+      "save_error": "Не вдалося зберегти фазу. Будь ласка, спробуйте ще раз.",
+      "archived_title": "Фазу архівовано",
+      "unarchived_title": "Фазу відновлено",
+      "cycles_added": "Цикли додано",
+      "cycles_add_error": "Не вдалося додати цикли. Будь ласка, спробуйте ще раз."
+    },
+    "delete": {
+      "title": "Видалити фазу",
+      "content": "Ви впевнені, що хочете видалити \"{name}\"? Цю дію не можна скасувати."
+    },
+    "empty_state": {
+      "title": "Поки немає фаз",
+      "description": "Створіть фазу для групування циклів у значущі етапи."
+    },
+    "disabled": {
+      "title": "Фази вимкнено",
+      "description": "Увімкніть фази в налаштуваннях проекту для організації ваших циклів.",
+      "cta": "Увімкнути фази"
+    }
+  }
+}

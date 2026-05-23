@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Fáza} few {Fázy} other {Fáz}}",
+    "no_phase": "Žiadna fáza",
+    "page_title": "Fázy",
+    "add_phase": "Pridať fázu",
+    "create_phase": "Vytvoriť fázu",
+    "edit_phase": "Upraviť fázu",
+    "cycles_label": "cykly",
+    "add_cycles": "Pridať cykly",
+    "fields": {
+      "name": "Názov",
+      "name_placeholder": "napr. Spustenie Q1, MVP fáza",
+      "description": "Popis",
+      "description_placeholder": "Popíšte účel tejto fázy...",
+      "start_date": "Dátum začiatku",
+      "end_date": "Dátum ukončenia"
+    },
+    "validation": {
+      "name_required": "Názov fázy je povinný."
+    },
+    "toast": {
+      "created_title": "Fáza vytvorená",
+      "created_message": "Fáza bola úspešne vytvorená.",
+      "updated_title": "Fáza aktualizovaná",
+      "updated_message": "Fáza bola úspešne aktualizovaná.",
+      "deleted_title": "Fáza vymazaná",
+      "deleted_message": "\"{name}\" bola vymazaná.",
+      "delete_error": "Fázu sa nepodarilo vymazať. Skúste to znova.",
+      "save_error": "Fázu sa nepodarilo uložiť. Skúste to znova.",
+      "archived_title": "Fáza archivovaná",
+      "unarchived_title": "Fáza obnovená",
+      "cycles_added": "Cykly pridané",
+      "cycles_add_error": "Cykly sa nepodarilo pridať. Skúste to znova."
+    },
+    "delete": {
+      "title": "Vymazať fázu",
+      "content": "Naozaj chcete vymazať \"{name}\"? Túto akciu nemožno vrátiť späť."
+    },
+    "empty_state": {
+      "title": "Zatiaľ žiadne fázy",
+      "description": "Vytvorte fázu na zoskupenie cyklov do zmysluplných míľnikov."
+    },
+    "disabled": {
+      "title": "Fázy sú zakázané",
+      "description": "Povolte fázy v nastaveniach projektu na organizáciu vašich cyklov.",
+      "cta": "Povoliť fázy"
+    }
+  }
+}

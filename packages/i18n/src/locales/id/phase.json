@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Fase} other {Fase}}",
+    "no_phase": "Tidak ada fase",
+    "page_title": "Fase",
+    "add_phase": "Tambah fase",
+    "create_phase": "Buat fase",
+    "edit_phase": "Edit fase",
+    "cycles_label": "siklus",
+    "add_cycles": "Tambah siklus",
+    "fields": {
+      "name": "Nama",
+      "name_placeholder": "mis. Peluncuran Q1, Fase MVP",
+      "description": "Deskripsi",
+      "description_placeholder": "Jelaskan tujuan fase ini...",
+      "start_date": "Tanggal mulai",
+      "end_date": "Tanggal selesai"
+    },
+    "validation": {
+      "name_required": "Nama fase wajib diisi."
+    },
+    "toast": {
+      "created_title": "Fase dibuat",
+      "created_message": "Fase telah berhasil dibuat.",
+      "updated_title": "Fase diperbarui",
+      "updated_message": "Fase telah berhasil diperbarui.",
+      "deleted_title": "Fase dihapus",
+      "deleted_message": "\"{name}\" telah dihapus.",
+      "delete_error": "Tidak dapat menghapus fase. Silakan coba lagi.",
+      "save_error": "Tidak dapat menyimpan fase. Silakan coba lagi.",
+      "archived_title": "Fase diarsipkan",
+      "unarchived_title": "Fase dipulihkan",
+      "cycles_added": "Siklus ditambahkan",
+      "cycles_add_error": "Tidak dapat menambah siklus. Silakan coba lagi."
+    },
+    "delete": {
+      "title": "Hapus fase",
+      "content": "Apakah Anda yakin ingin menghapus \"{name}\"? Ini tidak dapat dibatalkan."
+    },
+    "empty_state": {
+      "title": "Belum ada fase",
+      "description": "Buat fase untuk mengelompokkan siklus menjadi tonggak yang bermakna."
+    },
+    "disabled": {
+      "title": "Fase dinonaktifkan",
+      "description": "Aktifkan fase di pengaturan proyek untuk mengatur siklus Anda.",
+      "cta": "Aktifkan fase"
+    }
+  }
+}

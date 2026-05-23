@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {Fase} other {Fasi}}",
+    "no_phase": "Nessuna fase",
+    "page_title": "Fasi",
+    "add_phase": "Aggiungi fase",
+    "create_phase": "Crea fase",
+    "edit_phase": "Modifica fase",
+    "cycles_label": "cicli",
+    "add_cycles": "Aggiungi cicli",
+    "fields": {
+      "name": "Nome",
+      "name_placeholder": "es. Lancio Q1, Fase MVP",
+      "description": "Descrizione",
+      "description_placeholder": "Descrivi lo scopo di questa fase...",
+      "start_date": "Data di inizio",
+      "end_date": "Data di fine"
+    },
+    "validation": {
+      "name_required": "Il nome della fase è obbligatorio."
+    },
+    "toast": {
+      "created_title": "Fase creata",
+      "created_message": "La fase è stata creata con successo.",
+      "updated_title": "Fase aggiornata",
+      "updated_message": "La fase è stata aggiornata con successo.",
+      "deleted_title": "Fase eliminata",
+      "deleted_message": "\"{name}\" è stata eliminata.",
+      "delete_error": "Impossibile eliminare la fase. Riprovare.",
+      "save_error": "Impossibile salvare la fase. Riprovare.",
+      "archived_title": "Fase archiviata",
+      "unarchived_title": "Fase ripristinata",
+      "cycles_added": "Cicli aggiunti",
+      "cycles_add_error": "Impossibile aggiungere cicli. Riprovare."
+    },
+    "delete": {
+      "title": "Elimina fase",
+      "content": "Sei sicuro di voler eliminare \"{name}\"? Questa azione non può essere annullata."
+    },
+    "empty_state": {
+      "title": "Nessuna fase ancora",
+      "description": "Crea una fase per raggruppare i cicli in milestone significativi."
+    },
+    "disabled": {
+      "title": "Le fasi sono disabilitate",
+      "description": "Abilita le fasi nelle impostazioni del progetto per organizzare i tuoi cicli.",
+      "cta": "Abilita fasi"
+    }
+  }
+}

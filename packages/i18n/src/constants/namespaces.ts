@@ -15,7 +15,7 @@ export const NAMESPACES = [
   "home",
   "inbox",
   "integration",
-  "milestone",
+  "phase",
   "module",
   "navigation",
   "notification",

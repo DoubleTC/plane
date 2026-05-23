@@ -428,6 +428,13 @@
         "loading": "Projektfunktion wird aktualisiert...",
         "success": "Projektfunktion erfolgreich aktualisiert.",
         "error": "Beim Aktualisieren der Projektfunktion ist etwas schiefgelaufen. Bitte versuchen Sie es erneut."
+      },
+      "phases": {
+        "title": "Phasen",
+        "short_title": "Phasen",
+        "description": "Gruppieren Sie Zyklen in Phasen, um die Zeitplanung Ihres Projekts zu strukturieren.",
+        "toggle_title": "Phasen aktivieren",
+        "toggle_description": "Projektmitglieder können Phasen erstellen und verwalten."
       }
     },
     "project_updates": {

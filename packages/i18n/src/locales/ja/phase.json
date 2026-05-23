@@ -1,0 +1,50 @@
+{
+  "phase": {
+    "label": "{count, plural, one {フェーズ} other {フェーズ}}",
+    "no_phase": "フェーズなし",
+    "page_title": "フェーズ",
+    "add_phase": "フェーズを追加",
+    "create_phase": "フェーズを作成",
+    "edit_phase": "フェーズを編集",
+    "cycles_label": "サイクル",
+    "add_cycles": "サイクルを追加",
+    "fields": {
+      "name": "名前",
+      "name_placeholder": "例: Q1ローンチ、MVPフェーズ",
+      "description": "説明",
+      "description_placeholder": "このフェーズの目的を説明してください...",
+      "start_date": "開始日",
+      "end_date": "終了日"
+    },
+    "validation": {
+      "name_required": "フェーズ名は必須です。"
+    },
+    "toast": {
+      "created_title": "フェーズを作成しました",
+      "created_message": "フェーズが正常に作成されました。",
+      "updated_title": "フェーズを更新しました",
+      "updated_message": "フェーズが正常に更新されました。",
+      "deleted_title": "フェーズを削除しました",
+      "deleted_message": "\"{name}\" が削除されました。",
+      "delete_error": "フェーズを削除できませんでした。もう一度お試しください。",
+      "save_error": "フェーズを保存できませんでした。もう一度お試しください。",
+      "archived_title": "フェーズをアーカイブしました",
+      "unarchived_title": "フェーズを復元しました",
+      "cycles_added": "サイクルを追加しました",
+      "cycles_add_error": "サイクルを追加できませんでした。もう一度お試しください。"
+    },
+    "delete": {
+      "title": "フェーズを削除",
+      "content": "\"{name}\" を削除してもよろしいですか？この操作は元に戻せません。"
+    },
+    "empty_state": {
+      "title": "まだフェーズがありません",
+      "description": "フェーズを作成して、サイクルを意味のあるマイルストーンにグループ化しましょう。"
+    },
+    "disabled": {
+      "title": "フェーズが無効になっています",
+      "description": "プロジェクト設定でフェーズを有効にして、サイクルを整理しましょう。",
+      "cta": "フェーズを有効にする"
+    }
+  }
+}

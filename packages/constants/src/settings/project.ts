@@ -51,12 +51,12 @@ export const PROJECT_SETTINGS: Record<TProjectSettingsTabs, TProjectSettingsItem
     access: [EUserProjectRoles.ADMIN],
     highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/features/cycles/`,
   },
-  features_milestones: {
-    key: "features_milestones",
-    i18n_label: "project_settings.features.milestones.short_title",
-    href: `/features/milestones`,
+  features_phases: {
+    key: "features_phases",
+    i18n_label: "project_settings.features.phases.short_title",
+    href: `/features/phases`,
     access: [EUserProjectRoles.ADMIN],
-    highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/features/milestones/`,
+    highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/features/phases/`,
   },
   features_modules: {
     key: "features_modules",
@@ -122,7 +122,7 @@ export const GROUPED_PROJECT_SETTINGS: Record<PROJECT_SETTINGS_CATEGORY, TProjec
   [PROJECT_SETTINGS_CATEGORY.GENERAL]: [PROJECT_SETTINGS["general"], PROJECT_SETTINGS["members"]],
   [PROJECT_SETTINGS_CATEGORY.FEATURES]: [
     PROJECT_SETTINGS["features_cycles"],
-    PROJECT_SETTINGS["features_milestones"],
+    PROJECT_SETTINGS["features_phases"],
     PROJECT_SETTINGS["features_modules"],
     PROJECT_SETTINGS["features_views"],
     PROJECT_SETTINGS["features_pages"],

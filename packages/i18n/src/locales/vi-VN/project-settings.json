@@ -428,6 +428,13 @@
         "loading": "Đang cập nhật tính năng dự án...",
         "success": "Đã cập nhật tính năng dự án thành công.",
         "error": "Đã xảy ra lỗi khi cập nhật tính năng dự án. Vui lòng thử lại."
+      },
+      "phases": {
+        "title": "Giai đoạn",
+        "short_title": "Giai đoạn",
+        "description": "Nhóm các chu kỳ thành giai đoạn để cấu trúc dòng thời gian dự án của bạn.",
+        "toggle_title": "Bật giai đoạn",
+        "toggle_description": "Thành viên dự án sẽ có thể tạo và quản lý các giai đoạn."
       }
     },
     "project_updates": {
