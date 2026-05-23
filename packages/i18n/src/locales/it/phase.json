@@ -31,7 +31,9 @@
       "archived_title": "Fase archiviata",
       "unarchived_title": "Fase ripristinata",
       "cycles_added": "Cicli aggiunti",
-      "cycles_add_error": "Impossibile aggiungere cicli. Riprovare."
+      "cycles_add_error": "Impossibile aggiungere cicli. Riprovare.",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "Elimina fase",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "Nessuna fase ancora",
-      "description": "Crea una fase per raggruppare i cicli in milestone significativi."
+      "description": "Crea una fase per raggruppare i cicli in milestone significativi.",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "Le fasi sono disabilitate",
       "description": "Abilita le fasi nelle impostazioni del progetto per organizzare i tuoi cicli.",
       "cta": "Abilita fasi"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }

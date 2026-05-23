@@ -31,7 +31,9 @@
       "archived_title": "フェーズをアーカイブしました",
       "unarchived_title": "フェーズを復元しました",
       "cycles_added": "サイクルを追加しました",
-      "cycles_add_error": "サイクルを追加できませんでした。もう一度お試しください。"
+      "cycles_add_error": "サイクルを追加できませんでした。もう一度お試しください。",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "フェーズを削除",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "まだフェーズがありません",
-      "description": "フェーズを作成して、サイクルを意味のあるマイルストーンにグループ化しましょう。"
+      "description": "フェーズを作成して、サイクルを意味のあるマイルストーンにグループ化しましょう。",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "フェーズが無効になっています",
       "description": "プロジェクト設定でフェーズを有効にして、サイクルを整理しましょう。",
       "cta": "フェーズを有効にする"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }

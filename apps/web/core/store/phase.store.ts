@@ -13,6 +13,7 @@ export interface IPhaseStore {
   loader: boolean;
   fetchedMap: Record<string, boolean>;
   phaseMap: Record<string, IPhase>;
+  phaseCyclesMap: Record<string, IPhaseCycle[]>;
   createPhaseModalOpen: boolean;
   // Computed
   currentProjectPhaseIds: string[] | null;
@@ -20,11 +21,13 @@ export interface IPhaseStore {
   getPhaseFetchStatusByProjectId: (projectId: string) => boolean;
   getPhaseById: (phaseId: string) => IPhase | null;
   getProjectPhaseIds: (projectId: string) => string[] | null;
+  getPhaseCyclesByPhaseId: (phaseId: string) => IPhaseCycle[] | null;
   // Toggle
   toggleCreatePhaseModal: (value?: boolean) => void;
   // Fetch
   fetchPhases: (workspaceSlug: string, projectId: string) => Promise<IPhase[]>;
   fetchPhaseDetails: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<IPhase>;
+  fetchPhaseCycles: (workspaceSlug: string, projectId: string, phaseId: string) => Promise<IPhaseCycle[]>;
   // CRUD
   createPhase: (workspaceSlug: string, projectId: string, data: IPhaseCreate) => Promise<IPhase>;
   updatePhase: (workspaceSlug: string, projectId: string, phaseId: string, data: IPhaseUpdate) => Promise<IPhase>;
@@ -51,6 +54,7 @@ export interface IPhaseStore {
 export class PhaseStore implements IPhaseStore {
   loader: boolean = false;
   phaseMap: Record<string, IPhase> = {};
+  phaseCyclesMap: Record<string, IPhaseCycle[]> = {};
   fetchedMap: Record<string, boolean> = {};
   createPhaseModalOpen: boolean = false;
 
@@ -61,12 +65,14 @@ export class PhaseStore implements IPhaseStore {
     makeObservable(this, {
       loader: observable.ref,
       phaseMap: observable,
+      phaseCyclesMap: observable,
       fetchedMap: observable,
       createPhaseModalOpen: observable.ref,
       currentProjectPhaseIds: computed,
       toggleCreatePhaseModal: action,
       fetchPhases: action,
       fetchPhaseDetails: action,
+      fetchPhaseCycles: action,
       createPhase: action,
       updatePhase: action,
       deletePhase: action,
@@ -101,6 +107,8 @@ export class PhaseStore implements IPhaseStore {
     if (!phases.length) return null;
     return sortBy(phases, "sort_order").map((p) => p.id);
   });
+
+  getPhaseCyclesByPhaseId = computedFn((phaseId: string): IPhaseCycle[] | null => this.phaseCyclesMap[phaseId] ?? null);
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
 
@@ -203,6 +211,14 @@ export class PhaseStore implements IPhaseStore {
 
   // ── Cycles ─────────────────────────────────────────────────────────────────
 
+  fetchPhaseCycles = async (workspaceSlug: string, projectId: string, phaseId: string): Promise<IPhaseCycle[]> => {
+    const cycles = await this.phaseService.getPhaseCycles(workspaceSlug, projectId, phaseId);
+    runInAction(() => {
+      this.phaseCyclesMap[phaseId] = cycles;
+    });
+    return cycles;
+  };
+
   getPhaseCycles = async (workspaceSlug: string, projectId: string, phaseId: string): Promise<IPhaseCycle[]> =>
     this.phaseService.getPhaseCycles(workspaceSlug, projectId, phaseId);
 
@@ -213,7 +229,10 @@ export class PhaseStore implements IPhaseStore {
     cycleIds: string[]
   ): Promise<IPhaseCycle[]> => {
     const result = await this.phaseService.addCyclesToPhase(workspaceSlug, projectId, phaseId, cycleIds);
-    await this.fetchPhaseDetails(workspaceSlug, projectId, phaseId);
+    await Promise.all([
+      this.fetchPhaseDetails(workspaceSlug, projectId, phaseId),
+      this.fetchPhaseCycles(workspaceSlug, projectId, phaseId),
+    ]);
     return result;
   };
 
@@ -223,6 +242,12 @@ export class PhaseStore implements IPhaseStore {
     phaseId: string,
     phaseCycleId: string
   ): Promise<void> => {
+    // Optimistic update
+    runInAction(() => {
+      if (this.phaseCyclesMap[phaseId]) {
+        this.phaseCyclesMap[phaseId] = this.phaseCyclesMap[phaseId].filter((pc) => pc.id !== phaseCycleId);
+      }
+    });
     await this.phaseService.removeCycleFromPhase(workspaceSlug, projectId, phaseId, phaseCycleId);
     await this.fetchPhaseDetails(workspaceSlug, projectId, phaseId);
   };

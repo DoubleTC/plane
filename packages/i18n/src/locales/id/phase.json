@@ -31,7 +31,9 @@
       "archived_title": "Fase diarsipkan",
       "unarchived_title": "Fase dipulihkan",
       "cycles_added": "Siklus ditambahkan",
-      "cycles_add_error": "Tidak dapat menambah siklus. Silakan coba lagi."
+      "cycles_add_error": "Tidak dapat menambah siklus. Silakan coba lagi.",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "Hapus fase",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "Belum ada fase",
-      "description": "Buat fase untuk mengelompokkan siklus menjadi tonggak yang bermakna."
+      "description": "Buat fase untuk mengelompokkan siklus menjadi tonggak yang bermakna.",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "Fase dinonaktifkan",
       "description": "Aktifkan fase di pengaturan proyek untuk mengatur siklus Anda.",
       "cta": "Aktifkan fase"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }

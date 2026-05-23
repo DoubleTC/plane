@@ -31,7 +31,9 @@
       "archived_title": "단계 보관됨",
       "unarchived_title": "단계 복원됨",
       "cycles_added": "사이클 추가됨",
-      "cycles_add_error": "사이클을 추가할 수 없습니다. 다시 시도해 주세요."
+      "cycles_add_error": "사이클을 추가할 수 없습니다. 다시 시도해 주세요.",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "단계 삭제",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "아직 단계가 없습니다",
-      "description": "단계를 만들어 사이클을 의미 있는 마일스톤으로 그룹화하세요."
+      "description": "단계를 만들어 사이클을 의미 있는 마일스톤으로 그룹화하세요.",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "단계가 비활성화되어 있습니다",
       "description": "프로젝트 설정에서 단계를 활성화하여 사이클을 구성하세요.",
       "cta": "단계 활성화"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }

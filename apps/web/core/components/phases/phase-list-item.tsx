@@ -38,8 +38,7 @@ export const PhaseListItem = observer(function PhaseListItem(props: Props) {
   return (
     <ListItem
       title={phase.name}
-      itemLink=""
-      disableLink
+      itemLink={`/${workspaceSlug}/projects/${projectId}/phases/${phaseId}`}
       prependTitleElement={
         <CircularProgressIndicator size={30} percentage={progress} strokeWidth={3}>
           {progress === 100 ? (

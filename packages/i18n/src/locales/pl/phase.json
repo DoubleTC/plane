@@ -31,7 +31,9 @@
       "archived_title": "Faza zarchiwizowana",
       "unarchived_title": "Faza przywrócona",
       "cycles_added": "Cykle dodane",
-      "cycles_add_error": "Nie można dodać cykli. Spróbuj ponownie."
+      "cycles_add_error": "Nie można dodać cykli. Spróbuj ponownie.",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "Usuń fazę",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "Brak faz",
-      "description": "Utwórz fazę, aby grupować cykle w znaczące kamienie milowe."
+      "description": "Utwórz fazę, aby grupować cykle w znaczące kamienie milowe.",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "Fazy są wyłączone",
       "description": "Włącz fazy w ustawieniach projektu, aby zorganizować swoje cykle.",
       "cta": "Włącz fazy"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }

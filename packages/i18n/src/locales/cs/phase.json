@@ -31,7 +31,9 @@
       "archived_title": "Fáze archivována",
       "unarchived_title": "Fáze obnovena",
       "cycles_added": "Cykly přidány",
-      "cycles_add_error": "Cykly se nepodařilo přidat. Zkuste to znovu."
+      "cycles_add_error": "Cykly se nepodařilo přidat. Zkuste to znovu.",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "Smazat fázi",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "Zatím žádné fáze",
-      "description": "Vytvořte fázi pro seskupení cyklů do smysluplných milníků."
+      "description": "Vytvořte fázi pro seskupení cyklů do smysluplných milníků.",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "Fáze jsou zakázány",
       "description": "Povolte fáze v nastavení projektu pro organizaci vašich cyklů.",
       "cta": "Povolit fáze"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }

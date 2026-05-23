@@ -31,7 +31,9 @@
       "archived_title": "Fase archivada",
       "unarchived_title": "Fase restaurada",
       "cycles_added": "Ciclos agregados",
-      "cycles_add_error": "No se pudieron agregar ciclos. Por favor, inténtelo de nuevo."
+      "cycles_add_error": "No se pudieron agregar ciclos. Por favor, inténtelo de nuevo.",
+      "cycle_removed": "Cycle removed from phase",
+      "cycle_remove_error": "Could not remove cycle. Please try again."
     },
     "delete": {
       "title": "Eliminar fase",
@@ -39,12 +41,19 @@
     },
     "empty_state": {
       "title": "Aún no hay fases",
-      "description": "Cree una fase para agrupar ciclos en hitos significativos."
+      "description": "Cree una fase para agrupar ciclos en hitos significativos.",
+      "no_cycles_to_add": "No available cycles to add."
     },
     "disabled": {
       "title": "Las fases están desactivadas",
       "description": "Active las fases en la configuración del proyecto para organizar sus ciclos.",
       "cta": "Activar fases"
+    },
+    "detail": {
+      "linked_cycles": "Linked cycles",
+      "no_cycles": "No cycles linked to this phase yet.",
+      "progress": "Progress",
+      "remove_cycle": "Remove cycle"
     }
   }
 }
