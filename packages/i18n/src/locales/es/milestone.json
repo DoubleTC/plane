@@ -27,7 +27,9 @@
       "delete_error": "No se pudo eliminar el hito. Inténtelo de nuevo.",
       "save_error": "No se pudo guardar el hito. Inténtelo de nuevo.",
       "archived_title": "Hito archivado",
-      "unarchived_title": "Hito restaurado"
+      "unarchived_title": "Hito restaurado",
+      "issues_added": "Tareas agregadas",
+      "issues_add_error": "No se pudieron agregar las tareas. Inténtelo de nuevo."
     },
     "delete": {
       "title": "Eliminar hito",
@@ -41,6 +43,7 @@
       "title": "Los hitos están desactivados",
       "description": "Active los hitos en la configuración del proyecto.",
       "cta": "Activar hitos"
-    }
+    },
+    "add_issues": "Agregar tareas"
   }
 }

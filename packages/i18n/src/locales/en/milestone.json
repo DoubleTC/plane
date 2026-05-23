@@ -27,7 +27,9 @@
       "delete_error": "Could not delete milestone. Please try again.",
       "save_error": "Could not save milestone. Please try again.",
       "archived_title": "Milestone archived",
-      "unarchived_title": "Milestone restored"
+      "unarchived_title": "Milestone restored",
+      "issues_added": "Issues added",
+      "issues_add_error": "Could not add issues. Please try again."
     },
     "delete": {
       "title": "Delete milestone",
@@ -41,6 +43,7 @@
       "title": "Milestones are disabled",
       "description": "Enable milestones in project settings to track key deliverables.",
       "cta": "Enable milestones"
-    }
+    },
+    "add_issues": "Add issues"
   }
 }

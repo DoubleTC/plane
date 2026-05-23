@@ -27,7 +27,9 @@
       "delete_error": "Nie można usunąć kamienia milowego. Spróbuj ponownie.",
       "save_error": "Nie można zapisać kamienia milowego. Spróbuj ponownie.",
       "archived_title": "Kamień milowy zarchiwizowany",
-      "unarchived_title": "Kamień milowy przywrócony"
+      "unarchived_title": "Kamień milowy przywrócony",
+      "issues_added": "Zadania dodane",
+      "issues_add_error": "Nie można dodać zadań. Spróbuj ponownie."
     },
     "delete": {
       "title": "Usuń kamień milowy",
@@ -41,6 +43,7 @@
       "title": "Kamienie milowe są wyłączone",
       "description": "Włącz kamienie milowe w ustawieniach projektu.",
       "cta": "Włącz kamienie milowe"
-    }
+    },
+    "add_issues": "Dodaj zadania"
   }
 }

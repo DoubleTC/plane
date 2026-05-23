@@ -27,7 +27,9 @@
       "delete_error": "無法刪除里程碑。請重試。",
       "save_error": "無法儲存里程碑。請重試。",
       "archived_title": "里程碑已封存",
-      "unarchived_title": "里程碑已復原"
+      "unarchived_title": "里程碑已復原",
+      "issues_added": "工作項目已新增",
+      "issues_add_error": "無法新增工作項目。請重試。"
     },
     "delete": {
       "title": "刪除里程碑",
@@ -41,6 +43,7 @@
       "title": "里程碑已停用",
       "description": "請在專案設定中啟用里程碑。",
       "cta": "啟用里程碑"
-    }
+    },
+    "add_issues": "新增工作項目"
   }
 }

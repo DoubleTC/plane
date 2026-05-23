@@ -27,7 +27,9 @@
       "delete_error": "마일스톤을 삭제할 수 없습니다. 다시 시도해주세요.",
       "save_error": "마일스톤을 저장할 수 없습니다. 다시 시도해주세요.",
       "archived_title": "마일스톤이 보관되었습니다",
-      "unarchived_title": "마일스톤이 복원되었습니다"
+      "unarchived_title": "마일스톤이 복원되었습니다",
+      "issues_added": "이슈가 추가됨",
+      "issues_add_error": "이슈를 추가할 수 없습니다. 다시 시도해 주세요."
     },
     "delete": {
       "title": "마일스톤 삭제",
@@ -41,6 +43,7 @@
       "title": "마일스톤이 비활성화되어 있습니다",
       "description": "프로젝트 설정에서 마일스톤을 활성화하세요.",
       "cta": "마일스톤 활성화"
-    }
+    },
+    "add_issues": "이슈 추가"
   }
 }

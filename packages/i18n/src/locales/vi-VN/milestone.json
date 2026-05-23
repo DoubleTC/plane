@@ -27,7 +27,9 @@
       "delete_error": "Không thể xóa cột mốc. Vui lòng thử lại.",
       "save_error": "Không thể lưu cột mốc. Vui lòng thử lại.",
       "archived_title": "Cột mốc đã được lưu trữ",
-      "unarchived_title": "Cột mốc đã được khôi phục"
+      "unarchived_title": "Cột mốc đã được khôi phục",
+      "issues_added": "Đã thêm công việc",
+      "issues_add_error": "Không thể thêm công việc. Vui lòng thử lại."
     },
     "delete": {
       "title": "Xóa cột mốc",
@@ -41,6 +43,7 @@
       "title": "Cột mốc bị tắt",
       "description": "Bật cột mốc trong cài đặt dự án để theo dõi các mốc quan trọng.",
       "cta": "Bật cột mốc"
-    }
+    },
+    "add_issues": "Thêm công việc"
   }
 }

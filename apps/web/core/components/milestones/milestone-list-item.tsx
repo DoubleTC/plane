@@ -8,13 +8,15 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
-import { Archive, CalendarDays, Pencil, Trash2 } from "lucide-react";
+import { Archive, CalendarDays, Link2, Pencil, Trash2 } from "lucide-react";
 // plane imports
 import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import type { ISearchIssueResponse } from "@plane/types";
 import { CircularProgressIndicator, CustomMenu } from "@plane/ui";
 import { renderFormattedDate } from "@plane/utils";
 // components
+import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 import { CreateUpdateMilestoneModal } from "@/components/milestones/create-update-milestone-modal";
 import { DeleteMilestoneModal } from "@/components/milestones/delete-milestone-modal";
 // hooks
@@ -29,10 +31,13 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
   // states
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [addIssuesModal, setAddIssuesModal] = useState(false);
+  const [linkedIssueIds, setLinkedIssueIds] = useState<string[]>([]);
   // router
   const { workspaceSlug, projectId } = useParams();
   // store hooks
-  const { getMilestoneById, archiveMilestone, unarchiveMilestone } = useMilestone();
+  const { getMilestoneById, archiveMilestone, unarchiveMilestone, getMilestoneIssues, addIssuesToMilestone } =
+    useMilestone();
   const { t } = useTranslation();
 
   const milestone = getMilestoneById(milestoneId);
@@ -61,6 +66,33 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
     }
   };
 
+  const handleOpenAddIssues = async () => {
+    if (!workspaceSlug || !projectId) return;
+    // pre-fetch existing linked issues so we can hide them in the picker
+    try {
+      const existing = await getMilestoneIssues(workspaceSlug.toString(), projectId.toString(), milestoneId);
+      setLinkedIssueIds(existing.map((mi) => mi.issue));
+    } catch {
+      setLinkedIssueIds([]);
+    }
+    setAddIssuesModal(true);
+  };
+
+  const handleAddIssues = async (selected: ISearchIssueResponse[]) => {
+    if (!workspaceSlug || !projectId || selected.length === 0) return;
+    try {
+      await addIssuesToMilestone(
+        workspaceSlug.toString(),
+        projectId.toString(),
+        milestoneId,
+        selected.map((i) => i.id)
+      );
+      setToast({ type: TOAST_TYPE.SUCCESS, title: t("milestone.toast.issues_added") });
+    } catch {
+      setToast({ type: TOAST_TYPE.ERROR, title: t("milestone.toast.issues_add_error") });
+    }
+  };
+
   return (
     <>
       {/* Edit Modal */}
@@ -73,6 +105,16 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
       />
       {/* Delete Modal */}
       <DeleteMilestoneModal data={milestone} isOpen={deleteModal} onClose={() => setDeleteModal(false)} />
+      {/* Add Issues Modal */}
+      <ExistingIssuesListModal
+        workspaceSlug={workspaceSlug?.toString()}
+        projectId={projectId?.toString()}
+        isOpen={addIssuesModal}
+        handleClose={() => setAddIssuesModal(false)}
+        searchParams={{}}
+        handleOnSubmit={handleAddIssues}
+        shouldHideIssue={(issue) => linkedIssueIds.includes(issue.id)}
+      />
 
       <div className="group border-custom-border-200 bg-custom-background-100 hover:bg-custom-background-90 flex items-center justify-between gap-x-3 rounded-lg border px-4 py-3 transition-colors">
         {/* Left: progress + info */}
@@ -126,6 +168,12 @@ export const MilestoneListItem = observer(function MilestoneListItem(props: Prop
 
           {/* Context menu */}
           <CustomMenu ellipsis placement="bottom-end">
+            <CustomMenu.MenuItem onClick={handleOpenAddIssues}>
+              <span className="text-custom-text-200 flex items-center gap-x-2">
+                <Link2 className="h-3.5 w-3.5" />
+                {t("milestone.add_issues")}
+              </span>
+            </CustomMenu.MenuItem>
             <CustomMenu.MenuItem onClick={() => setEditModal(true)}>
               <span className="text-custom-text-200 flex items-center gap-x-2">
                 <Pencil className="h-3.5 w-3.5" />

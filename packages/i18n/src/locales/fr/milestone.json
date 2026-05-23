@@ -27,7 +27,9 @@
       "delete_error": "Impossible de supprimer le jalon. Veuillez réessayer.",
       "save_error": "Impossible d'enregistrer le jalon. Veuillez réessayer.",
       "archived_title": "Jalon archivé",
-      "unarchived_title": "Jalon restauré"
+      "unarchived_title": "Jalon restauré",
+      "issues_added": "Tâches ajoutées",
+      "issues_add_error": "Impossible d'ajouter les tâches. Veuillez réessayer."
     },
     "delete": {
       "title": "Supprimer le jalon",
@@ -41,6 +43,7 @@
       "title": "Les jalons sont désactivés",
       "description": "Activez les jalons dans les paramètres du projet.",
       "cta": "Activer les jalons"
-    }
+    },
+    "add_issues": "Ajouter des tâches"
   }
 }

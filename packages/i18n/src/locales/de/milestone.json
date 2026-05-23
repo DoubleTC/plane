@@ -27,7 +27,9 @@
       "delete_error": "Meilenstein konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.",
       "save_error": "Meilenstein konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
       "archived_title": "Meilenstein archiviert",
-      "unarchived_title": "Meilenstein wiederhergestellt"
+      "unarchived_title": "Meilenstein wiederhergestellt",
+      "issues_added": "Aufgaben hinzugefügt",
+      "issues_add_error": "Aufgaben konnten nicht hinzugefügt werden. Bitte erneut versuchen."
     },
     "delete": {
       "title": "Meilenstein löschen",
@@ -41,6 +43,7 @@
       "title": "Meilensteine sind deaktiviert",
       "description": "Aktivieren Sie Meilensteine in den Projekteinstellungen.",
       "cta": "Meilensteine aktivieren"
-    }
+    },
+    "add_issues": "Aufgaben hinzufügen"
   }
 }

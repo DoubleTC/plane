@@ -27,7 +27,9 @@
       "delete_error": "Míľnik sa nedá vymazať. Skúste znova.",
       "save_error": "Míľnik sa nedá uložiť. Skúste znova.",
       "archived_title": "Míľnik archivovaný",
-      "unarchived_title": "Míľnik obnovený"
+      "unarchived_title": "Míľnik obnovený",
+      "issues_added": "Úlohy pridané",
+      "issues_add_error": "Nepodarilo sa pridať úlohy. Skúste to znova."
     },
     "delete": {
       "title": "Vymazať míľnik",
@@ -41,6 +43,7 @@
       "title": "Míľniky sú zakázané",
       "description": "Povolte míľniky v nastaveniach projektu.",
       "cta": "Povoliť míľniky"
-    }
+    },
+    "add_issues": "Pridať úlohy"
   }
 }

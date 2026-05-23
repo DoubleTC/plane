@@ -27,7 +27,9 @@
       "delete_error": "Kilometre taşı silinemedi. Lütfen tekrar deneyin.",
       "save_error": "Kilometre taşı kaydedilemedi. Lütfen tekrar deneyin.",
       "archived_title": "Kilometre taşı arşivlendi",
-      "unarchived_title": "Kilometre taşı geri yüklendi"
+      "unarchived_title": "Kilometre taşı geri yüklendi",
+      "issues_added": "İş öğeleri eklendi",
+      "issues_add_error": "İş öğeleri eklenemedi. Lütfen tekrar deneyin."
     },
     "delete": {
       "title": "Kilometre taşını sil",
@@ -41,6 +43,7 @@
       "title": "Kilometre taşları devre dışı",
       "description": "Kilometre taşlarını proje ayarlarından etkinleştirin.",
       "cta": "Kilometre taşlarını etkinleştir"
-    }
+    },
+    "add_issues": "İş öğesi ekle"
   }
 }

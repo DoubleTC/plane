@@ -27,7 +27,9 @@
       "delete_error": "Impossibile eliminare la milestone. Riprovare.",
       "save_error": "Impossibile salvare la milestone. Riprovare.",
       "archived_title": "Milestone archiviata",
-      "unarchived_title": "Milestone ripristinata"
+      "unarchived_title": "Milestone ripristinata",
+      "issues_added": "Attività aggiunte",
+      "issues_add_error": "Impossibile aggiungere le attività. Riprova."
     },
     "delete": {
       "title": "Elimina milestone",
@@ -41,6 +43,7 @@
       "title": "Le milestone sono disabilitate",
       "description": "Abilita le milestone nelle impostazioni del progetto.",
       "cta": "Abilita milestone"
-    }
+    },
+    "add_issues": "Aggiungi attività"
   }
 }

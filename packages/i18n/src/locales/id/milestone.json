@@ -27,7 +27,9 @@
       "delete_error": "Tidak dapat menghapus tonggak. Silakan coba lagi.",
       "save_error": "Tidak dapat menyimpan tonggak. Silakan coba lagi.",
       "archived_title": "Tonggak diarsipkan",
-      "unarchived_title": "Tonggak dipulihkan"
+      "unarchived_title": "Tonggak dipulihkan",
+      "issues_added": "Tugas ditambahkan",
+      "issues_add_error": "Tidak dapat menambah tugas. Silakan coba lagi."
     },
     "delete": {
       "title": "Hapus tonggak",
@@ -41,6 +43,7 @@
       "title": "Tonggak dinonaktifkan",
       "description": "Aktifkan tonggak di pengaturan proyek.",
       "cta": "Aktifkan tonggak"
-    }
+    },
+    "add_issues": "Tambah tugas"
   }
 }

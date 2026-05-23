@@ -27,7 +27,9 @@
       "delete_error": "Não foi possível excluir o marco. Tente novamente.",
       "save_error": "Não foi possível salvar o marco. Tente novamente.",
       "archived_title": "Marco arquivado",
-      "unarchived_title": "Marco restaurado"
+      "unarchived_title": "Marco restaurado",
+      "issues_added": "Tarefas adicionadas",
+      "issues_add_error": "Não foi possível adicionar as tarefas. Tente novamente."
     },
     "delete": {
       "title": "Excluir marco",
@@ -41,6 +43,7 @@
       "title": "Marcos estão desativados",
       "description": "Ative os marcos nas configurações do projeto.",
       "cta": "Ativar marcos"
-    }
+    },
+    "add_issues": "Adicionar tarefas"
   }
 }

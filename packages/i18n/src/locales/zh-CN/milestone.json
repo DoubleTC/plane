@@ -27,7 +27,9 @@
       "delete_error": "无法删除里程碑。请重试。",
       "save_error": "无法保存里程碑。请重试。",
       "archived_title": "里程碑已归档",
-      "unarchived_title": "里程碑已恢复"
+      "unarchived_title": "里程碑已恢复",
+      "issues_added": "工作项已添加",
+      "issues_add_error": "无法添加工作项。请重试。"
     },
     "delete": {
       "title": "删除里程碑",
@@ -41,6 +43,7 @@
       "title": "里程碑已禁用",
       "description": "请在项目设置中启用里程碑。",
       "cta": "启用里程碑"
-    }
+    },
+    "add_issues": "添加工作项"
   }
 }

@@ -27,7 +27,9 @@
       "delete_error": "Nu s-a putut șterge jalonul. Încercați din nou.",
       "save_error": "Nu s-a putut salva jalonul. Încercați din nou.",
       "archived_title": "Jalon arhivat",
-      "unarchived_title": "Jalon restaurat"
+      "unarchived_title": "Jalon restaurat",
+      "issues_added": "Sarcini adăugate",
+      "issues_add_error": "Nu s-au putut adăuga sarcinile. Vă rugăm să încercați din nou."
     },
     "delete": {
       "title": "Șterge jalon",
@@ -41,6 +43,7 @@
       "title": "Jaloanele sunt dezactivate",
       "description": "Activați jaloanele în setările proiectului.",
       "cta": "Activați jaloanele"
-    }
+    },
+    "add_issues": "Adăugați sarcini"
   }
 }

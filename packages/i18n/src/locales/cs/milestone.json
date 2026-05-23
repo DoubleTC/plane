@@ -27,7 +27,9 @@
       "delete_error": "Milník nelze smazat. Zkuste to znovu.",
       "save_error": "Milník nelze uložit. Zkuste to znovu.",
       "archived_title": "Milník archivován",
-      "unarchived_title": "Milník obnoven"
+      "unarchived_title": "Milník obnoven",
+      "issues_added": "Úkoly přidány",
+      "issues_add_error": "Nelze přidat úkoly. Zkuste to prosím znovu."
     },
     "delete": {
       "title": "Smazat milník",
@@ -41,6 +43,7 @@
       "title": "Milníky jsou zakázány",
       "description": "Povolte milníky v nastavení projektu.",
       "cta": "Povolit milníky"
-    }
+    },
+    "add_issues": "Přidat úkoly"
   }
 }

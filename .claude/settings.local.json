@@ -34,7 +34,8 @@
       "Bash(python3.10 *)",
       "Bash(pnpm *)",
       "Bash(xargs sed -i 's/\"milestones\\\\./\"milestone./g')",
-      "Bash(HUSKY=0 git commit -m 'feat\\(milestones\\): add dedicated Project Settings → Features → Milestones toggle page *)"
+      "Bash(HUSKY=0 git commit -m 'feat\\(milestones\\): add dedicated Project Settings → Features → Milestones toggle page *)",
+      "Bash(docker compose *)"
     ]
   }
 }
