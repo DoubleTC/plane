@@ -13,15 +13,15 @@ from plane.db.models import Cycle, Phase, PhaseCycle, Project
 
 from .base import BaseViewSet
 
-_CYCLE_COMPLETION = Q(phase_cycles__cycle__end_date__lt=timezone.now().date()) | Q(
-    phase_cycles__cycle__status="completed"
-)
-
-
 def _annotate_phases(qs):
+    now = timezone.now()
     return qs.annotate(
         total_cycles=Count("phase_cycles", distinct=True),
-        completed_cycles=Count("phase_cycles", filter=_CYCLE_COMPLETION, distinct=True),
+        completed_cycles=Count(
+            "phase_cycles",
+            filter=Q(phase_cycles__cycle__end_date__lt=now, phase_cycles__cycle__end_date__isnull=False),
+            distinct=True,
+        ),
     )
 
 
