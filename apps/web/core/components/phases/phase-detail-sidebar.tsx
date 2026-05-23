@@ -102,6 +102,8 @@ export const PhaseDetailSidebar = observer(function PhaseDetailSidebar(props: Pr
 
   const progress = phase.total_cycles > 0 ? Math.floor((phase.completed_cycles / phase.total_cycles) * 100) : 0;
   const moduleStatus = MODULE_STATUS.find((s) => s.value === phase.status);
+  // Deduplicate in the frontend as a safety net against any ORM artefacts
+  const uniqueMemberIds = [...new Set(phase.member_ids ?? [])];
 
   return (
     <div className="relative">
@@ -242,10 +244,10 @@ export const PhaseDetailSidebar = observer(function PhaseDetailSidebar(props: Pr
             <span className="text-14">{t("members")}</span>
           </div>
           <div className="flex h-7 w-3/5 items-center">
-            {phase.member_ids && phase.member_ids.length > 0 ? (
-              <Tooltip isMobile={isMobile} tooltipContent={`${phase.member_ids.length} ${t("members")}`} position="top">
+            {uniqueMemberIds.length > 0 ? (
+              <Tooltip isMobile={isMobile} tooltipContent={`${uniqueMemberIds.length} ${t("members")}`} position="top">
                 <AvatarGroup showTooltip={false}>
-                  {phase.member_ids.map((memberId) => {
+                  {uniqueMemberIds.map((memberId) => {
                     const member = getUserDetails(memberId);
                     return (
                       <Avatar key={memberId} name={member?.display_name} src={getFileURL(member?.avatar_url ?? "")} />

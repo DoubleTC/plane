@@ -27,11 +27,22 @@ class PhaseSerializer(DynamicBaseSerializer):
         """
         Computed: union of all assignees of all work items in all cycles of this phase.
         Phase → PhaseCycle → Cycle → CycleIssue → IssueAssignee → User
+
+        cycle_ids is materialised to a plain list so Django generates an IN (...)
+        clause instead of a correlated subquery, avoiding phantom duplicate rows
+        that can appear when the queryset is used directly inside __in with
+        multiple JOIN conditions.  A Python set() then guarantees uniqueness
+        regardless of any edge-case the DB-level DISTINCT might miss.
         """
-        cycle_ids = PhaseCycle.objects.filter(
-            phase=obj,
-            deleted_at__isnull=True,
-        ).values_list("cycle_id", flat=True)
+        cycle_ids = list(
+            PhaseCycle.objects.filter(
+                phase=obj,
+                deleted_at__isnull=True,
+            ).values_list("cycle_id", flat=True)
+        )
+
+        if not cycle_ids:
+            return []
 
         assignee_ids = (
             IssueAssignee.objects.filter(
@@ -42,7 +53,8 @@ class PhaseSerializer(DynamicBaseSerializer):
             .values_list("assignee_id", flat=True)
             .distinct()
         )
-        return [str(uid) for uid in assignee_ids]
+        # Python-level dedup as a safety net against any ORM JOIN artefacts
+        return list({str(uid) for uid in assignee_ids})
 
 
 class PhaseWriteSerializer(BaseSerializer):

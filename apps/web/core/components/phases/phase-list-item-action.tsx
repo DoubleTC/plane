@@ -56,6 +56,8 @@ export const PhaseListItemAction = observer(function PhaseListItemAction(props: 
   const isDisabled = !isEditingAllowed || !!phase.archived_at;
   const showDateIcon = Boolean(phase.start_date) || Boolean(phase.end_date);
   const currentStatus = MODULE_STATUS.find((s) => s.value === phase.status);
+  // Deduplicate in the frontend as a safety net against any ORM artefacts
+  const uniqueMemberIds = [...new Set(phase.member_ids ?? [])];
 
   // handlers
   const handlePhaseChange = async (payload: IPhaseUpdate) => {
@@ -161,11 +163,11 @@ export const PhaseListItemAction = observer(function PhaseListItemAction(props: 
       )}
 
       {/* Member avatars — computed from all assignees across phase cycles */}
-      {phase.member_ids && phase.member_ids.length > 0 ? (
-        <Tooltip isMobile={isMobile} tooltipContent={`${phase.member_ids.length} ${t("members")}`} position="bottom">
+      {uniqueMemberIds.length > 0 ? (
+        <Tooltip isMobile={isMobile} tooltipContent={`${uniqueMemberIds.length} ${t("members")}`} position="bottom">
           <div className="flex cursor-default items-center justify-center">
             <AvatarGroup showTooltip={false}>
-              {phase.member_ids.map((memberId) => {
+              {uniqueMemberIds.map((memberId) => {
                 const member = getUserDetails(memberId);
                 return <Avatar key={memberId} name={member?.display_name} src={getFileURL(member?.avatar_url ?? "")} />;
               })}
