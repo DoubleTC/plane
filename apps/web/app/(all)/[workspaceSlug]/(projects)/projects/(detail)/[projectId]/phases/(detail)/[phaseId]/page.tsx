@@ -56,10 +56,8 @@ function PhaseDetailPage({ params }: Route.ComponentProps) {
         />
       ) : (
         <div className="flex h-full w-full overflow-hidden">
-          {/* Main content */}
-          <div className="h-full w-full overflow-y-auto px-6 py-4">
-            <PhaseCyclesList workspaceSlug={workspaceSlug} projectId={projectId} phaseId={phaseId} />
-          </div>
+          {/* Main content — PhaseCyclesList manages its own scroll via ContentWrapper */}
+          <PhaseCyclesList workspaceSlug={workspaceSlug} projectId={projectId} phaseId={phaseId} />
 
           {/* Right sidebar */}
           {!isSidebarCollapsed && (
@@ -71,8 +69,6 @@ function PhaseDetailPage({ params }: Route.ComponentProps) {
               <PhaseDetailSidebar
                 phaseId={phaseId}
                 handleClose={() => {
-                  // The header controls the sidebar state via localStorage;
-                  // writing "true" directly here as a fallback close.
                   localStorage.setItem("phase_detail_sidebar_collapsed", "true");
                   window.dispatchEvent(new Event("storage"));
                 }}

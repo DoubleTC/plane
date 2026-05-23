@@ -81,15 +81,22 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
 
   const MENU_ITEMS: TContextMenuItem[] = [
     {
+      key: "edit",
+      title: t("edit"),
+      icon: Pencil,
+      action: () => setEditModal(true),
+      shouldRender: isEditingAllowed && !phase.archived_at,
+    },
+    {
       key: "open-new-tab",
-      title: t("common.open_in_new_tab"),
+      title: t("open_in_new_tab"),
       icon: ExternalLink,
       action: handleOpenInNewTab,
       shouldRender: true,
     },
     {
       key: "copy-link",
-      title: t("common.copy_link"),
+      title: t("copy_link"),
       icon: Link,
       action: handleCopyLink,
       shouldRender: true,
@@ -102,22 +109,15 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
       shouldRender: isEditingAllowed && !phase.archived_at,
     },
     {
-      key: "edit",
-      title: t("common.edit"),
-      icon: Pencil,
-      action: () => setEditModal(true),
-      shouldRender: isEditingAllowed && !phase.archived_at,
-    },
-    {
       key: "archive",
-      title: phase.archived_at ? t("common.unarchive") : t("common.archive"),
+      title: phase.archived_at ? t("restore") : t("archive"),
       icon: Archive,
       action: handleArchiveToggle,
       shouldRender: isEditingAllowed,
     },
     {
       key: "delete",
-      title: t("common.delete"),
+      title: t("delete"),
       icon: Trash2,
       action: () => setDeleteModal(true),
       shouldRender: isEditingAllowed,

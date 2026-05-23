@@ -15,6 +15,7 @@ class PhaseSerializer(DynamicBaseSerializer):
     total_cycles = serializers.IntegerField(read_only=True, default=0)
     completed_cycles = serializers.IntegerField(read_only=True, default=0)
     is_favorite = serializers.BooleanField(read_only=True, default=False)
+    lead_id = serializers.PrimaryKeyRelatedField(source="lead", read_only=True, allow_null=True)
     member_ids = serializers.SerializerMethodField()
 
     class Meta:
