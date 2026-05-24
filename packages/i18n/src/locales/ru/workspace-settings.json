@@ -283,7 +283,10 @@
         "cancel": "cancel",
         "mark_as_default": "Mark as default",
         "state_description_placeholder": "Describe this state for your members.",
-        "default_badge": "Default"
+        "default_badge": "Default",
+        "pick_color": "Pick color",
+        "edit": "Edit",
+        "delete": "Delete"
       },
       "projects": {
         "title": "Проекты",

@@ -20,9 +20,15 @@ type Props = {
   workspaceSlug: string;
   state: IWorkspaceProjectState;
   group: TProjectStateGroup;
+  isLastInGroup: boolean;
 };
 
-export const ProjectStateItem = observer(function ProjectStateItem({ workspaceSlug, state, group }: Props) {
+export const ProjectStateItem = observer(function ProjectStateItem({
+  workspaceSlug,
+  state,
+  group,
+  isLastInGroup,
+}: Props) {
   const { t } = useTranslation();
   const { updateState, deleteState } = useWorkspaceProjectState();
 
@@ -79,12 +85,13 @@ export const ProjectStateItem = observer(function ProjectStateItem({ workspaceSl
     }
   };
 
+  // ── Edit mode ────────────────────────────────────────────────────────────────
   if (isEditing) {
     return (
-      <div className="border-custom-border-100 flex items-center gap-3 border-t px-4 py-3">
+      <div className="relative flex items-center gap-2 rounded-sm border border-subtle bg-surface-1 p-3 px-3.5">
         {/* Inline color picker */}
         <label
-          aria-label="Pick color"
+          aria-label={t("workspace_settings.settings.project_states.pick_color")}
           className="relative h-5 w-5 flex-shrink-0 cursor-pointer overflow-hidden rounded"
         >
           <span className="absolute inset-0 rounded" style={{ backgroundColor: editColor }} />
@@ -104,20 +111,20 @@ export const ProjectStateItem = observer(function ProjectStateItem({ workspaceSl
             if (e.key === "Enter") void handleSave();
             if (e.key === "Escape") handleCancel();
           }}
-          className="border-custom-border-300 bg-custom-background-100 text-sm text-custom-text-100 focus:border-custom-primary-100 flex-grow rounded border px-2.5 py-1 outline-none"
+          className="focus:border-accent-primary flex-grow rounded border border-subtle bg-transparent px-2 py-1 text-13 text-primary outline-none"
         />
         <div className="flex flex-shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={() => void handleSave()}
-            className="border-custom-primary-100 bg-custom-primary-100 text-xs hover:bg-custom-primary-200 rounded border px-3 py-1 font-medium text-white"
+            className="border-accent-primary rounded border bg-accent-primary px-3 py-1 text-13 font-medium text-white hover:bg-accent-primary/90"
           >
             {t("workspace_settings.settings.project_states.save")}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="border-custom-border-200 text-xs text-custom-text-300 hover:bg-custom-background-80 rounded border px-3 py-1 font-medium"
+            className="rounded border border-subtle px-3 py-1 text-13 font-medium text-secondary hover:bg-layer-1"
           >
             {t("workspace_settings.settings.project_states.cancel")}
           </button>
@@ -126,50 +133,53 @@ export const ProjectStateItem = observer(function ProjectStateItem({ workspaceSl
     );
   }
 
+  // ── View mode ────────────────────────────────────────────────────────────────
   return (
-    <div className="group/state-item border-custom-border-100 flex items-center gap-3 border-t px-4 py-3">
-      {/* State icon: same shape as group, colored by state.color */}
-      <GroupIcon group={group} color={state.color} size={16} />
+    <div className="group relative flex cursor-auto items-center gap-2 rounded-sm border border-subtle bg-surface-1 p-3 px-3.5">
+      {/* State group icon colored by state.color */}
+      <div className="flex-shrink-0">
+        <GroupIcon group={group} fill={state.color} size={16} />
+      </div>
 
-      {/* State name + optional default dot inline */}
-      <span className="text-sm text-custom-text-100 flex flex-grow items-center gap-1.5 truncate">
-        <span className="truncate">{state.name}</span>
-        {/* Default indicator: small dot in the state's own color */}
-        {state.is_default && (
-          <span
-            className="size-1.5 flex-shrink-0 rounded-full"
-            style={{ backgroundColor: state.color }}
-            title={t("workspace_settings.settings.project_states.default_badge")}
-          />
-        )}
-      </span>
+      {/* State name */}
+      <div className="min-h-5 w-full px-2">
+        <h6 className="text-13 font-medium text-primary">{state.name}</h6>
+      </div>
 
-      {/* Actions — visible on hover */}
-      <div className="flex flex-shrink-0 items-center gap-1.5 opacity-0 transition-opacity group-hover/state-item:opacity-100">
-        {/* "Mark as default" only shown when this is NOT the current default */}
-        {!state.is_default && (
+      {/* Hover-only actions */}
+      <div className="hidden flex-shrink-0 items-center gap-2 group-hover:flex">
+        {/* Default indicator / mark-as-default button */}
+        {state.is_default ? (
+          <button type="button" disabled className="cursor-default text-13 whitespace-nowrap text-tertiary">
+            {t("workspace_settings.settings.project_states.default_badge")}
+          </button>
+        ) : (
           <button
             type="button"
             onClick={() => void handleMarkAsDefault()}
-            className="text-xs text-custom-text-300 hover:text-custom-primary-100"
+            className="text-13 whitespace-nowrap text-secondary hover:text-primary"
           >
             {t("workspace_settings.settings.project_states.mark_as_default")}
           </button>
         )}
+
+        {/* Edit button */}
         <button
           type="button"
           onClick={() => setIsEditing(true)}
-          className="text-custom-text-400 hover:bg-custom-background-80 hover:text-custom-text-200 flex items-center rounded p-0.5"
-          title="Edit"
+          className="flex h-5 w-5 items-center justify-center rounded-sm text-secondary hover:bg-layer-1 hover:text-primary"
+          title={t("workspace_settings.settings.project_states.edit")}
         >
-          <Pencil className="h-3.5 w-3.5" />
+          <Pencil className="h-3 w-3" />
         </button>
+
+        {/* Delete button — disabled when this is the only state or is marked as default */}
         <button
           type="button"
           onClick={() => void handleDelete()}
-          disabled={isDeleting}
-          className="text-custom-text-400 hover:bg-custom-background-80 hover:text-red-500 flex items-center rounded p-0.5 disabled:opacity-50"
-          title="Delete"
+          disabled={isDeleting || isLastInGroup || state.is_default}
+          className="hover:text-red-500 flex h-5 w-5 items-center justify-center rounded-sm bg-layer-1 text-secondary disabled:cursor-not-allowed disabled:opacity-40"
+          title={t("workspace_settings.settings.project_states.delete")}
         >
           <X className="h-3.5 w-3.5" />
         </button>
