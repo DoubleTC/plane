@@ -275,8 +275,14 @@
           "updated": "State updated successfully.",
           "update_error": "Failed to update state.",
           "deleted": "State deleted successfully.",
-          "delete_error": "Failed to delete state."
-        }
+          "delete_error": "Failed to delete state.",
+          "marked_as_default": "State marked as default."
+        },
+        "create": "Create",
+        "save": "Save",
+        "cancel": "cancel",
+        "mark_as_default": "Mark as default",
+        "state_description_placeholder": "Describe this state for your members."
       },
       "projects": {
         "title": "Проєкти",

@@ -12,7 +12,6 @@ import { useTranslation } from "@plane/i18n";
 // components
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";
-import { SettingsHeading } from "@/components/settings/heading";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
 import { ProjectStatesRoot } from "@/components/workspace/settings/project-states/root";
 // hooks
@@ -33,6 +32,7 @@ function ProjectStatesSettingsPage({ params }: Route.ComponentProps) {
 
   const canAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE);
 
+  // Fetch states when feature is enabled
   useSWR(
     canAdmin && currentWorkspace?.project_states_enabled ? `WORKSPACE_PROJECT_STATES_${workspaceSlug}` : null,
     canAdmin && currentWorkspace?.project_states_enabled ? () => fetchStates(workspaceSlug) : null
@@ -49,15 +49,7 @@ function ProjectStatesSettingsPage({ params }: Route.ComponentProps) {
   return (
     <SettingsContentWrapper header={<ProjectStatesWorkspaceSettingsHeader />}>
       <PageHead title={pageTitle} />
-
-      <SettingsHeading
-        title={t("workspace_settings.settings.project_states.title")}
-        description={t("workspace_settings.settings.project_states.description")}
-      />
-
-      <div className="mt-6">
-        <ProjectStatesRoot workspaceSlug={workspaceSlug} />
-      </div>
+      <ProjectStatesRoot workspaceSlug={workspaceSlug} />
     </SettingsContentWrapper>
   );
 }

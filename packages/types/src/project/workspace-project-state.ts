@@ -14,6 +14,7 @@ export interface IWorkspaceProjectState {
   group: TProjectStateGroup;
   color: string;
   sequence: number;
+  is_default?: boolean;
   // Audit
   readonly created_at: string;
   readonly updated_at: string;
@@ -26,17 +27,22 @@ export interface IWorkspaceProjectStateCreate {
   description?: string;
   group: TProjectStateGroup;
   color?: string;
+  is_default?: boolean;
 }
 
 export type IWorkspaceProjectStateUpdate = Partial<IWorkspaceProjectStateCreate> & {
   sequence?: number;
 };
 
-export const PROJECT_STATE_GROUPS: { key: TProjectStateGroup; label: string; color: string }[] = [
+export const PROJECT_STATE_GROUPS: {
+  key: TProjectStateGroup;
+  label: string;
+  color: string;
+}[] = [
   { key: "draft", label: "Draft", color: "#94A3B8" },
   { key: "planning", label: "Planning", color: "#60A5FA" },
   { key: "execution", label: "Execution", color: "#F59E0B" },
   { key: "monitoring", label: "Monitoring", color: "#A78BFA" },
   { key: "completed", label: "Completed", color: "#34D399" },
-  { key: "cancelled", label: "Cancelled", color: "#9AA4BC" },
+  { key: "cancelled", label: "Cancelled", color: "#EF4444" },
 ];

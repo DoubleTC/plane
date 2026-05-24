@@ -12,12 +12,14 @@ import { useTranslation } from "@plane/i18n";
 import { ToggleSwitch } from "@plane/ui";
 import { setToast, TOAST_TYPE } from "@plane/propel/toast";
 import { PROJECT_STATE_GROUPS } from "@plane/types";
+// components
+import { SettingsHeading } from "@/components/settings/heading";
 // services
 import { workspaceProjectStateService } from "@/services/workspace-project-state.service";
 // hooks
-import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-// components
+import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
+// local
 import { ProjectStateGroupSection } from "./state-group-section";
 
 type Props = {
@@ -33,25 +35,26 @@ export const ProjectStatesRoot = observer(function ProjectStatesRoot({ workspace
 
   const isEnabled = !!currentWorkspace?.project_states_enabled;
 
-  const handleToggle = async (enabled: boolean) => {
+  const handleToggle = async () => {
     if (isToggling) return;
+    const newValue = !isEnabled;
     setIsToggling(true);
     try {
-      await workspaceProjectStateService.toggleFeature(workspaceSlug, enabled);
-      // Update the workspace observable locally so the toggle reflects immediately
+      await workspaceProjectStateService.toggleFeature(workspaceSlug, newValue);
+      // Patch the workspace observable locally without a second PATCH request
       const workspace = getWorkspaceBySlug(workspaceSlug);
       if (workspace) {
         runInAction(() => {
-          workspace.project_states_enabled = enabled;
+          workspace.project_states_enabled = newValue;
         });
       }
-      if (enabled) {
-        // Fetch default states that may have been seeded
+      if (newValue) {
+        // Fetch default states that were seeded on first enable
         await fetchStates(workspaceSlug);
       }
       setToast({
         type: TOAST_TYPE.SUCCESS,
-        title: enabled
+        title: newValue
           ? t("workspace_settings.settings.project_states.toast.enabled")
           : t("workspace_settings.settings.project_states.toast.disabled"),
       });
@@ -67,38 +70,26 @@ export const ProjectStatesRoot = observer(function ProjectStatesRoot({ workspace
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Feature toggle */}
-      <div className="border-custom-border-200 bg-custom-background-100 flex items-start justify-between gap-4 rounded-lg border p-4">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-sm text-custom-text-100 font-medium">
-            {t("workspace_settings.settings.project_states.toggle_title")}
-          </h3>
-          <p className="text-xs text-custom-text-300">
-            {t("workspace_settings.settings.project_states.toggle_description")}
-          </p>
-        </div>
-        <ToggleSwitch
-          value={isEnabled}
-          onChange={() => void handleToggle(!isEnabled)}
-          disabled={isToggling}
-          size="sm"
-        />
-      </div>
+      {/* Heading + description + feature toggle aligned to top-right */}
+      <SettingsHeading
+        title={t("workspace_settings.settings.project_states.heading")}
+        description={t("workspace_settings.settings.project_states.description")}
+        control={
+          <ToggleSwitch value={isEnabled} onChange={() => void handleToggle()} disabled={isToggling} size="sm" />
+        }
+      />
 
-      {/* States list — only shown when feature is enabled */}
+      {/* Group accordion list — rendered only when the feature is enabled */}
       {isEnabled && (
-        <div className="flex flex-col gap-6">
-          {PROJECT_STATE_GROUPS.map((groupMeta) => {
-            const states = getStatesByGroup(workspaceSlug, groupMeta.key);
-            return (
-              <ProjectStateGroupSection
-                key={groupMeta.key}
-                workspaceSlug={workspaceSlug}
-                group={groupMeta.key}
-                states={states}
-              />
-            );
-          })}
+        <div className="flex flex-col gap-3">
+          {PROJECT_STATE_GROUPS.map((groupMeta) => (
+            <ProjectStateGroupSection
+              key={groupMeta.key}
+              workspaceSlug={workspaceSlug}
+              group={groupMeta.key}
+              states={getStatesByGroup(workspaceSlug, groupMeta.key)}
+            />
+          ))}
         </div>
       )}
     </div>
