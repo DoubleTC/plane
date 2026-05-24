@@ -344,7 +344,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
             {/* Members count */}
             <div className="my-auto h-5" role="presentation">
               <button type="button" disabled className="block h-full w-full cursor-not-allowed outline-none">
-                <div className="flex h-full items-center gap-2 rounded border-[0.5px] border-subtle px-2 text-11 text-secondary">
+                <div className="flex h-full cursor-not-allowed items-center gap-2 rounded border-[0.5px] border-subtle-1 px-2 text-11 text-secondary hover:bg-layer-1">
                   <Users className="h-3 w-3 shrink-0" />
                   <span>{projectMembersIds.length}</span>
                 </div>
@@ -355,33 +355,38 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
             <div className="my-auto flex h-5 gap-2" role="presentation">
               <button
                 type="button"
-                className="flex h-full w-full max-w-full cursor-pointer items-center gap-1.5 rounded-sm border-[0.5px] border-strong px-1.5 text-11 text-secondary outline-none hover:bg-layer-transparent-hover"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  // future: open date-picker
-                }}
+                className="clickable flex h-5 w-full max-w-full cursor-pointer items-center gap-1.5 rounded-sm text-11 text-tertiary outline-none"
               >
-                <div className="flex w-full items-center gap-1.5">
-                  <CalendarDays className="h-3 w-3 flex-shrink-0" aria-hidden />
-                  {(project.start_date || project.end_date) && (
-                    <>
-                      <span className="flex-grow truncate text-11">
-                        {project.start_date ? renderFormattedDate(project.start_date) : "—"}
-                        {" - "}
-                        {project.end_date ? renderFormattedDate(project.end_date) : "—"}
-                      </span>
-                      {/* Clear dates */}
-                      <button
-                        type="button"
-                        className="h-2.5 w-2.5 flex-shrink-0 cursor-pointer text-tertiary hover:text-secondary"
-                        onClick={handleClearDates}
-                      >
-                        <X className="h-2.5 w-2.5" />
-                      </button>
-                    </>
-                  )}
-                </div>
+                <button
+                  type="button"
+                  className="flex h-full w-full items-center justify-start gap-1.5 rounded-sm border-[0.5px] border-strong bg-layer-transparent px-1.5 text-caption-md-medium whitespace-nowrap text-secondary transition-colors hover:bg-layer-transparent-hover focus:bg-layer-transparent-active focus-visible:outline-none active:bg-layer-transparent-active disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-layer-transparent disabled:text-disabled"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // future: open date-picker
+                  }}
+                >
+                  <div className="flex w-full items-center gap-1.5">
+                    <CalendarDays className="h-3 w-3 flex-shrink-0" aria-hidden />
+                    {(project.start_date || project.end_date) && (
+                      <>
+                        <span className="flex-grow truncate text-11">
+                          {project.start_date ? renderFormattedDate(project.start_date) : "—"}
+                          {" - "}
+                          {project.end_date ? renderFormattedDate(project.end_date) : "—"}
+                        </span>
+                        {/* Clear dates */}
+                        <button
+                          type="button"
+                          className="h-2.5 w-2.5 flex-shrink-0 cursor-pointer text-tertiary hover:text-secondary"
+                          onClick={handleClearDates}
+                        >
+                          <X className="h-2.5 w-2.5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </button>
               </button>
             </div>
 

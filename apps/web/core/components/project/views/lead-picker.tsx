@@ -106,7 +106,7 @@ export const ProjectLeadPicker = observer(function ProjectLeadPicker({ project, 
             <button
               type="button"
               className={cn(
-                "inline-flex h-5 items-center gap-1.5 rounded border-[0.5px] border-subtle px-2 text-11 text-secondary hover:bg-layer-1 focus:outline-none",
+                "flex h-full items-center gap-2 rounded border-[0.5px] border-subtle-1 px-2 text-11 text-secondary hover:bg-layer-1",
                 className
               )}
             />

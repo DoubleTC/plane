@@ -48,7 +48,19 @@
       "Bash(python -c ' *)",
       "Bash(git -C /home/doubletc/dtc-x-plane diff --name-only)",
       "Bash(git -C /home/doubletc/dtc-x-plane diff --name-only --cached)",
-      "Bash(git -C /home/doubletc/dtc-x-plane status --short)"
+      "Bash(git -C /home/doubletc/dtc-x-plane status --short)",
+      "Bash(DJANGO_SETTINGS_MODULE=plane.settings.test python3 -c \"import plane.db.models; print\\('Models OK'\\)\")",
+      "Bash(DJANGO_SETTINGS_MODULE=plane.settings.test python3 -c \"import plane.app.views; print\\('Views OK'\\)\")",
+      "Bash(DJANGO_SETTINGS_MODULE=plane.settings.test python3 -c \"import plane.app.urls; print\\('URLs OK'\\)\")",
+      "Bash(node_modules/.bin/oxlint core/components/workspace/settings/project-states/root.tsx core/components/workspace/settings/project-states/state-item.tsx core/components/workspace/settings/project-states/state-group-section.tsx core/store/workspace-project-state.store.ts core/hooks/store/use-workspace-project-state.ts core/components/project/card.tsx 'app/\\(all\\)/[workspaceSlug]/\\(settings\\)/settings/\\(workspace\\)/project-states/page.tsx' 'app/\\(all\\)/[workspaceSlug]/\\(settings\\)/settings/\\(workspace\\)/project-states/header.tsx')",
+      "Bash(git -C /home/doubletc/dtc-x-plane diff apps/api/plane/app/serializers/__init__.py)",
+      "Bash(git -C /home/doubletc/dtc-x-plane diff apps/api/plane/db/models/__init__.py)",
+      "Bash(git -C /home/doubletc/dtc-x-plane diff apps/api/plane/app/views/__init__.py)",
+      "Bash(git *)",
+      "WebFetch(domain:media.docs.plane.so)",
+      "Bash(npx skills *)",
+      "WebFetch(domain:i.ibb.co)",
+      "Bash(grep -v \"^--$\")"
     ]
   }
 }

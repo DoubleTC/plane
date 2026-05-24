@@ -95,7 +95,7 @@ export const ProjectStatePicker = observer(function ProjectStatePicker({ project
             <button
               type="button"
               className={cn(
-                "inline-flex h-5 items-center gap-1 rounded-sm border-[0.5px] border-strong px-2 text-11 text-secondary hover:bg-layer-1 focus:outline-none",
+                "z-1 flex h-5 w-full cursor-pointer items-center justify-between gap-1 rounded-sm border-[0.5px] border-strong px-2 py-0 text-left text-11 group-[.selected-project-row]:bg-accent-primary/5 hover:bg-layer-transparent-hover group-[.selected-project-row]:hover:bg-accent-primary/10",
                 className
               )}
             />
