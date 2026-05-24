@@ -12,6 +12,7 @@ import type {
   IWorkspaceProjectStateUpdate,
   TProjectStateGroup,
 } from "@plane/types";
+import { PROJECT_STATE_GROUPS } from "@plane/types";
 import { workspaceProjectStateService } from "@/services/workspace-project-state.service";
 
 export interface IWorkspaceProjectStateStore {
@@ -75,8 +76,15 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
     const items = Array.from(ids)
       .map((id) => this.stateMap[id])
       .filter((s): s is IWorkspaceProjectState => !!s);
+    // Sort: group canonical order first (draft → planning → execution → monitoring → completed → cancelled),
+    // then by state id (lexicographic) within each group.
+    const groupOrder = new Map(PROJECT_STATE_GROUPS.map(({ key }, idx) => [key, idx]));
     // eslint-disable-next-line unicorn/no-array-sort
-    return [...items].sort((a, b) => a.sequence - b.sequence);
+    return [...items].sort((a, b) => {
+      const groupDiff = (groupOrder.get(a.group) ?? 999) - (groupOrder.get(b.group) ?? 999);
+      if (groupDiff !== 0) return groupDiff;
+      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+    });
   });
 
   getStatesByGroup = computedFn((workspaceSlug: string, group: TProjectStateGroup): IWorkspaceProjectState[] =>
