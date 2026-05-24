@@ -38,8 +38,11 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
   const { workspaceSlug } = useParams();
 
   const [open, setOpen] = useState(false);
-  // Local draft range — synced from project on open, saved on complete selection
-  const [range, setRange] = useState<DateRange>({ from: undefined, to: undefined });
+  // undefined = nothing selected yet; object = at least one end chosen.
+  // Do NOT initialise with { from: undefined, to: undefined } — react-day-picker v9
+  // treats that object as "a range is already in progress", which causes the first
+  // click to immediately complete the range with the same date for both ends.
+  const [range, setRange] = useState<DateRange | undefined>(undefined);
 
   const { updateProject } = useProject();
   const { data: userProfile } = useUserProfile();
@@ -56,23 +59,25 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
     if (isOpen) {
-      // Pre-populate the draft range from saved project dates
-      setRange({ from: startDate, to: endDate });
+      // Pre-populate from saved dates (or undefined when there are none)
+      setRange(startDate || endDate ? { from: startDate, to: endDate } : undefined);
     }
   };
 
   const handleRangeSelect = async (selected: DateRange | undefined) => {
     if (!workspaceSlug || !project.id) return;
-    const next = selected ?? { from: undefined, to: undefined };
-    setRange(next);
+    setRange(selected);
 
-    // Auto-save as soon as both ends are chosen
-    if (next.from && next.to) {
+    // Auto-save only when a genuine range (two DIFFERENT days) is complete.
+    // Guard against react-day-picker v9 emitting { from: d, to: d } on the
+    // first click when it treats an existing range-in-progress as already started.
+    const { from, to } = selected ?? {};
+    if (from && to && from.getTime() !== to.getTime()) {
       setOpen(false);
       try {
         await updateProject(workspaceSlug.toString(), project.id, {
-          start_date: next.from.toISOString().split("T")[0],
-          end_date: next.to.toISOString().split("T")[0],
+          start_date: from.toISOString().split("T")[0],
+          end_date: to.toISOString().split("T")[0],
         });
       } catch {
         // updateProject surfaces its own error toast
@@ -155,7 +160,7 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
           />
           {/* Footer: hint text */}
           <div className="border-t border-subtle px-3 py-2 text-11 text-placeholder">
-            {range?.from && !range?.to
+            {range?.from && (!range?.to || range.from.getTime() === range.to.getTime())
               ? t("workspace_projects.dates.select_end")
               : t("workspace_projects.dates.select_start")}
           </div>
