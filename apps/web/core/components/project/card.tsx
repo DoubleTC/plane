@@ -8,7 +8,7 @@ import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArchiveRestoreIcon, CalendarDays, MoreHorizontal, Settings, Users, UserPlus, X } from "lucide-react";
+import { ArchiveRestoreIcon, MoreHorizontal, Settings, Users, UserPlus } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@plane/constants";
 import { useLocalStorage } from "@plane/hooks";
@@ -19,7 +19,7 @@ import { setPromiseToast, setToast, TOAST_TYPE } from "@plane/propel/toast";
 import type { IProject } from "@plane/types";
 import type { TContextMenuItem } from "@plane/ui";
 import { ContextMenu, CustomMenu, FavoriteStar } from "@plane/ui";
-import { cn, copyUrlToClipboard, renderFormattedDate } from "@plane/utils";
+import { cn, copyUrlToClipboard } from "@plane/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 import { useProject } from "@/hooks/store/use-project";
@@ -30,6 +30,7 @@ import { useAppRouter } from "@/hooks/use-app-router";
 import { ArchiveRestoreProjectModal } from "./archive-restore-modal";
 import { DeleteProjectModal } from "./delete-project-modal";
 import { JoinProjectModal } from "./join-project-modal";
+import { ProjectDatePicker } from "./views/date-picker";
 import { ProjectLeadPicker } from "./views/lead-picker";
 import { ProjectStatePicker } from "./views/state-picker";
 
@@ -49,7 +50,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
   const router = useAppRouter();
   const { workspaceSlug } = useParams();
   // store hooks
-  const { addProjectToFavorites, removeProjectFromFavorites, updateProject } = useProject();
+  const { addProjectToFavorites, removeProjectFromFavorites } = useProject();
   const { currentWorkspace } = useWorkspace();
   const { allowPermissions } = useUserPermissions();
   // hooks
@@ -100,17 +101,6 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
       success: { title: "Success!", message: () => "Project removed from favorites." },
       error: { title: "Error!", message: () => "Couldn't remove the project from favorites. Please try again." },
     });
-  };
-
-  const handleClearDates = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!workspaceSlug) return;
-    try {
-      await updateProject(workspaceSlug.toString(), project.id, { start_date: null, end_date: null });
-    } catch {
-      setToast({ type: TOAST_TYPE.ERROR, title: "Error!", message: "Couldn't clear the dates. Please try again." });
-    }
   };
 
   const projectLink = `${workspaceSlug}/projects/${project.id}/issues`;
@@ -351,43 +341,9 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
               </button>
             </div>
 
-            {/* Date range */}
-            <div className="my-auto flex h-5 gap-2" role="presentation">
-              <button
-                type="button"
-                className="clickable flex h-5 w-full max-w-full cursor-pointer items-center gap-1.5 rounded-sm text-11 text-tertiary outline-none"
-              >
-                <button
-                  type="button"
-                  className="flex h-full w-full items-center justify-start gap-1.5 rounded-sm border-[0.5px] border-strong bg-layer-transparent px-1.5 text-caption-md-medium whitespace-nowrap text-secondary transition-colors hover:bg-layer-transparent-hover focus:bg-layer-transparent-active focus-visible:outline-none active:bg-layer-transparent-active disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-layer-transparent disabled:text-disabled"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    // future: open date-picker
-                  }}
-                >
-                  <div className="flex w-full items-center gap-1.5">
-                    <CalendarDays className="h-3 w-3 flex-shrink-0" aria-hidden />
-                    {(project.start_date || project.end_date) && (
-                      <>
-                        <span className="flex-grow truncate text-11">
-                          {project.start_date ? renderFormattedDate(project.start_date) : "—"}
-                          {" - "}
-                          {project.end_date ? renderFormattedDate(project.end_date) : "—"}
-                        </span>
-                        {/* Clear dates */}
-                        <button
-                          type="button"
-                          className="h-2.5 w-2.5 flex-shrink-0 cursor-pointer text-tertiary hover:text-secondary"
-                          onClick={handleClearDates}
-                        >
-                          <X className="h-2.5 w-2.5" />
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </button>
-              </button>
+            {/* Date range — clickable picker */}
+            <div className="my-auto h-5">
+              <ProjectDatePicker project={project} />
             </div>
 
             {/* Archived restore / delete actions */}

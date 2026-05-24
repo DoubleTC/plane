@@ -250,6 +250,11 @@
     },
     "member": {
       "joined": "Joined"
+    },
+    "dates": {
+      "set_dates": "Set dates",
+      "select_start": "Click a start date",
+      "select_end": "Now pick an end date"
     }
   },
   "workspace_views": {
