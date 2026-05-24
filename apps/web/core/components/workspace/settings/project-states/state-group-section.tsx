@@ -32,7 +32,7 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
   const { t } = useTranslation();
   const { createState } = useWorkspaceProjectState();
 
-  const [isExpanded, setIsExpanded] = useState(states.length > 0);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState("#64748B");
