@@ -247,6 +247,9 @@
     },
     "archived": {
       "restore": "Restore"
+    },
+    "member": {
+      "joined": "Joined"
     }
   },
   "workspace_views": {

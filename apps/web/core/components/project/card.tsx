@@ -8,33 +8,30 @@ import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArchiveRestoreIcon, CalendarDays, Settings, UserPlus } from "lucide-react";
+import { ArchiveRestoreIcon, CalendarDays, MoreHorizontal, Settings, Users, UserPlus, X } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@plane/constants";
 import { useLocalStorage } from "@plane/hooks";
-import { Button } from "@plane/propel/button";
+import { useTranslation } from "@plane/i18n";
 import { Logo } from "@plane/propel/emoji-icon-picker";
-import { LinkIcon, LockIcon, NewTabIcon, TrashIcon, CheckIcon } from "@plane/propel/icons";
+import { LinkIcon, LockIcon, NewTabIcon, TrashIcon } from "@plane/propel/icons";
 import { setPromiseToast, setToast, TOAST_TYPE } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
 import type { IProject } from "@plane/types";
 import type { TContextMenuItem } from "@plane/ui";
-import { Avatar, AvatarGroup, ContextMenu, FavoriteStar } from "@plane/ui";
-import { copyUrlToClipboard, cn, getFileURL, renderFormattedDate } from "@plane/utils";
+import { Avatar, ContextMenu, CustomMenu, FavoriteStar } from "@plane/ui";
+import { cn, copyUrlToClipboard, getFileURL, renderFormattedDate } from "@plane/utils";
 // components
-// hooks
+import { CoverImage } from "@/components/common/cover-image";
 import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-import { usePlatformOS } from "@/hooks/use-platform-os";
 // local imports
-import { CoverImage } from "@/components/common/cover-image";
+import { ArchiveRestoreProjectModal } from "./archive-restore-modal";
 import { DeleteProjectModal } from "./delete-project-modal";
 import { JoinProjectModal } from "./join-project-modal";
-import { ArchiveRestoreProjectModal } from "./archive-restore-modal";
+import { ProjectStatePicker } from "./views/state-picker";
 
 type Props = {
   project: IProject;
@@ -47,22 +44,20 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
   const [joinProjectModalOpen, setJoinProjectModal] = useState(false);
   const [restoreProject, setRestoreProject] = useState(false);
   // refs
-  const projectCardRef = useRef(null);
+  const projectCardRef = useRef<HTMLDivElement>(null);
   // router
   const router = useAppRouter();
   const { workspaceSlug } = useParams();
   // store hooks
   const { getUserDetails } = useMember();
-  const { addProjectToFavorites, removeProjectFromFavorites } = useProject();
+  const { addProjectToFavorites, removeProjectFromFavorites, updateProject } = useProject();
   const { currentWorkspace } = useWorkspace();
-  const { getStateById } = useWorkspaceProjectState();
   const { allowPermissions } = useUserPermissions();
   // hooks
-  const { isMobile } = usePlatformOS();
+  const { t } = useTranslation();
   // derived values
-  const projectMembersIds = project.members;
+  const projectMembersIds = project.members ?? [];
   const projectStatesEnabled = !!currentWorkspace?.project_states_enabled;
-  const projectState = project.project_status ? getStateById(project.project_status) : undefined;
   const projectLead =
     typeof project.project_lead === "string"
       ? getUserDetails(project.project_lead)
@@ -83,9 +78,10 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
     false
   );
 
+  // ── Handlers ─────────────────────────────────────────────────────────────────
+
   const handleAddToFavorites = () => {
     if (!workspaceSlug) return;
-
     const addToFavoritePromise = addProjectToFavorites(workspaceSlug.toString(), project.id);
     setPromiseToast(addToFavoritePromise, {
       loading: "Adding project to favorites...",
@@ -97,40 +93,39 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
           return <></>;
         },
       },
-      error: {
-        title: "Error!",
-        message: () => "Couldn't add the project to favorites. Please try again.",
-      },
+      error: { title: "Error!", message: () => "Couldn't add the project to favorites. Please try again." },
     });
   };
 
   const handleRemoveFromFavorites = () => {
     if (!workspaceSlug) return;
-
     const removeFromFavoritePromise = removeProjectFromFavorites(workspaceSlug.toString(), project.id);
     setPromiseToast(removeFromFavoritePromise, {
       loading: "Removing project from favorites...",
-      success: {
-        title: "Success!",
-        message: () => "Project removed from favorites.",
-      },
-      error: {
-        title: "Error!",
-        message: () => "Couldn't remove the project from favorites. Please try again.",
-      },
+      success: { title: "Success!", message: () => "Project removed from favorites." },
+      error: { title: "Error!", message: () => "Couldn't remove the project from favorites. Please try again." },
     });
+  };
+
+  const handleClearDates = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!workspaceSlug) return;
+    try {
+      await updateProject(workspaceSlug.toString(), project.id, { start_date: null, end_date: null });
+    } catch {
+      setToast({ type: TOAST_TYPE.ERROR, title: "Error!", message: "Couldn't clear the dates. Please try again." });
+    }
   };
 
   const projectLink = `${workspaceSlug}/projects/${project.id}/issues`;
   const handleCopyText = () =>
     copyUrlToClipboard(projectLink).then(() =>
-      setToast({
-        type: TOAST_TYPE.INFO,
-        title: "Link Copied!",
-        message: "Project link copied to clipboard.",
-      })
+      setToast({ type: TOAST_TYPE.INFO, title: "Link Copied!", message: "Project link copied to clipboard." })
     );
   const handleOpenInNewTab = () => window.open(`/${projectLink}`, "_blank");
+
+  // ── Context menu items ────────────────────────────────────────────────────────
 
   const MENU_ITEMS: TContextMenuItem[] = [
     {
@@ -152,7 +147,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
       action: handleOpenInNewTab,
       title: "Open in new tab",
       icon: NewTabIcon,
-      shouldRender: !isMemberOfProject && !isArchived,
+      shouldRender: !isArchived,
     },
     {
       key: "copy-link",
@@ -177,15 +172,16 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
     },
   ];
 
+  // ── Render ────────────────────────────────────────────────────────────────────
+
   return (
     <>
-      {/* Delete Project Modal */}
+      {/* Modals */}
       <DeleteProjectModal
         project={project}
         isOpen={deleteProjectModalOpen}
         onClose={() => setDeleteProjectModal(false)}
       />
-      {/* Join Project Modal */}
       {workspaceSlug && (
         <JoinProjectModal
           workspaceSlug={workspaceSlug.toString()}
@@ -194,7 +190,6 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
           handleClose={() => setJoinProjectModal(false)}
         />
       )}
-      {/* Restore project modal */}
       {workspaceSlug && project && (
         <ArchiveRestoreProjectModal
           workspaceSlug={workspaceSlug.toString()}
@@ -204,223 +199,289 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
           archive={false}
         />
       )}
-      <Link
+
+      {/* Card outer wrapper — provides border, shadow and `group/project-card` for hover effects */}
+      <div
         ref={projectCardRef}
-        href={`/${workspaceSlug}/projects/${project.id}/issues`}
-        onClick={(e) => {
-          if (!isMemberOfProject || isArchived) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (!isArchived) setJoinProjectModal(true);
-          }
-        }}
-        data-prevent-progress={!isMemberOfProject || isArchived}
-        className={cn(
-          "group/project-card flex w-full flex-col justify-between overflow-hidden rounded-lg border border-subtle bg-layer-2 transition-all duration-300 hover:border-strong hover:shadow-raised-200"
-        )}
+        className="group/project-card flex w-full flex-col justify-between overflow-hidden rounded-lg border border-subtle bg-layer-2 transition-all duration-300 hover:border-strong hover:shadow-raised-200"
       >
         <ContextMenu parentRef={projectCardRef} items={MENU_ITEMS} />
-        <div className="relative h-[118px] w-full rounded-t">
-          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/60 to-transparent" />
 
-          <CoverImage
-            src={project.cover_image_url}
-            alt={project.name}
-            className="absolute top-0 left-0 h-full w-full rounded-t"
-          />
+        <Link
+          href={`/${workspaceSlug}/projects/${project.id}/issues`}
+          onClick={(e) => {
+            if (!isMemberOfProject || isArchived) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!isArchived) setJoinProjectModal(true);
+            }
+          }}
+          data-prevent-progress={!isMemberOfProject || isArchived}
+          className="group/project-card flex w-full flex-col justify-between hover:cursor-pointer"
+        >
+          {/* ── Top: cover image + action buttons + name strip ── */}
+          <div>
+            {/* Cover image */}
+            <div className="w-full rounded-t">
+              <div className="relative">
+                <div>
+                  <CoverImage
+                    src={project.cover_image_url}
+                    alt={project.name}
+                    className="relative h-[120px] w-full rounded-t object-cover"
+                  />
+                  {/* Gradient — only on hover */}
+                  <div className="absolute inset-0 z-[1] hidden rounded-sm bg-gradient-to-t from-transparent to-black/60 group-hover/project-card:flex" />
+                </div>
 
-          <div className="absolute bottom-4 z-[1] flex h-10 w-full items-center justify-between gap-3 px-4">
-            <div className="flex flex-grow items-center gap-2.5 truncate">
-              <div className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-sm bg-white/10">
-                <Logo logo={project.logo_props} size={18} />
-              </div>
-
-              <div className="flex w-full flex-col justify-between gap-0.5 truncate">
-                <h3 className="truncate font-semibold text-on-color">{project.name}</h3>
-                <span className="flex items-center gap-1.5">
-                  <p className="text-11 font-medium text-on-color">{project.identifier} </p>
-                  {project.network === 0 && <LockIcon className="h-2.5 w-2.5 text-on-color" />}
-                </span>
-              </div>
-            </div>
-
-            {!isArchived && (
-              <div data-prevent-progress className="flex h-full flex-shrink-0 items-center gap-2">
-                <button
-                  className="flex h-6 w-6 items-center justify-center rounded-sm bg-white/10"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    handleCopyText();
-                  }}
-                >
-                  <LinkIcon className="h-3 w-3 text-on-color" />
-                </button>
-                {shouldRenderFavorite && (
-                  <FavoriteStar
-                    buttonClassName="h-6 w-6 bg-white/10 rounded-sm"
-                    iconClassName={cn("h-3 w-3", {
-                      "text-on-color": !project.is_favorite,
-                    })}
+                {/* Action buttons — top-right, hover-only */}
+                {!isArchived && (
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                  <div
+                    role="presentation"
+                    className="absolute top-2 right-2 z-[10] flex gap-2"
+                    data-prevent-progress
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      if (project.is_favorite) handleRemoveFromFavorites();
-                      else handleAddToFavorites();
                     }}
-                    selected={!!project.is_favorite}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div
-          className={cn("flex h-[104px] w-full flex-col justify-between rounded-b-sm p-4", {
-            "opacity-90": isArchived,
-          })}
-        >
-          <p className="line-clamp-2 text-13 break-words text-tertiary">
-            {project.description && project.description.trim() !== ""
-              ? project.description
-              : `Created on ${renderFormattedDate(project.created_at)}`}
-          </p>
-          {/* Project state + dates strip (visible when project states feature is enabled) */}
-          {projectStatesEnabled && (projectState || project.start_date || project.end_date) && (
-            <div className="mt-1.5 flex flex-wrap items-center gap-2">
-              {projectState && (
-                <span
-                  className="text-xs inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium"
-                  style={{ borderColor: `${projectState.color}50`, color: projectState.color }}
-                >
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: projectState.color }} />
-                  {projectState.name}
-                </span>
-              )}
-              {(project.start_date || project.end_date) && (
-                <span className="text-xs text-custom-text-400 flex items-center gap-1">
-                  <CalendarDays className="h-3 w-3" />
-                  {project.start_date ? renderFormattedDate(project.start_date) : "—"}
-                  {" → "}
-                  {project.end_date ? renderFormattedDate(project.end_date) : "—"}
-                </span>
-              )}
-            </div>
-          )}
-          <div className="item-center flex justify-between">
-            <div className="flex items-center justify-center gap-2">
-              <Tooltip
-                isMobile={isMobile}
-                tooltipHeading="Members"
-                tooltipContent={
-                  project.members && project.members.length > 0 ? `${project.members.length} Members` : "No Member"
-                }
-                position="top"
-              >
-                {projectMembersIds && projectMembersIds.length > 0 ? (
-                  <div className="flex cursor-pointer items-center gap-2 text-secondary">
-                    <AvatarGroup showTooltip={false}>
-                      {projectMembersIds.map((memberId) => {
-                        const member = getUserDetails(memberId);
-                        if (!member) return null;
+                  >
+                    {/* 3-dot context menu */}
+                    <CustomMenu
+                      customButton={
+                        <button
+                          type="button"
+                          className="my-auto grid place-items-center rounded-sm p-0.5 text-on-color"
+                        >
+                          <MoreHorizontal className="size-4" />
+                        </button>
+                      }
+                      customButtonClassName="flex justify-center items-center opacity-0 z-[10] pointer-events-none flex-shrink-0 group-hover/project-card:opacity-100 group-hover/project-card:pointer-events-auto my-auto bg-white/30 rounded-sm h-6 w-6"
+                      placement="bottom-end"
+                      closeOnSelect
+                    >
+                      {MENU_ITEMS.map((item) => {
+                        if (item.shouldRender === false) return null;
                         return (
-                          <Avatar key={member.id} name={member.display_name} src={getFileURL(member.avatar_url)} />
+                          <CustomMenu.MenuItem
+                            key={item.key}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              item.action();
+                            }}
+                            className="flex items-center gap-2"
+                          >
+                            {item.icon && <item.icon className="h-3 w-3" />}
+                            {item.title}
+                          </CustomMenu.MenuItem>
                         );
                       })}
-                    </AvatarGroup>
+                    </CustomMenu>
+
+                    {/* Favorite star */}
+                    {shouldRenderFavorite && (
+                      <div data-prevent-progress>
+                        <FavoriteStar
+                          buttonClassName="place-items-center relative flex justify-center items-center opacity-0 z-[2] pointer-events-none flex-shrink-0 group-hover/project-card:opacity-100 group-hover/project-card:pointer-events-auto my-auto bg-white/30 rounded-sm h-6 w-6"
+                          iconClassName={cn("h-4 w-4 transition-all", {
+                            "text-on-color": !project.is_favorite,
+                          })}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (project.is_favorite) handleRemoveFromFavorites();
+                            else handleAddToFavorites();
+                          }}
+                          selected={!!project.is_favorite}
+                        />
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <span className="text-13 text-placeholder italic">No Member Yet</span>
                 )}
-              </Tooltip>
-              {/* Project lead */}
-              {projectStatesEnabled && projectLead && (
-                <Tooltip
-                  isMobile={isMobile}
-                  tooltipHeading="Lead"
-                  tooltipContent={projectLead.display_name}
-                  position="top"
-                >
-                  <Avatar
-                    name={projectLead.display_name}
-                    src={getFileURL(projectLead.avatar_url)}
-                    size="sm"
-                    className="ring-custom-background-100 ring-2"
-                  />
-                </Tooltip>
-              )}
-              {isArchived && <div className="text-11 font-medium text-placeholder">Archived</div>}
+              </div>
             </div>
-            {isArchived ? (
-              hasAdminRole && (
-                <div className="flex items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    className="flex items-center justify-center text-11 font-medium text-placeholder hover:text-secondary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setRestoreProject(true);
-                    }}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <ArchiveRestoreIcon className="h-3.5 w-3.5" />
-                      Restore
-                    </div>
-                  </button>
-                  <button
-                    type="button"
-                    className="flex items-center justify-center text-11 font-medium text-placeholder hover:text-secondary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setDeleteProjectModal(true);
-                    }}
-                  >
-                    <TrashIcon className="h-3.5 w-3.5" />
-                  </button>
+
+            {/* Project name + identifier — below image */}
+            <div className="mt-3 flex h-10 w-full items-center justify-between gap-3 p-4">
+              <div className="flex flex-grow items-center gap-2.5 truncate">
+                {/* Logo / emoji */}
+                <div className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-sm bg-layer-1">
+                  <Logo logo={project.logo_props} size={18} />
                 </div>
-              )
-            ) : (
-              <>
-                {isMemberOfProject &&
-                  (hasAdminRole || hasMemberRole ? (
-                    <Link
-                      className="flex items-center justify-center rounded-sm p-1 text-placeholder hover:bg-layer-1 hover:text-secondary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      href={`/${workspaceSlug}/settings/projects/${project.id}`}
-                    >
-                      <Settings className="h-3.5 w-3.5" />
-                    </Link>
-                  ) : (
-                    <span className="flex items-center gap-1 text-13 text-placeholder">
-                      <CheckIcon className="h-3.5 w-3.5" />
-                      Joined
-                    </span>
-                  ))}
-                {!isMemberOfProject && (
-                  <div className="flex items-center">
-                    <Button
-                      variant="link"
-                      className="!p-0 font-semibold"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setJoinProjectModal(true);
-                      }}
-                    >
-                      Join
-                    </Button>
+                {/* Name + identifier */}
+                <div className="flex w-full flex-col justify-between gap-0.5 truncate">
+                  <div className="flex justify-between">
+                    <h3 className="w-full truncate font-medium">{project.name}</h3>
                   </div>
-                )}
+                  <span className="flex items-center gap-1.5">
+                    <p className="text-11 font-medium">{project.identifier}</p>
+                    {project.network === 0 && <LockIcon className="h-2.5 w-2.5" />}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Attributes strip ── */}
+          {/* role="presentation" + onClick to stop link navigation when interacting with pickers */}
+          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+          <div
+            role="presentation"
+            className="flex flex-wrap gap-2 p-4"
+            data-prevent-progress
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            {/* Project state — only when feature is enabled */}
+            {projectStatesEnabled && (
+              <div className="my-auto h-5" role="presentation">
+                <ProjectStatePicker project={project} />
+              </div>
+            )}
+
+            {/* Lead */}
+            <div className="my-auto h-5" role="presentation">
+              <button
+                type="button"
+                className="block h-full w-full cursor-pointer outline-none"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <div className="flex h-full items-center gap-2 rounded border-[0.5px] border-subtle px-2 text-11 text-secondary hover:bg-layer-1">
+                  {projectLead ? (
+                    <>
+                      <Avatar
+                        name={projectLead.display_name}
+                        src={getFileURL(projectLead.avatar_url)}
+                        size={14}
+                        className="flex-shrink-0"
+                      />
+                      <span className="max-w-[80px] truncate">{projectLead.display_name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Users className="h-3 w-3 flex-shrink-0" />
+                      <span>{t("lead")}</span>
+                    </>
+                  )}
+                </div>
+              </button>
+            </div>
+
+            {/* Members count */}
+            <div className="my-auto h-5" role="presentation">
+              <button type="button" disabled className="block h-full w-full cursor-not-allowed outline-none">
+                <div className="flex h-full items-center gap-2 rounded border-[0.5px] border-subtle px-2 text-11 text-secondary">
+                  <Users className="h-3 w-3 shrink-0" />
+                  <span>{projectMembersIds.length}</span>
+                </div>
+              </button>
+            </div>
+
+            {/* Date range */}
+            <div className="my-auto flex h-5 gap-2" role="presentation">
+              <button
+                type="button"
+                className="flex h-full w-full max-w-full cursor-pointer items-center gap-1.5 rounded-sm border-[0.5px] border-strong px-1.5 text-11 text-secondary outline-none hover:bg-layer-transparent-hover"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  // future: open date-picker
+                }}
+              >
+                <div className="flex w-full items-center gap-1.5">
+                  <CalendarDays className="h-3 w-3 flex-shrink-0" aria-hidden />
+                  {(project.start_date || project.end_date) && (
+                    <>
+                      <span className="flex-grow truncate text-11">
+                        {project.start_date ? renderFormattedDate(project.start_date) : "—"}
+                        {" - "}
+                        {project.end_date ? renderFormattedDate(project.end_date) : "—"}
+                      </span>
+                      {/* Clear dates */}
+                      <button
+                        type="button"
+                        className="h-2.5 w-2.5 flex-shrink-0 cursor-pointer text-tertiary hover:text-secondary"
+                        onClick={handleClearDates}
+                      >
+                        <X className="h-2.5 w-2.5" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </button>
+            </div>
+
+            {/* Archived restore / delete actions */}
+            {isArchived && hasAdminRole && (
+              <>
+                <button
+                  type="button"
+                  className="flex items-center gap-1 text-11 text-placeholder hover:text-secondary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setRestoreProject(true);
+                  }}
+                >
+                  <ArchiveRestoreIcon className="h-3.5 w-3.5" />
+                  {t("workspace_projects.archived.restore")}
+                </button>
+                <button
+                  type="button"
+                  className="flex items-center justify-center text-11 text-placeholder hover:text-secondary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setDeleteProjectModal(true);
+                  }}
+                >
+                  <TrashIcon className="h-3.5 w-3.5" />
+                </button>
               </>
             )}
+
+            {/* Member/joined indicator for non-archived */}
+            {!isArchived && isMemberOfProject && !(hasAdminRole || hasMemberRole) && (
+              <span className="flex items-center gap-1 text-13 text-placeholder">
+                <span className="h-3.5 w-3.5">✓</span>
+                {t("workspace_projects.member.joined")}
+              </span>
+            )}
+
+            {/* Settings link for admins/members */}
+            {!isArchived && isMemberOfProject && (hasAdminRole || hasMemberRole) && (
+              <Link
+                href={`/${workspaceSlug}/settings/projects/${project.id}`}
+                className="ml-auto flex items-center rounded-sm p-1 text-placeholder hover:bg-layer-1 hover:text-secondary"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Settings className="h-3.5 w-3.5" />
+              </Link>
+            )}
+
+            {/* Join button for non-members */}
+            {!isArchived && !isMemberOfProject && (
+              <button
+                type="button"
+                className="ml-auto text-13 font-semibold text-accent-primary hover:text-accent-primary/90"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setJoinProjectModal(true);
+                }}
+              >
+                {t("common.join")}
+              </button>
+            )}
           </div>
-        </div>
-      </Link>
+        </Link>
+      </div>
     </>
   );
 });
