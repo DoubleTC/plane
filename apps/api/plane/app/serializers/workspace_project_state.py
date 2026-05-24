@@ -23,4 +23,4 @@ class WorkspaceProjectStateSerializer(DynamicBaseSerializer):
 class WorkspaceProjectStateWriteSerializer(BaseSerializer):
     class Meta:
         model = WorkspaceProjectState
-        fields = ["name", "description", "group", "color", "sequence"]
+        fields = ["name", "description", "group", "color", "sequence", "is_default"]

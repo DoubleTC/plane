@@ -37,6 +37,16 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
   stateMap: Record<string, IWorkspaceProjectState> = {};
   loader = false;
 
+  /**
+   * Slug-keyed index: workspaceSlug → Set of state IDs belonging to that workspace.
+   *
+   * The Django API returns `workspace` as a UUID FK, not the slug used in URL params.
+   * Filtering `stateMap` by `s.workspace === workspaceSlug` would never match.
+   * We therefore maintain this separate index, populated on every mutating action,
+   * so `getStatesByWorkspace` can look states up without the UUID/slug mismatch.
+   */
+  private slugToIds: Record<string, Set<string>> = {};
+
   constructor() {
     makeObservable(this, {
       stateMap: observable,
@@ -48,11 +58,17 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
     });
   }
 
-  getStatesByWorkspace = computedFn((workspaceSlug: string): IWorkspaceProjectState[] =>
-    Object.values(this.stateMap)
-      .filter((s) => s.workspace === workspaceSlug || this._matchSlug(s, workspaceSlug))
-      .sort((a, b) => a.sequence - b.sequence)
-  );
+  // ── Computed helpers ────────────────────────────────────────────────────────
+
+  getStatesByWorkspace = computedFn((workspaceSlug: string): IWorkspaceProjectState[] => {
+    const ids = this.slugToIds[workspaceSlug];
+    if (!ids) return [];
+    const items = Array.from(ids)
+      .map((id) => this.stateMap[id])
+      .filter((s): s is IWorkspaceProjectState => !!s);
+    // eslint-disable-next-line unicorn/no-array-sort
+    return [...items].sort((a, b) => a.sequence - b.sequence);
+  });
 
   getStatesByGroup = computedFn((workspaceSlug: string, group: TProjectStateGroup): IWorkspaceProjectState[] =>
     this.getStatesByWorkspace(workspaceSlug).filter((s) => s.group === group)
@@ -60,12 +76,15 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
 
   getStateById = computedFn((stateId: string): IWorkspaceProjectState | undefined => this.stateMap[stateId]);
 
-  // Helper: after fetch the workspace FK is the UUID id, not the slug.
-  // We key the map by id and filter by the fetched result storing workspace id.
-  // This helper is a no-op — getStatesByWorkspace is populated correctly after fetch.
-  private _matchSlug(_s: IWorkspaceProjectState, _slug: string): boolean {
-    return false;
+  // ── Private helpers ─────────────────────────────────────────────────────────
+
+  private _ensureSlugSet(workspaceSlug: string): void {
+    if (!this.slugToIds[workspaceSlug]) {
+      this.slugToIds[workspaceSlug] = new Set();
+    }
   }
+
+  // ── Actions ─────────────────────────────────────────────────────────────────
 
   fetchStates = action(async (workspaceSlug: string): Promise<IWorkspaceProjectState[]> => {
     runInAction(() => {
@@ -74,7 +93,11 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
     try {
       const states = await workspaceProjectStateService.list(workspaceSlug);
       runInAction(() => {
-        for (const s of states) this.stateMap[s.id] = s;
+        this._ensureSlugSet(workspaceSlug);
+        for (const s of states) {
+          this.stateMap[s.id] = s;
+          this.slugToIds[workspaceSlug].add(s.id);
+        }
         this.loader = false;
       });
       return states;
@@ -90,6 +113,8 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
     const state = await workspaceProjectStateService.create(workspaceSlug, data);
     runInAction(() => {
       this.stateMap[state.id] = state;
+      this._ensureSlugSet(workspaceSlug);
+      this.slugToIds[workspaceSlug].add(state.id);
     });
     return state;
   });
@@ -97,6 +122,17 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
   updateState = action(async (workspaceSlug: string, stateId: string, data: IWorkspaceProjectStateUpdate) => {
     const state = await workspaceProjectStateService.update(workspaceSlug, stateId, data);
     runInAction(() => {
+      // If this update marks a state as default, clear is_default on all others in the workspace
+      if (data.is_default) {
+        const ids = this.slugToIds[workspaceSlug];
+        if (ids) {
+          for (const id of ids) {
+            if (id !== stateId && this.stateMap[id]?.is_default) {
+              this.stateMap[id] = { ...this.stateMap[id], is_default: false };
+            }
+          }
+        }
+      }
       this.stateMap[stateId] = state;
     });
     return state;
@@ -106,6 +142,7 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
     await workspaceProjectStateService.destroy(workspaceSlug, stateId);
     runInAction(() => {
       delete this.stateMap[stateId];
+      this.slugToIds[workspaceSlug]?.delete(stateId);
     });
   });
 }

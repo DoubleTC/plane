@@ -51,6 +51,14 @@ class WorkspaceProjectStateViewSet(BaseViewSet):
             return Response({"error": "State not found."}, status=status.HTTP_404_NOT_FOUND)
         serializer = WorkspaceProjectStateWriteSerializer(state, data=request.data, partial=True)
         if serializer.is_valid():
+            # Enforce exclusive default: if this state is being set as default,
+            # clear is_default from all other states in this workspace.
+            if request.data.get("is_default"):
+                WorkspaceProjectState.objects.filter(
+                    workspace__slug=slug,
+                    deleted_at__isnull=True,
+                    is_default=True,
+                ).exclude(pk=pk).update(is_default=False)
             serializer.save(updated_by=request.user)
             full = WorkspaceProjectStateSerializer(WorkspaceProjectState.objects.get(pk=state.pk))
             return Response(full.data, status=status.HTTP_200_OK)
@@ -89,6 +97,7 @@ class WorkspaceProjectStateFeatureToggleEndpoint(BaseAPIView):
                         group=s["group"],
                         color=s["color"],
                         sequence=s["sequence"],
+                        is_default=s.get("is_default", False),
                         created_by=request.user,
                         updated_by=request.user,
                     )

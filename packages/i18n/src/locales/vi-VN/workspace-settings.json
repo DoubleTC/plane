@@ -282,7 +282,8 @@
         "save": "Save",
         "cancel": "cancel",
         "mark_as_default": "Mark as default",
-        "state_description_placeholder": "Describe this state for your members."
+        "state_description_placeholder": "Describe this state for your members.",
+        "default_badge": "Default"
       },
       "projects": {
         "title": "Dự án",

@@ -193,12 +193,12 @@ PROJECT_STATE_GROUP_CHOICES = (
 )
 
 DEFAULT_PROJECT_STATES = [
-    {"name": "Draft", "group": "draft", "color": "#94A3B8", "sequence": 10000},
-    {"name": "Planning", "group": "planning", "color": "#60A5FA", "sequence": 20000},
-    {"name": "Execution", "group": "execution", "color": "#F59E0B", "sequence": 30000},
-    {"name": "Monitoring", "group": "monitoring", "color": "#A78BFA", "sequence": 40000},
-    {"name": "Completed", "group": "completed", "color": "#34D399", "sequence": 50000},
-    {"name": "Cancelled", "group": "cancelled", "color": "#9AA4BC", "sequence": 60000},
+    {"name": "Draft", "group": "draft", "color": "#94A3B8", "sequence": 10000, "is_default": True},
+    {"name": "Planning", "group": "planning", "color": "#60A5FA", "sequence": 20000, "is_default": False},
+    {"name": "Execution", "group": "execution", "color": "#F59E0B", "sequence": 30000, "is_default": False},
+    {"name": "Monitoring", "group": "monitoring", "color": "#A78BFA", "sequence": 40000, "is_default": False},
+    {"name": "Completed", "group": "completed", "color": "#34D399", "sequence": 50000, "is_default": False},
+    {"name": "Cancelled", "group": "cancelled", "color": "#EF4444", "sequence": 60000, "is_default": False},
 ]
 
 
@@ -217,6 +217,7 @@ class WorkspaceProjectState(BaseModel):
     )
     color = models.CharField(max_length=20, default="#94A3B8")
     sequence = models.FloatField(default=65535)
+    is_default = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Workspace Project State"

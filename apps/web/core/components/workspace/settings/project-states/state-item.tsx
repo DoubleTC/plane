@@ -133,32 +133,45 @@ export const ProjectStateItem = observer(function ProjectStateItem({ workspaceSl
 
       <span className="text-sm text-custom-text-100 flex-grow truncate">{state.name}</span>
 
-      {/* Hover actions */}
-      <div className="flex flex-shrink-0 items-center gap-2 opacity-0 transition-opacity group-hover/state-item:opacity-100">
-        <button
-          type="button"
-          onClick={() => void handleMarkAsDefault()}
-          className="text-xs text-custom-text-300 hover:text-custom-primary-100"
-        >
-          {t("workspace_settings.settings.project_states.mark_as_default")}
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsEditing(true)}
-          className="text-custom-text-400 hover:bg-custom-background-80 hover:text-custom-text-200 flex items-center rounded p-0.5"
-          title="Edit"
-        >
-          <Pencil className="h-3.5 w-3.5" />
-        </button>
-        <button
-          type="button"
-          onClick={() => void handleDelete()}
-          disabled={isDeleting}
-          className="text-custom-text-400 hover:bg-custom-background-80 hover:text-red-500 flex items-center rounded p-0.5 disabled:opacity-50"
-          title="Delete"
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
+      {/* Right side: default badge (always) + hover actions */}
+      <div className="flex flex-shrink-0 items-center gap-2">
+        {/* "Default" badge — always visible when this state is the default */}
+        {state.is_default && (
+          <span className="border-custom-primary-100/30 bg-custom-primary-100/10 text-xs text-custom-primary-100 rounded border px-1.5 py-0.5 font-medium">
+            {t("workspace_settings.settings.project_states.default_badge")}
+          </span>
+        )}
+
+        {/* Actions — visible on hover */}
+        <div className="flex items-center gap-1.5 opacity-0 transition-opacity group-hover/state-item:opacity-100">
+          {/* "Mark as default" only shown when this is NOT the current default */}
+          {!state.is_default && (
+            <button
+              type="button"
+              onClick={() => void handleMarkAsDefault()}
+              className="text-xs text-custom-text-300 hover:text-custom-primary-100"
+            >
+              {t("workspace_settings.settings.project_states.mark_as_default")}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="text-custom-text-400 hover:bg-custom-background-80 hover:text-custom-text-200 flex items-center rounded p-0.5"
+            title="Edit"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => void handleDelete()}
+            disabled={isDeleting}
+            className="text-custom-text-400 hover:bg-custom-background-80 hover:text-red-500 flex items-center rounded p-0.5 disabled:opacity-50"
+            title="Delete"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
     </div>
   );
