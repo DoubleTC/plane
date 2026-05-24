@@ -223,6 +223,30 @@
       "search": {
         "description": "Nenalezeny projekty odpovídající kritériím.\nVytvořte nový."
       }
+    },
+    "view_modes": {
+      "gallery": "Gallery",
+      "board": "Board",
+      "list": "List",
+      "timeline": "Timeline"
+    },
+    "project_state": {
+      "no_state": "No state",
+      "unassigned": "Unassigned"
+    },
+    "board": {
+      "empty_column": "No projects"
+    },
+    "timeline": {
+      "week": "Week",
+      "month": "Month",
+      "quarter": "Quarter",
+      "today": "Today",
+      "fullscreen": "Fullscreen",
+      "no_projects": "No projects to display"
+    },
+    "archived": {
+      "restore": "Restore"
     }
   },
   "workspace_views": {

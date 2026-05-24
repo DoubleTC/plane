@@ -22,6 +22,7 @@ import { useUserPermissions } from "@/hooks/store/user";
 // components
 import HeaderFilters from "./filters";
 import { ProjectSearch } from "./search-projects";
+import { ProjectViewModeSwitcher } from "./view-mode-switcher";
 
 export const ProjectsBaseHeader = observer(function ProjectsBaseHeader() {
   // i18n
@@ -58,6 +59,7 @@ export const ProjectsBaseHeader = observer(function ProjectsBaseHeader() {
         <div className="hidden md:flex">
           <HeaderFilters />
         </div>
+        <ProjectViewModeSwitcher />
         {isAuthorizedUser && !isArchived ? (
           <Button
             variant="primary"
