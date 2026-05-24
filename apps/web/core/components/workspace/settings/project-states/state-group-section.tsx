@@ -36,7 +36,6 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState("#64748B");
-  const [newDescription, setNewDescription] = useState("");
   const addInputRef = useRef<HTMLInputElement>(null);
 
   const groupMeta = PROJECT_STATE_GROUPS.find((g) => g.key === group);
@@ -55,13 +54,11 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
     try {
       await createState(workspaceSlug, {
         name: newName.trim(),
-        description: newDescription.trim() || undefined,
         group,
         color: newColor,
       });
       setNewName("");
       setNewColor("#64748B");
-      setNewDescription("");
       setIsAdding(false);
       setToast({ type: TOAST_TYPE.SUCCESS, title: t("workspace_settings.settings.project_states.toast.created") });
     } catch {
@@ -72,12 +69,11 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
   const handleCancelAdd = () => {
     setNewName("");
     setNewColor("#64748B");
-    setNewDescription("");
     setIsAdding(false);
   };
 
   return (
-    <div className="border-custom-border-200 overflow-hidden rounded-md border">
+    <div className="border-custom-border-200 overflow-hidden rounded-xl border">
       {/* ── Accordion header ── */}
       <div className="bg-custom-background-90 hover:bg-custom-background-80 flex w-full items-center px-4 py-3 transition-colors">
         {/* Left: collapse toggle (takes up all the flex-grow space) */}
@@ -150,15 +146,6 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
                     className="border-custom-border-200 text-sm text-custom-text-100 placeholder-custom-text-400 focus:border-custom-primary-100 flex-grow border-b bg-transparent py-1 outline-none"
                   />
                 </div>
-
-                {/* Description textarea */}
-                <textarea
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder={t("workspace_settings.settings.project_states.state_description_placeholder")}
-                  rows={2}
-                  className="border-custom-border-200 text-sm text-custom-text-100 placeholder-custom-text-400 focus:border-custom-primary-100 mt-3 w-full resize-none rounded border bg-transparent px-2.5 py-2 outline-none"
-                />
 
                 {/* Create / cancel */}
                 <div className="mt-3 flex items-center gap-2">

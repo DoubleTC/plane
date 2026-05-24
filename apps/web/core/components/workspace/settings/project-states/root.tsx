@@ -81,7 +81,7 @@ export const ProjectStatesRoot = observer(function ProjectStatesRoot({ workspace
 
       {/* Group accordion list — rendered only when the feature is enabled */}
       {isEnabled && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {PROJECT_STATE_GROUPS.map((groupMeta) => (
             <ProjectStateGroupSection
               key={groupMeta.key}
