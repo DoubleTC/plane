@@ -146,43 +146,49 @@ export const ProjectStateItem = observer(function ProjectStateItem({
         <h6 className="text-13 font-medium text-primary">{state.name}</h6>
       </div>
 
-      {/* Hover-only actions */}
-      <div className="hidden flex-shrink-0 items-center gap-2 group-hover:flex">
-        {/* Default indicator / mark-as-default button */}
-        {state.is_default ? (
-          <button type="button" disabled className="cursor-default text-13 whitespace-nowrap text-tertiary">
+      {/* Right side: "Default" badge always visible; action buttons hover-only */}
+      <div className="flex flex-shrink-0 items-center gap-2">
+        {/* "Default" badge — always shown when this is the current default */}
+        {state.is_default && (
+          <span className="text-13 whitespace-nowrap text-tertiary">
             {t("workspace_settings.settings.project_states.default_badge")}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => void handleMarkAsDefault()}
-            className="text-13 whitespace-nowrap text-secondary hover:text-primary"
-          >
-            {t("workspace_settings.settings.project_states.mark_as_default")}
-          </button>
+          </span>
         )}
 
-        {/* Edit button */}
-        <button
-          type="button"
-          onClick={() => setIsEditing(true)}
-          className="flex h-5 w-5 items-center justify-center rounded-sm text-secondary hover:bg-layer-1 hover:text-primary"
-          title={t("workspace_settings.settings.project_states.edit")}
-        >
-          <Pencil className="h-3 w-3" />
-        </button>
+        {/* Hover-only action buttons */}
+        <div className="hidden items-center gap-2 group-hover:flex">
+          {/* "Mark as default" — only when NOT currently default */}
+          {!state.is_default && (
+            <button
+              type="button"
+              onClick={() => void handleMarkAsDefault()}
+              className="text-13 whitespace-nowrap text-secondary hover:text-primary"
+            >
+              {t("workspace_settings.settings.project_states.mark_as_default")}
+            </button>
+          )}
 
-        {/* Delete button — disabled when this is the only state or is marked as default */}
-        <button
-          type="button"
-          onClick={() => void handleDelete()}
-          disabled={isDeleting || isLastInGroup || state.is_default}
-          className="hover:text-red-500 flex h-5 w-5 items-center justify-center rounded-sm bg-layer-1 text-secondary disabled:cursor-not-allowed disabled:opacity-40"
-          title={t("workspace_settings.settings.project_states.delete")}
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
+          {/* Edit button */}
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="flex h-5 w-5 items-center justify-center rounded-sm text-secondary hover:bg-layer-1 hover:text-primary"
+            title={t("workspace_settings.settings.project_states.edit")}
+          >
+            <Pencil className="h-3 w-3" />
+          </button>
+
+          {/* Delete button — disabled when this is the only state in the group or is the default */}
+          <button
+            type="button"
+            onClick={() => void handleDelete()}
+            disabled={isDeleting || isLastInGroup || state.is_default}
+            className="hover:text-red-500 flex h-5 w-5 items-center justify-center rounded-sm bg-layer-1 text-secondary disabled:cursor-not-allowed disabled:opacity-40"
+            title={t("workspace_settings.settings.project_states.delete")}
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
     </div>
   );

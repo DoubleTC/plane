@@ -45,7 +45,8 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
   const [isExpanded, setIsExpanded] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState("");
-  const [newColor, setNewColor] = useState("#64748B");
+  // Default new-state color = the design-system color for this group
+  const [newColor, setNewColor] = useState(GROUP_ICON_COLORS[group]);
   const addInputRef = useRef<HTMLInputElement>(null);
 
   const groupMeta = PROJECT_STATE_GROUPS.find((g) => g.key === group);
@@ -68,7 +69,7 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
         color: newColor,
       });
       setNewName("");
-      setNewColor("#64748B");
+      setNewColor(GROUP_ICON_COLORS[group]);
       setIsAdding(false);
       setToast({ type: TOAST_TYPE.SUCCESS, title: t("workspace_settings.settings.project_states.toast.created") });
     } catch {
@@ -78,7 +79,7 @@ export const ProjectStateGroupSection = observer(function ProjectStateGroupSecti
 
   const handleCancelAdd = () => {
     setNewName("");
-    setNewColor("#64748B");
+    setNewColor(GROUP_ICON_COLORS[group]);
     setIsAdding(false);
   };
 

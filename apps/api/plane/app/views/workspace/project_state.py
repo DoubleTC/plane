@@ -69,6 +69,11 @@ class WorkspaceProjectStateViewSet(BaseViewSet):
         state = self.get_queryset().filter(pk=pk).first()
         if not state:
             return Response({"error": "State not found."}, status=status.HTTP_404_NOT_FOUND)
+        if state.is_default:
+            return Response(
+                {"error": "The default state cannot be deleted. Set another state as default first."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         state.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

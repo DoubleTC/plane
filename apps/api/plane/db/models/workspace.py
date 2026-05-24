@@ -193,12 +193,14 @@ PROJECT_STATE_GROUP_CHOICES = (
 )
 
 DEFAULT_PROJECT_STATES = [
-    {"name": "Draft", "group": "draft", "color": "#94A3B8", "sequence": 10000, "is_default": True},
-    {"name": "Planning", "group": "planning", "color": "#60A5FA", "sequence": 20000, "is_default": False},
+    # Colors match the design-system group icon palette.
+    # Draft is the initial default state; is_default protects it from deletion.
+    {"name": "Draft", "group": "draft", "color": "#60646C", "sequence": 10000, "is_default": True},
+    {"name": "Planning", "group": "planning", "color": "#60646C", "sequence": 20000, "is_default": False},
     {"name": "Execution", "group": "execution", "color": "#F59E0B", "sequence": 30000, "is_default": False},
-    {"name": "Monitoring", "group": "monitoring", "color": "#A78BFA", "sequence": 40000, "is_default": False},
-    {"name": "Completed", "group": "completed", "color": "#34D399", "sequence": 50000, "is_default": False},
-    {"name": "Cancelled", "group": "cancelled", "color": "#EF4444", "sequence": 60000, "is_default": False},
+    {"name": "Monitoring", "group": "monitoring", "color": "#00838F", "sequence": 40000, "is_default": False},
+    {"name": "Completed", "group": "completed", "color": "#46A758", "sequence": 50000, "is_default": False},
+    {"name": "Cancelled", "group": "cancelled", "color": "#9AA4BC", "sequence": 60000, "is_default": False},
 ]
 
 
