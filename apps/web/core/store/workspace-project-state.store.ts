@@ -48,9 +48,18 @@ export class WorkspaceProjectStateStore implements IWorkspaceProjectStateStore {
   private slugToIds: Record<string, Set<string>> = {};
 
   constructor() {
-    makeObservable(this, {
+    // The private `slugToIds` field must be listed via the AdditionalKeys type
+    // parameter so TypeScript allows annotating it here.  Without making it
+    // observable, getStatesByWorkspace returns early on the first render
+    // (before fetchStates has run) without reading any observable, so MobX
+    // records zero dependencies for that computation.  When fetchStates later
+    // populates slugToIds and stateMap, nothing invalidates the cached result
+    // and the component never re-renders — states stay blank until the next
+    // full page mount.
+    makeObservable<WorkspaceProjectStateStore, "slugToIds">(this, {
       stateMap: observable,
       loader: observable,
+      slugToIds: observable,
       fetchStates: action,
       createState: action,
       updateState: action,
