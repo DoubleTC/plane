@@ -260,7 +260,23 @@
         "title": "프로젝트 스테이트",
         "heading": "모든 프로젝트의 진행 상황 개요를 확인하세요.",
         "description": "프로젝트 스테이트는 어떤 프로젝트 속성으로든 모든 프로젝트의 진행 상황을 추적하는 Plane 전용 기능입니다.",
-        "go_to_settings": "설정으로 이동"
+        "go_to_settings": "설정으로 이동",
+        "toggle_title": "Enable Project States",
+        "toggle_description": "Track the lifecycle of each project by assigning a custom state. States are grouped by phase (Draft, Planning, Execution, Monitoring, Completed, Cancelled).",
+        "add_state": "Add state",
+        "state_name_placeholder": "State name",
+        "no_states_in_group": "No states in this group yet.",
+        "toast": {
+          "enabled": "Project States enabled.",
+          "disabled": "Project States disabled.",
+          "toggle_error": "Failed to update Project States setting.",
+          "created": "State created successfully.",
+          "create_error": "Failed to create state.",
+          "updated": "State updated successfully.",
+          "update_error": "Failed to update state.",
+          "deleted": "State deleted successfully.",
+          "delete_error": "Failed to delete state."
+        }
       },
       "projects": {
         "title": "프로젝트",

@@ -58,6 +58,11 @@ export interface IProject extends IPartialProject {
   anchor?: string | null;
   is_favorite?: boolean;
   members?: string[];
+  // Project State, Priority, Dates
+  project_status?: string | null;
+  priority?: "urgent" | "high" | "medium" | "low" | "none" | null;
+  start_date?: string | null;
+  end_date?: string | null;
   timezone?: string;
   next_work_item_sequence?: number;
 }

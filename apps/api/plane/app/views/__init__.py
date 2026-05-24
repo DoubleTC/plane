@@ -242,3 +242,5 @@ from .timezone.base import TimezoneEndpoint
 from .workspace.roles import CustomRoleViewSet
 
 from .phase import PhaseViewSet, PhaseArchiveViewSet, PhaseCycleViewSet, PhaseFavoriteViewSet, PhaseDateCheckEndpoint
+
+from .workspace.project_state import WorkspaceProjectStateViewSet, WorkspaceProjectStateFeatureToggleEndpoint

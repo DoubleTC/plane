@@ -137,6 +137,7 @@ class Workspace(BaseModel):
     organization_size = models.CharField(max_length=20, blank=True, null=True)
     timezone = models.CharField(max_length=255, default="UTC", choices=TIMEZONE_CHOICES)
     background_color = models.CharField(max_length=255, default=get_random_color)
+    project_states_enabled = models.BooleanField(default=False)
 
     def __str__(self):
         """Return name of the Workspace"""
@@ -180,6 +181,51 @@ class Workspace(BaseModel):
         verbose_name_plural = "Workspaces"
         db_table = "workspaces"
         ordering = ("-created_at",)
+
+
+PROJECT_STATE_GROUP_CHOICES = (
+    ("draft", "Draft"),
+    ("planning", "Planning"),
+    ("execution", "Execution"),
+    ("monitoring", "Monitoring"),
+    ("completed", "Completed"),
+    ("cancelled", "Cancelled"),
+)
+
+DEFAULT_PROJECT_STATES = [
+    {"name": "Draft", "group": "draft", "color": "#94A3B8", "sequence": 10000},
+    {"name": "Planning", "group": "planning", "color": "#60A5FA", "sequence": 20000},
+    {"name": "Execution", "group": "execution", "color": "#F59E0B", "sequence": 30000},
+    {"name": "Monitoring", "group": "monitoring", "color": "#A78BFA", "sequence": 40000},
+    {"name": "Completed", "group": "completed", "color": "#34D399", "sequence": 50000},
+    {"name": "Cancelled", "group": "cancelled", "color": "#9AA4BC", "sequence": 60000},
+]
+
+
+class WorkspaceProjectState(BaseModel):
+    workspace = models.ForeignKey(
+        "db.Workspace",
+        on_delete=models.CASCADE,
+        related_name="project_states",
+    )
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    group = models.CharField(
+        choices=PROJECT_STATE_GROUP_CHOICES,
+        max_length=20,
+        db_index=True,
+    )
+    color = models.CharField(max_length=20, default="#94A3B8")
+    sequence = models.FloatField(default=65535)
+
+    class Meta:
+        verbose_name = "Workspace Project State"
+        verbose_name_plural = "Workspace Project States"
+        db_table = "workspace_project_states"
+        ordering = ("sequence",)
+
+    def __str__(self):
+        return f"{self.name} ({self.workspace.slug})"
 
 
 class WorkspaceBaseModel(BaseModel):

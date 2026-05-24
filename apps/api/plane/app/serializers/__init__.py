@@ -137,3 +137,5 @@ from .draft import (
 from .roles import CustomRoleSerializer
 
 from .phase import PhaseSerializer, PhaseWriteSerializer, PhaseCycleSerializer
+
+from .workspace_project_state import WorkspaceProjectStateSerializer, WorkspaceProjectStateWriteSerializer

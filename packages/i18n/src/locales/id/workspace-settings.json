@@ -260,7 +260,23 @@
         "title": "Status proyek",
         "heading": "Lihat ikhtisar kemajuan untuk semua proyek.",
         "description": "Status Proyek adalah fitur khusus Plane untuk melacak kemajuan semua proyek Anda berdasarkan properti proyek apa pun.",
-        "go_to_settings": "Pergi ke pengaturan"
+        "go_to_settings": "Pergi ke pengaturan",
+        "toggle_title": "Enable Project States",
+        "toggle_description": "Track the lifecycle of each project by assigning a custom state. States are grouped by phase (Draft, Planning, Execution, Monitoring, Completed, Cancelled).",
+        "add_state": "Add state",
+        "state_name_placeholder": "State name",
+        "no_states_in_group": "No states in this group yet.",
+        "toast": {
+          "enabled": "Project States enabled.",
+          "disabled": "Project States disabled.",
+          "toggle_error": "Failed to update Project States setting.",
+          "created": "State created successfully.",
+          "create_error": "Failed to create state.",
+          "updated": "State updated successfully.",
+          "update_error": "Failed to update state.",
+          "deleted": "State deleted successfully.",
+          "delete_error": "Failed to delete state."
+        }
       },
       "projects": {
         "title": "Proyek",

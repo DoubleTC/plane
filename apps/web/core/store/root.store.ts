@@ -65,6 +65,8 @@ import type { IPhaseStore } from "./phase.store";
 import { PhaseStore } from "./phase.store";
 import type { IPhaseFilterStore } from "./phase_filter.store";
 import { PhaseFilterStore } from "./phase_filter.store";
+import type { IWorkspaceProjectStateStore } from "./workspace-project-state.store";
+import { WorkspaceProjectStateStore } from "./workspace-project-state.store";
 import type { IRouterStore } from "./router.store";
 import { RouterStore } from "./router.store";
 import type { IStickyStore } from "./sticky/sticky.store";
@@ -110,6 +112,7 @@ export class CoreRootStore {
   roles: IRolesStore;
   phase: IPhaseStore;
   phaseFilter: IPhaseFilterStore;
+  workspaceProjectState: IWorkspaceProjectStateStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -144,6 +147,7 @@ export class CoreRootStore {
     this.roles = new RolesStore();
     this.phase = new PhaseStore(this);
     this.phaseFilter = new PhaseFilterStore(this);
+    this.workspaceProjectState = new WorkspaceProjectStateStore();
   }
 
   resetOnSignOut() {
@@ -180,5 +184,6 @@ export class CoreRootStore {
     this.roles = new RolesStore();
     this.phase = new PhaseStore(this);
     this.phaseFilter = new PhaseFilterStore(this);
+    this.workspaceProjectState = new WorkspaceProjectStateStore();
   }
 }

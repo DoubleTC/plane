@@ -143,10 +143,18 @@ class ProjectDetailSerializer(BaseSerializer):
     # workspace = WorkSpaceSerializer(read_only=True)
     default_assignee = UserLiteSerializer(read_only=True)
     project_lead = UserLiteSerializer(read_only=True)
+    project_status_detail = serializers.SerializerMethodField(read_only=True)
     is_favorite = serializers.BooleanField(read_only=True)
     sort_order = serializers.FloatField(read_only=True)
     member_role = serializers.IntegerField(read_only=True)
     anchor = serializers.CharField(read_only=True)
+
+    def get_project_status_detail(self, obj):
+        if obj.project_status_id is None:
+            return None
+        from plane.app.serializers.workspace_project_state import WorkspaceProjectStateSerializer
+
+        return WorkspaceProjectStateSerializer(obj.project_status).data
 
     class Meta:
         model = Project

@@ -260,7 +260,23 @@
         "title": "Trạng thái dự án",
         "heading": "Xem tổng quan tiến độ cho tất cả dự án.",
         "description": "Trạng thái Dự án là tính năng chỉ có trong Plane để theo dõi tiến độ của tất cả các dự án của bạn theo bất kỳ thuộc tính dự án nào.",
-        "go_to_settings": "Đi đến cài đặt"
+        "go_to_settings": "Đi đến cài đặt",
+        "toggle_title": "Enable Project States",
+        "toggle_description": "Track the lifecycle of each project by assigning a custom state. States are grouped by phase (Draft, Planning, Execution, Monitoring, Completed, Cancelled).",
+        "add_state": "Add state",
+        "state_name_placeholder": "State name",
+        "no_states_in_group": "No states in this group yet.",
+        "toast": {
+          "enabled": "Project States enabled.",
+          "disabled": "Project States disabled.",
+          "toggle_error": "Failed to update Project States setting.",
+          "created": "State created successfully.",
+          "create_error": "Failed to create state.",
+          "updated": "State updated successfully.",
+          "update_error": "Failed to update state.",
+          "deleted": "State deleted successfully.",
+          "delete_error": "Failed to delete state."
+        }
       },
       "projects": {
         "title": "Dự án",

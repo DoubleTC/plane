@@ -8,7 +8,7 @@ import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArchiveRestoreIcon, Settings, UserPlus } from "lucide-react";
+import { ArchiveRestoreIcon, CalendarDays, Settings, UserPlus } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@plane/constants";
 import { useLocalStorage } from "@plane/hooks";
@@ -25,6 +25,8 @@ import { copyUrlToClipboard, cn, getFileURL, renderFormattedDate } from "@plane/
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
+import { useWorkspace } from "@/hooks/store/use-workspace";
+import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { usePlatformOS } from "@/hooks/use-platform-os";
@@ -52,11 +54,19 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
   // store hooks
   const { getUserDetails } = useMember();
   const { addProjectToFavorites, removeProjectFromFavorites } = useProject();
+  const { currentWorkspace } = useWorkspace();
+  const { getStateById } = useWorkspaceProjectState();
   const { allowPermissions } = useUserPermissions();
   // hooks
   const { isMobile } = usePlatformOS();
   // derived values
   const projectMembersIds = project.members;
+  const projectStatesEnabled = !!currentWorkspace?.project_states_enabled;
+  const projectState = project.project_status ? getStateById(project.project_status) : undefined;
+  const projectLead =
+    typeof project.project_lead === "string"
+      ? getUserDetails(project.project_lead)
+      : (project.project_lead ?? undefined);
   const shouldRenderFavorite = allowPermissions(
     [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
     EUserPermissionsLevel.WORKSPACE
@@ -276,6 +286,28 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
               ? project.description
               : `Created on ${renderFormattedDate(project.created_at)}`}
           </p>
+          {/* Project state + dates strip (visible when project states feature is enabled) */}
+          {projectStatesEnabled && (projectState || project.start_date || project.end_date) && (
+            <div className="mt-1.5 flex flex-wrap items-center gap-2">
+              {projectState && (
+                <span
+                  className="text-xs inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium"
+                  style={{ borderColor: `${projectState.color}50`, color: projectState.color }}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: projectState.color }} />
+                  {projectState.name}
+                </span>
+              )}
+              {(project.start_date || project.end_date) && (
+                <span className="text-xs text-custom-text-400 flex items-center gap-1">
+                  <CalendarDays className="h-3 w-3" />
+                  {project.start_date ? renderFormattedDate(project.start_date) : "—"}
+                  {" → "}
+                  {project.end_date ? renderFormattedDate(project.end_date) : "—"}
+                </span>
+              )}
+            </div>
+          )}
           <div className="item-center flex justify-between">
             <div className="flex items-center justify-center gap-2">
               <Tooltip
@@ -302,12 +334,29 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
                   <span className="text-13 text-placeholder italic">No Member Yet</span>
                 )}
               </Tooltip>
+              {/* Project lead */}
+              {projectStatesEnabled && projectLead && (
+                <Tooltip
+                  isMobile={isMobile}
+                  tooltipHeading="Lead"
+                  tooltipContent={projectLead.display_name}
+                  position="top"
+                >
+                  <Avatar
+                    name={projectLead.display_name}
+                    src={getFileURL(projectLead.avatar_url)}
+                    size="sm"
+                    className="ring-custom-background-100 ring-2"
+                  />
+                </Tooltip>
+              )}
               {isArchived && <div className="text-11 font-medium text-placeholder">Archived</div>}
             </div>
             {isArchived ? (
               hasAdminRole && (
                 <div className="flex items-center justify-center gap-2">
-                  <div
+                  <button
+                    type="button"
                     className="flex items-center justify-center text-11 font-medium text-placeholder hover:text-secondary"
                     onClick={(e) => {
                       e.preventDefault();
@@ -319,8 +368,9 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
                       <ArchiveRestoreIcon className="h-3.5 w-3.5" />
                       Restore
                     </div>
-                  </div>
-                  <div
+                  </button>
+                  <button
+                    type="button"
                     className="flex items-center justify-center text-11 font-medium text-placeholder hover:text-secondary"
                     onClick={(e) => {
                       e.preventDefault();
@@ -329,7 +379,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
                     }}
                   >
                     <TrashIcon className="h-3.5 w-3.5" />
-                  </div>
+                  </button>
                 </div>
               )
             ) : (

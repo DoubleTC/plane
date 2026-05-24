@@ -260,7 +260,23 @@
         "title": "项目状态",
         "heading": "查看所有项目的进度概览。",
         "description": "项目状态是 Plane 独有的功能，用于按任何项目属性跟踪您所有项目的进度。",
-        "go_to_settings": "前往设置"
+        "go_to_settings": "前往设置",
+        "toggle_title": "Enable Project States",
+        "toggle_description": "Track the lifecycle of each project by assigning a custom state. States are grouped by phase (Draft, Planning, Execution, Monitoring, Completed, Cancelled).",
+        "add_state": "Add state",
+        "state_name_placeholder": "State name",
+        "no_states_in_group": "No states in this group yet.",
+        "toast": {
+          "enabled": "Project States enabled.",
+          "disabled": "Project States disabled.",
+          "toggle_error": "Failed to update Project States setting.",
+          "created": "State created successfully.",
+          "create_error": "Failed to create state.",
+          "updated": "State updated successfully.",
+          "update_error": "Failed to update state.",
+          "deleted": "State deleted successfully.",
+          "delete_error": "Failed to delete state."
+        }
       },
       "projects": {
         "title": "项目",

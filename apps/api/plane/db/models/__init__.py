@@ -75,6 +75,9 @@ from .workspace import (
     WorkspaceUserLink,
     WorkspaceHomePreference,
     WorkspaceUserPreference,
+    WorkspaceProjectState,
+    DEFAULT_PROJECT_STATES,
+    PROJECT_STATE_GROUP_CHOICES,
 )
 
 from .favorite import UserFavorite
