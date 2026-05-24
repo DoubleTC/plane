@@ -116,7 +116,7 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
             <button
               type="button"
               className={cn(
-                "inline-flex h-5 items-center gap-1.5 rounded-sm border-[0.5px] border-strong px-1.5 text-11 text-secondary hover:bg-layer-1 focus:outline-none",
+                "flex h-full w-full items-center justify-start gap-1.5 rounded-sm border-[0.5px] border-strong bg-layer-transparent px-1.5 text-caption-md-medium whitespace-nowrap text-secondary transition-colors hover:bg-layer-transparent-hover focus:bg-layer-transparent-active focus-visible:outline-none active:bg-layer-transparent-active disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-layer-transparent disabled:text-disabled",
                 className
               )}
             />
