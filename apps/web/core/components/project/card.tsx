@@ -18,11 +18,10 @@ import { LinkIcon, LockIcon, NewTabIcon, TrashIcon } from "@plane/propel/icons";
 import { setPromiseToast, setToast, TOAST_TYPE } from "@plane/propel/toast";
 import type { IProject } from "@plane/types";
 import type { TContextMenuItem } from "@plane/ui";
-import { Avatar, ContextMenu, CustomMenu, FavoriteStar } from "@plane/ui";
-import { cn, copyUrlToClipboard, getFileURL, renderFormattedDate } from "@plane/utils";
+import { ContextMenu, CustomMenu, FavoriteStar } from "@plane/ui";
+import { cn, copyUrlToClipboard, renderFormattedDate } from "@plane/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
-import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -31,6 +30,7 @@ import { useAppRouter } from "@/hooks/use-app-router";
 import { ArchiveRestoreProjectModal } from "./archive-restore-modal";
 import { DeleteProjectModal } from "./delete-project-modal";
 import { JoinProjectModal } from "./join-project-modal";
+import { ProjectLeadPicker } from "./views/lead-picker";
 import { ProjectStatePicker } from "./views/state-picker";
 
 type Props = {
@@ -49,7 +49,6 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
   const router = useAppRouter();
   const { workspaceSlug } = useParams();
   // store hooks
-  const { getUserDetails } = useMember();
   const { addProjectToFavorites, removeProjectFromFavorites, updateProject } = useProject();
   const { currentWorkspace } = useWorkspace();
   const { allowPermissions } = useUserPermissions();
@@ -58,10 +57,6 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
   // derived values
   const projectMembersIds = project.members ?? [];
   const projectStatesEnabled = !!currentWorkspace?.project_states_enabled;
-  const projectLead =
-    typeof project.project_lead === "string"
-      ? getUserDetails(project.project_lead)
-      : (project.project_lead ?? undefined);
   const shouldRenderFavorite = allowPermissions(
     [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
     EUserPermissionsLevel.WORKSPACE
@@ -341,36 +336,9 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
               </div>
             )}
 
-            {/* Lead */}
-            <div className="my-auto h-5" role="presentation">
-              <button
-                type="button"
-                className="block h-full w-full cursor-pointer outline-none"
-                tabIndex={0}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                <div className="flex h-full items-center gap-2 rounded border-[0.5px] border-subtle px-2 text-11 text-secondary hover:bg-layer-1">
-                  {projectLead ? (
-                    <>
-                      <Avatar
-                        name={projectLead.display_name}
-                        src={getFileURL(projectLead.avatar_url)}
-                        size={14}
-                        className="flex-shrink-0"
-                      />
-                      <span className="max-w-[80px] truncate">{projectLead.display_name}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Users className="h-3 w-3 flex-shrink-0" />
-                      <span>{t("lead")}</span>
-                    </>
-                  )}
-                </div>
-              </button>
+            {/* Lead — clickable picker */}
+            <div className="my-auto h-5">
+              <ProjectLeadPicker project={project} />
             </div>
 
             {/* Members count */}
@@ -455,15 +423,15 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
             )}
 
             {/* Settings link for admins/members */}
-            {!isArchived && isMemberOfProject && (hasAdminRole || hasMemberRole) && (
-              <Link
-                href={`/${workspaceSlug}/settings/projects/${project.id}`}
-                className="ml-auto flex items-center rounded-sm p-1 text-placeholder hover:bg-layer-1 hover:text-secondary"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Settings className="h-3.5 w-3.5" />
-              </Link>
-            )}
+            {/*{!isArchived && isMemberOfProject && (hasAdminRole || hasMemberRole) && (*/}
+            {/*  <Link*/}
+            {/*    href={`/${workspaceSlug}/settings/projects/${project.id}`}*/}
+            {/*    className="ml-auto flex items-center rounded-sm p-1 text-placeholder hover:bg-layer-1 hover:text-secondary"*/}
+            {/*    onClick={(e) => e.stopPropagation()}*/}
+            {/*  >*/}
+            {/*    <Settings className="h-3.5 w-3.5" />*/}
+            {/*  </Link>*/}
+            {/*)}*/}
 
             {/* Join button for non-members */}
             {!isArchived && !isMemberOfProject && (
