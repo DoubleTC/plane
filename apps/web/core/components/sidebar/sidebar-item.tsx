@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import React from "react";
 import Link from "next/link";
 import { cn } from "@plane/utils";
 
@@ -22,8 +23,9 @@ interface AppSidebarItemData {
 }
 
 interface AppSidebarItemProps {
-  variant?: "link" | "button";
+  variant?: "link" | "button" | "plain";
   item?: AppSidebarItemData;
+  className?: string;
 }
 
 interface AppSidebarItemLabelProps {
@@ -46,6 +48,11 @@ interface AppSidebarButtonItemProps {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
+  className?: string;
+}
+
+interface AppSidebarPlainItemProps {
+  children: React.ReactNode;
   className?: string;
 }
 
@@ -97,36 +104,56 @@ function AppSidebarItemIcon({ icon, highlight }: AppSidebarItemIconProps) {
   );
 }
 
-function AppSidebarLinkItem({ href, children, className }: AppSidebarLinkItemProps) {
+const AppSidebarLinkItem = React.forwardRef<HTMLAnchorElement, AppSidebarLinkItemProps>(function AppSidebarLinkItem(
+  { href, children, className },
+  ref
+) {
   if (!href) return null;
 
   return (
-    <Link href={href} className={cn(styles.base, className)}>
+    <Link href={href} ref={ref} className={cn(styles.base, className)}>
       {children}
     </Link>
   );
-}
+});
 
-function AppSidebarButtonItem({ children, onClick, disabled = false, className }: AppSidebarButtonItemProps) {
-  return (
-    <button className={cn(styles.base, className)} onClick={onClick} disabled={disabled} type="button">
-      {children}
-    </button>
-  );
+const AppSidebarButtonItem = React.forwardRef<HTMLButtonElement, AppSidebarButtonItemProps>(
+  function AppSidebarButtonItem({ children, onClick, disabled = false, className }, ref) {
+    return (
+      <button ref={ref} className={cn(styles.base, className)} onClick={onClick} disabled={disabled} type="button">
+        {children}
+      </button>
+    );
+  }
+);
+
+/**
+ * Plain (div-based) variant — use when the item is rendered inside an element
+ * that is already interactive (e.g. CustomMenu's customButton wrapper), so we
+ * don't produce a nested <button> inside a <button>.
+ */
+function AppSidebarPlainItem({ children, className }: AppSidebarPlainItemProps) {
+  return <div className={cn(styles.base, className)}>{children}</div>;
 }
 
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
-export type AppSidebarItemComponent = React.FC<AppSidebarItemProps> & {
-  Label: React.FC<AppSidebarItemLabelProps>;
-  Icon: React.FC<AppSidebarItemIconProps>;
-  Link: React.FC<AppSidebarLinkItemProps>;
-  Button: React.FC<AppSidebarButtonItemProps>;
+export type AppSidebarItemComponent = React.ForwardRefExoticComponent<
+  AppSidebarItemProps & React.RefAttributes<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement>
+> & {
+  Label: typeof AppSidebarItemLabel;
+  Icon: typeof AppSidebarItemIcon;
+  Link: typeof AppSidebarLinkItem;
+  Button: typeof AppSidebarButtonItem;
+  Plain: typeof AppSidebarPlainItem;
 };
 
-function AppSidebarItem({ variant = "link", item }: AppSidebarItemProps) {
+const AppSidebarItemBase = React.forwardRef<
+  HTMLAnchorElement | HTMLButtonElement | HTMLDivElement,
+  AppSidebarItemProps
+>(function AppSidebarItem({ variant = "link", item, className }, ref) {
   if (!item) return null;
 
   const { icon, isActive, label, href, onClick, disabled, showLabel = true } = item;
@@ -139,24 +166,39 @@ function AppSidebarItem({ variant = "link", item }: AppSidebarItemProps) {
   );
 
   if (variant === "link") {
-    return <AppSidebarLinkItem href={href}>{commonItems}</AppSidebarLinkItem>;
+    return (
+      <AppSidebarLinkItem href={href} ref={ref as React.Ref<HTMLAnchorElement>} className={className}>
+        {commonItems}
+      </AppSidebarLinkItem>
+    );
+  }
+
+  if (variant === "plain") {
+    return <AppSidebarPlainItem className={className}>{commonItems}</AppSidebarPlainItem>;
   }
 
   return (
-    <AppSidebarButtonItem onClick={onClick} disabled={disabled}>
+    <AppSidebarButtonItem
+      onClick={onClick}
+      disabled={disabled}
+      ref={ref as React.Ref<HTMLButtonElement>}
+      className={className}
+    >
       {commonItems}
     </AppSidebarButtonItem>
   );
-}
+});
 
 // ============================================================================
 // COMPOUND COMPONENT ASSIGNMENT
 // ============================================================================
 
+const AppSidebarItem = AppSidebarItemBase as AppSidebarItemComponent;
 AppSidebarItem.Label = AppSidebarItemLabel;
 AppSidebarItem.Icon = AppSidebarItemIcon;
 AppSidebarItem.Link = AppSidebarLinkItem;
 AppSidebarItem.Button = AppSidebarButtonItem;
+AppSidebarItem.Plain = AppSidebarPlainItem;
 
 export { AppSidebarItem };
 export type { AppSidebarItemData, AppSidebarItemProps };
