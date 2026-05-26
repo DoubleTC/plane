@@ -29,15 +29,13 @@ import { Logo } from "@plane/propel/emoji-icon-picker";
 import type { IProject } from "@plane/types";
 import { cn } from "@plane/utils";
 // local imports
-import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
-import { ProjectStatePicker } from "./state-picker";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const SIDEBAR_WIDTH = 360; // px
 const HEADER_HEIGHT = 48; // px — two-row (month + week/day)
-const ROW_HEIGHT = 56; // px per project row
-const BAR_HEIGHT = 28; // px for the Gantt bar
+const ROW_HEIGHT = 44; // px per project row (h-11)
+const BAR_HEIGHT = 24; // px for the Gantt bar
 const BAR_V_OFFSET = (ROW_HEIGHT - BAR_HEIGHT) / 2; // center bar vertically in row
 
 type TZoomLevel = "week" | "month" | "quarter";
@@ -122,39 +120,46 @@ function buildMonthBlocks(days: Date[]): MonthBlock[] {
 
 // ── Subcomponents ─────────────────────────────────────────────────────────────
 
-type SidebarRowProps = {
-  project: IProject;
-  projectStatesEnabled: boolean;
-};
-
-const SidebarRow = observer(function SidebarRow({ project, projectStatesEnabled }: SidebarRowProps) {
+const SidebarRow = observer(function SidebarRow({ project }: { project: IProject }) {
+  const { t } = useTranslation();
   const { workspaceSlug } = useParams();
   const isMemberOfProject = !!project.member_role;
 
+  // Inclusive day count (start day + end day both counted)
+  const duration =
+    project.start_date && project.end_date
+      ? differenceInDays(startOfDay(new Date(project.end_date)), startOfDay(new Date(project.start_date))) + 1
+      : null;
+
   return (
-    <div className="flex items-center gap-2 border-b border-subtle px-4" style={{ height: ROW_HEIGHT }}>
-      {/* Logo */}
-      <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-sm bg-layer-1">
-        <Logo logo={project.logo_props} size={12} />
+    <Link
+      href={isMemberOfProject ? `/${workspaceSlug}/projects/${project.id}/issues` : "#"}
+      draggable={false}
+      onClick={(e) => {
+        if (!isMemberOfProject) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      className="flex w-full justify-between border-b border-subtle px-4 text-13 text-primary hover:bg-layer-1"
+      style={{ height: ROW_HEIGHT }}
+    >
+      {/* Left: identifier + logo + name */}
+      <div className="relative flex h-full min-w-0 flex-1 items-center gap-2">
+        <div className="w-[40px] flex-shrink-0 text-11 text-tertiary">{project.identifier}</div>
+        <div className="flex h-4 w-4 flex-shrink-0 items-center justify-center">
+          <Logo logo={project.logo_props} size={14} />
+        </div>
+        <span className="max-w-[150px] truncate text-13 font-medium">{project.name}</span>
       </div>
 
-      {/* Name */}
-      <Link
-        href={isMemberOfProject ? `/${workspaceSlug}/projects/${project.id}/issues` : "#"}
-        onClick={(e) => {
-          if (!isMemberOfProject) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }}
-        className="flex-1 truncate text-13 font-medium text-primary hover:underline"
-      >
-        {project.name}
-      </Link>
-
-      {/* State picker */}
-      {projectStatesEnabled && <ProjectStatePicker project={project} />}
-    </div>
+      {/* Right: duration */}
+      {duration !== null && (
+        <div className="ml-2 flex flex-shrink-0 items-center text-13 font-medium text-secondary">
+          {t("workspace_projects.common.days_count", { days: duration })}
+        </div>
+      )}
+    </Link>
   );
 });
 
@@ -172,13 +177,10 @@ type Props = {
  */
 export const ProjectTimelineView = observer(function ProjectTimelineView({ projectIds, getProjectById }: Props) {
   const { t } = useTranslation();
-  const { currentWorkspace } = useWorkspace();
   const { getStateById } = useWorkspaceProjectState();
 
   const [zoom, setZoom] = useState<TZoomLevel>("month");
   const calendarRef = useRef<HTMLDivElement>(null);
-
-  const projectStatesEnabled = !!currentWorkspace?.project_states_enabled;
 
   const projects = projectIds.map((id) => getProjectById(id)).filter((p): p is IProject => !!p);
 
@@ -247,15 +249,16 @@ export const ProjectTimelineView = observer(function ProjectTimelineView({ proje
         >
           {/* Sidebar header (matches calendar header height) */}
           <div
-            className="sticky top-0 z-10 flex flex-shrink-0 items-end border-b border-subtle bg-layer-1 px-4 pb-2 text-13 font-medium text-secondary"
-            style={{ height: HEADER_HEIGHT }}
+            className="sticky top-0 z-10 flex flex-shrink-0 items-end justify-between gap-2 border-b border-subtle bg-layer-1 px-4 pb-2 text-13 font-medium text-secondary"
+            style={{ height: HEADER_HEIGHT, textTransform: "capitalize" }}
           >
-            {t("workspace_projects.label", { count: 2 })}
+            <span>{t("workspace_projects.label", { count: 2 })}</span>
+            <span className="flex-shrink-0 text-tertiary">{t("workspace_projects.timeline.duration")}</span>
           </div>
 
           {/* Project rows */}
           {projects.map((project) => (
-            <SidebarRow key={project.id} project={project} projectStatesEnabled={projectStatesEnabled} />
+            <SidebarRow key={project.id} project={project} />
           ))}
 
           {projects.length === 0 && (

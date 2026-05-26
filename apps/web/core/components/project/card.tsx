@@ -203,6 +203,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
           }}
           data-prevent-progress={!isMemberOfProject || isArchived}
           className="group/project-card flex w-full flex-col justify-between hover:cursor-pointer"
+          draggable={false}
         >
           {/* ── Top: cover image + action buttons + name strip ── */}
           <div>
@@ -214,6 +215,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
                     src={project.cover_image_url}
                     alt={project.name}
                     className="relative h-[120px] w-full rounded-t object-cover"
+                    draggable={false}
                   />
                   {/* Gradient — only on hover */}
                   <div className="absolute inset-0 z-[1] hidden rounded-sm bg-gradient-to-t from-transparent to-black/60 group-hover/project-card:flex" />
@@ -351,7 +353,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
               <>
                 <button
                   type="button"
-                  className="flex items-center gap-1 text-11 text-placeholder hover:text-secondary"
+                  className="flex h-5 items-center gap-1 text-11 text-placeholder hover:text-secondary"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -363,7 +365,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
                 </button>
                 <button
                   type="button"
-                  className="flex items-center justify-center text-11 text-placeholder hover:text-secondary"
+                  className="flex h-5 items-center justify-center text-11 text-placeholder hover:text-secondary"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -377,7 +379,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
 
             {/* Member/joined indicator for non-archived */}
             {!isArchived && isMemberOfProject && !(hasAdminRole || hasMemberRole) && (
-              <span className="flex items-center gap-1 text-13 text-placeholder">
+              <span className="flex h-5 items-center gap-1 text-13 text-placeholder">
                 <span className="h-3.5 w-3.5">✓</span>
                 {t("workspace_projects.member.joined")}
               </span>
@@ -398,7 +400,7 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
             {!isArchived && !isMemberOfProject && (
               <button
                 type="button"
-                className="ml-auto text-13 font-semibold text-accent-primary hover:text-accent-primary/90"
+                className="ml-auto flex h-5 items-center text-13 font-semibold text-accent-primary hover:text-accent-primary/90"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

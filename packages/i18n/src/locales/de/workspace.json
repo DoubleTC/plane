@@ -243,7 +243,8 @@
       "quarter": "Quarter",
       "today": "Today",
       "fullscreen": "Fullscreen",
-      "no_projects": "No projects to display"
+      "no_projects": "No projects to display",
+      "duration": "Dauer"
     },
     "archived": {
       "restore": "Restore"

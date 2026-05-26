@@ -135,7 +135,8 @@ export const ProjectLeadPicker = observer(function ProjectLeadPicker({ project, 
           side="bottom"
           align="start"
           sideOffset={6}
-          className="shadow-lg z-20 min-w-48 overflow-hidden rounded-md border border-subtle bg-layer-2 py-2.5 whitespace-nowrap"
+          positionerClassName="z-[99999]"
+          className="shadow-lg min-w-48 overflow-hidden rounded-md border border-subtle bg-layer-2 py-2.5 whitespace-nowrap"
         >
           {/* Search bar */}
           <div className="mx-2 mb-2 flex items-center gap-1.5 rounded-sm border border-subtle px-2">

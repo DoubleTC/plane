@@ -60,7 +60,10 @@
       "WebFetch(domain:media.docs.plane.so)",
       "Bash(npx skills *)",
       "WebFetch(domain:i.ibb.co)",
-      "Bash(grep -v \"^--$\")"
+      "Bash(grep -v \"^--$\")",
+      "Bash(node\" | tail -10)",
+      "Bash(grep -v \"^$\\\\|Warning\\\\|MODULE_TYPELESS\\\\|Reparsing\\\\|To eliminate\\\\|Use `node\" | tail -10)",
+      "Bash(grep -v \"^$\\\\|Warning\\\\|MODULE_TYPELESS\\\\|Reparsing\\\\|To eliminate\\\\|Use \\\\`node\")"
     ]
   }
 }

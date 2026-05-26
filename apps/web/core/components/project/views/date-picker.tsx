@@ -146,7 +146,8 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
           side="bottom"
           align="start"
           sideOffset={6}
-          className="shadow-lg z-20 overflow-hidden rounded-md border border-subtle bg-layer-2"
+          positionerClassName="z-[99999]"
+          className="shadow-lg overflow-hidden rounded-md border border-subtle bg-layer-2"
         >
           <Calendar
             mode="range"
