@@ -19,21 +19,38 @@ import { cn, renderFormattedDate } from "@plane/utils";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserProfile } from "@/hooks/store/user";
 
+const toDate = (v: string | Date | null | undefined): Date | undefined =>
+  v ? (v instanceof Date ? v : new Date(v)) : undefined;
+
 type Props = {
-  project: IProject;
+  /** Managed mode: provide a project. Selecting a range patches start/end on the project. */
+  project?: IProject;
+  /** Controlled mode: current start date (YYYY-MM-DD string or Date or null). */
+  startDate?: string | Date | null;
+  /** Controlled mode: current end date. */
+  endDate?: string | Date | null;
+  /** Controlled mode: called when both ends of a valid range are picked. */
+  onChange?: (start: string | null, end: string | null) => void;
   className?: string;
 };
 
 /**
- * Compact date-range picker for the project card.
+ * Compact date-range picker for the project card and create form.
  * Opens a Popover containing a react-day-picker Calendar in range mode.
- * Selecting both start and end dates immediately saves them to the project.
- * The X button clears both dates.
  *
- * Must be rendered inside a propagation-stopping context (data-prevent-progress
- * + outer onClick) because ProjectCard is a <Link>.
+ * - Managed mode (pass `project`): selecting a complete range patches the project.
+ * - Controlled mode (pass `startDate`+`endDate`+`onChange`): selecting emits the
+ *   ISO-date strings (YYYY-MM-DD) to the parent. Used by the project-create form.
+ *
+ * The X button clears both dates in either mode.
  */
-export const ProjectDatePicker = observer(function ProjectDatePicker({ project, className }: Props) {
+export const ProjectDatePicker = observer(function ProjectDatePicker({
+  project,
+  startDate: startDateProp,
+  endDate: endDateProp,
+  onChange,
+  className,
+}: Props) {
   const { t } = useTranslation();
   const { workspaceSlug } = useParams();
 
@@ -50,9 +67,14 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
 
   // ── Derived values ────────────────────────────────────────────────────────────
 
-  const startDate = project.start_date ? new Date(project.start_date) : undefined;
-  const endDate = project.end_date ? new Date(project.end_date) : undefined;
-  const hasRange = !!(project.start_date || project.end_date);
+  const rawStart = project ? project.start_date : startDateProp;
+  const rawEnd = project ? project.end_date : endDateProp;
+  const startDate = toDate(rawStart);
+  const endDate = toDate(rawEnd);
+  const hasRange = !!(rawStart || rawEnd);
+
+  // Format for trigger label: prefer ISO string-formatting helper, but accept Date too
+  const formatForLabel = (v: string | Date | null | undefined): string => (v ? (renderFormattedDate(v) ?? "—") : "—");
 
   // ── Handlers ─────────────────────────────────────────────────────────────────
 
@@ -65,7 +87,6 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
   };
 
   const handleRangeSelect = async (selected: DateRange | undefined) => {
-    if (!workspaceSlug || !project.id) return;
     setRange(selected);
 
     // Auto-save only when a genuine range (two DIFFERENT days) is complete.
@@ -74,26 +95,38 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
     const { from, to } = selected ?? {};
     if (from && to && from.getTime() !== to.getTime()) {
       setOpen(false);
-      try {
-        await updateProject(workspaceSlug.toString(), project.id, {
-          start_date: from.toISOString().split("T")[0],
-          end_date: to.toISOString().split("T")[0],
-        });
-      } catch {
-        // updateProject surfaces its own error toast
+      const startStr = from.toISOString().split("T")[0];
+      const endStr = to.toISOString().split("T")[0];
+
+      if (project) {
+        if (!workspaceSlug || !project.id) return;
+        try {
+          await updateProject(workspaceSlug.toString(), project.id, {
+            start_date: startStr,
+            end_date: endStr,
+          });
+        } catch {
+          // updateProject surfaces its own error toast
+        }
+        return;
       }
+      onChange?.(startStr, endStr);
     }
   };
 
   const handleClearDates = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!workspaceSlug || !project.id) return;
-    try {
-      await updateProject(workspaceSlug.toString(), project.id, { start_date: null, end_date: null });
-    } catch {
-      // updateProject surfaces its own error toast
+    if (project) {
+      if (!workspaceSlug || !project.id) return;
+      try {
+        await updateProject(workspaceSlug.toString(), project.id, { start_date: null, end_date: null });
+      } catch {
+        // updateProject surfaces its own error toast
+      }
+      return;
     }
+    onChange?.(null, null);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────────
@@ -126,9 +159,9 @@ export const ProjectDatePicker = observer(function ProjectDatePicker({ project, 
           {hasRange ? (
             <>
               <span className="truncate">
-                {project.start_date ? renderFormattedDate(project.start_date) : "—"}
+                {formatForLabel(rawStart)}
                 {" - "}
-                {project.end_date ? renderFormattedDate(project.end_date) : "—"}
+                {formatForLabel(rawEnd)}
               </span>
               {/* Clear button — separate from the Popover trigger */}
               {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}

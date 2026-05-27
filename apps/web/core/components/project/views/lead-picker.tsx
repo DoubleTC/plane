@@ -19,19 +19,37 @@ import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 
 type Props = {
-  project: IProject;
+  /** Managed mode: provide a project. Selecting patches the project's `project_lead`. */
+  project?: IProject;
+  /** Controlled mode: current lead user id. */
+  value?: string | null;
+  /** Controlled mode: called on select. */
+  onChange?: (userId: string | null) => void;
+  /** Override the candidate member list. Defaults to `project.members` when in managed mode. */
+  memberIds?: string[];
   className?: string;
 };
 
 /**
- * Compact lead-picker button for the project card.
- * Opens a Popover listing all project members (minus guests) so the user
- * can set or clear the project lead without leaving the listing page.
+ * Compact lead-picker button for the project card and create form.
+ * Opens a Popover listing candidate members so the user can set or clear the lead.
  *
- * Must be rendered inside a propagation-stopping context (data-prevent-progress
- * + outer onClick) because ProjectCard is a <Link>.
+ * - Managed mode (pass `project`): selecting patches the project's `project_lead`.
+ *   Candidate list defaults to `project.members`.
+ * - Controlled mode (pass `value`+`onChange`): selecting emits to the parent —
+ *   used by the project-create form. Pass `memberIds` to supply workspace members
+ *   as candidates (no project exists yet).
+ *
+ * When used inside a `<Link>` (e.g. project card), must be rendered inside a
+ * propagation-stopping context — this component handles that internally.
  */
-export const ProjectLeadPicker = observer(function ProjectLeadPicker({ project, className }: Props) {
+export const ProjectLeadPicker = observer(function ProjectLeadPicker({
+  project,
+  value,
+  onChange,
+  memberIds: memberIdsProp,
+  className,
+}: Props) {
   const { t } = useTranslation();
   const { workspaceSlug } = useParams();
 
@@ -42,14 +60,18 @@ export const ProjectLeadPicker = observer(function ProjectLeadPicker({ project, 
   const { updateProject } = useProject();
   const { getUserDetails } = useMember();
 
-  // Resolve the current lead to a display object
-  const projectLead =
-    typeof project.project_lead === "string"
-      ? getUserDetails(project.project_lead)
-      : (project.project_lead ?? undefined);
+  // Resolve the current lead user id (managed: from project; controlled: from value)
+  const currentLeadId = project
+    ? typeof project.project_lead === "string"
+      ? project.project_lead
+      : (project.project_lead?.id ?? null)
+    : (value ?? null);
 
-  // Build the selectable member list from project.members (array of user IDs)
-  const memberIds = project.members ?? [];
+  // Resolve the current lead to a display object
+  const projectLead = currentLeadId ? getUserDetails(currentLeadId) : undefined;
+
+  // Build the selectable member list (explicit prop > project.members > [])
+  const memberIds = memberIdsProp ?? project?.members ?? [];
   const memberOptions = memberIds
     .map((id) => getUserDetails(id))
     .filter((u): u is NonNullable<ReturnType<typeof getUserDetails>> => !!u);
@@ -76,17 +98,19 @@ export const ProjectLeadPicker = observer(function ProjectLeadPicker({ project, 
   // ── Selection handler ─────────────────────────────────────────────────────────
 
   const handleSelectLead = async (userId: string | null) => {
-    if (!workspaceSlug || !project.id) return;
     setOpen(false);
     setSearch("");
-    try {
-      await updateProject(workspaceSlug.toString(), project.id, { project_lead: userId });
-    } catch {
-      // updateProject shows its own error toast on failure
+    if (project) {
+      if (!workspaceSlug || !project.id) return;
+      try {
+        await updateProject(workspaceSlug.toString(), project.id, { project_lead: userId });
+      } catch {
+        // updateProject shows its own error toast on failure
+      }
+      return;
     }
+    onChange?.(userId);
   };
-
-  const currentLeadId = typeof project.project_lead === "string" ? project.project_lead : project.project_lead?.id;
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions

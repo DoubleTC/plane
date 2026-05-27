@@ -19,19 +19,27 @@ import { useProject } from "@/hooks/store/use-project";
 import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
 
 type Props = {
-  project: IProject;
+  /** Managed mode: provide a project. Selecting a state auto-patches the project. */
+  project?: IProject;
+  /** Controlled mode: current state id (used when `project` is not provided). */
+  value?: string | null;
+  /** Controlled mode: called on select. Only one of `project` / (`value`+`onChange`) is needed. */
+  onChange?: (stateId: string | null) => void;
   className?: string;
 };
 
 /**
- * A compact state-picker button that renders the project's current workspace state.
+ * A compact state-picker button that renders the current workspace state.
  * Clicking it opens a popover with a search box and a list of all workspace states;
- * the active state is marked with a checkmark. Selecting one patches the project.
+ * the active state is marked with a checkmark.
+ *
+ * - Managed mode (pass `project`): selecting patches the project via `updateProject`.
+ * - Controlled mode (pass `value`+`onChange`): selecting emits the id to the parent —
+ *   used by the project-create form where no project exists yet.
  *
  * Used in all four project view modes whenever `project_states_enabled` is ON.
- * Must be rendered inside a context that stops link navigation.
  */
-export const ProjectStatePicker = observer(function ProjectStatePicker({ project, className }: Props) {
+export const ProjectStatePicker = observer(function ProjectStatePicker({ project, value, onChange, className }: Props) {
   const { t } = useTranslation();
   const { workspaceSlug } = useParams();
 
@@ -42,7 +50,8 @@ export const ProjectStatePicker = observer(function ProjectStatePicker({ project
   const { updateProject } = useProject();
   const { getStatesByWorkspace, getStateById } = useWorkspaceProjectState();
 
-  const currentState = project.project_status ? getStateById(project.project_status) : undefined;
+  const currentStateId = project ? project.project_status : value;
+  const currentState = currentStateId ? getStateById(currentStateId) : undefined;
   const workspaceStates = workspaceSlug ? getStatesByWorkspace(workspaceSlug.toString()) : [];
 
   const filteredStates = search.trim()
@@ -65,15 +74,19 @@ export const ProjectStatePicker = observer(function ProjectStatePicker({ project
   }, [open]);
 
   const handleSelectState = async (stateId: string) => {
-    if (!workspaceSlug || !project.id) return;
     // Close the panel immediately so the UI feels snappy
     setOpen(false);
     setSearch("");
-    try {
-      await updateProject(workspaceSlug.toString(), project.id, { project_status: stateId });
-    } catch {
-      // silently ignore — updateProject shows its own error toast
+    if (project) {
+      if (!workspaceSlug || !project.id) return;
+      try {
+        await updateProject(workspaceSlug.toString(), project.id, { project_status: stateId });
+      } catch {
+        // silently ignore — updateProject shows its own error toast
+      }
+      return;
     }
+    onChange?.(stateId);
   };
 
   return (
@@ -146,7 +159,7 @@ export const ProjectStatePicker = observer(function ProjectStatePicker({ project
                     <span className="max-w-[100px] flex-grow truncate">{state.name}</span>
                   </span>
                 </span>
-                {project.project_status === state.id && <Check className="size-3.5 shrink-0" />}
+                {currentStateId === state.id && <Check className="size-3.5 shrink-0" />}
               </button>
             ))}
 
