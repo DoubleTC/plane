@@ -15,7 +15,7 @@ import { CustomMenu } from "@plane/ui";
 import { cn } from "@plane/utils";
 
 type Props = {
-  ref: React.MutableRefObject<HTMLDivElement | null>;
+  menuRef: React.MutableRefObject<HTMLDivElement | null>;
   isMenuActive: boolean;
   favorite: IFavorite;
   onChange: (value: boolean) => void;
@@ -23,14 +23,14 @@ type Props = {
 };
 
 export const FavoriteItemQuickAction = observer(function FavoriteItemQuickAction(props: Props) {
-  const { ref, isMenuActive, onChange, handleRemoveFromFavorites, favorite } = props;
+  const { menuRef, isMenuActive, onChange, handleRemoveFromFavorites, favorite } = props;
   // translation
   const { t } = useTranslation();
 
   return (
     <CustomMenu
       customButton={
-        <span ref={ref} className="grid place-items-center rounded-sm p-0.5 text-placeholder hover:bg-layer-1">
+        <span ref={menuRef} className="grid place-items-center rounded-sm p-0.5 text-placeholder hover:bg-layer-1">
           <MoreHorizontal className="size-4" />
         </span>
       }

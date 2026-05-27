@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import { Archive, ExternalLink, Link, Milestone, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { IconButton } from "@plane/propel/icon-button";
+import { getIconButtonStyling } from "@plane/propel/icon-button";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TContextMenuItem } from "@plane/ui";
 import { ContextMenu, CustomMenu } from "@plane/ui";
@@ -148,7 +148,8 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
       </div>
       <ContextMenu parentRef={parentRef} items={MENU_ITEMS} />
       <CustomMenu
-        customButton={<IconButton variant="tertiary" size="lg" icon={MoreHorizontal} />}
+        customButton={<MoreHorizontal className="size-4" />}
+        customButtonClassName={getIconButtonStyling("tertiary", "lg")}
         placement="bottom-end"
         closeOnSelect
       >

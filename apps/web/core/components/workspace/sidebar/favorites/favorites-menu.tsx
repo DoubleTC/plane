@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
   DragLocationHistory,
@@ -257,7 +257,7 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
                 orderBy(Object.values(groupedFavorites), "sequence", "desc")
                   .filter((fav) => !fav.parent)
                   .map((fav, index, { length }) => (
-                    <>
+                    <Fragment key={fav.id}>
                       {fav?.is_folder ? (
                         <FavoriteFolder
                           favorite={fav}
@@ -276,7 +276,7 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
                           handleDrop={handleDrop}
                         />
                       )}
-                    </>
+                    </Fragment>
                   ))
               )}
             </Disclosure.Panel>

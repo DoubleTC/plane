@@ -9,7 +9,7 @@ import { observer } from "mobx-react";
 import { MoreHorizontal } from "lucide-react";
 // types
 import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { IconButton } from "@plane/propel/icon-button";
+import { getIconButtonStyling } from "@plane/propel/icon-button";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { IProjectView } from "@plane/types";
 // ui
@@ -52,13 +52,13 @@ export const ViewQuickActions = observer(function ViewQuickActions(props: Props)
 
   const viewLink = `${workspaceSlug}/projects/${projectId}/views/${view.id}`;
   const handleCopyText = () =>
-    copyUrlToClipboard(viewLink).then(() => {
+    copyUrlToClipboard(viewLink).then(() =>
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: "Link Copied!",
         message: "View link copied to clipboard.",
-      });
-    });
+      })
+    );
   const handleOpenInNewTab = () => window.open(`/${viewLink}`, "_blank");
 
   const menuResult = useViewMenuItems({
@@ -102,7 +102,8 @@ export const ViewQuickActions = observer(function ViewQuickActions(props: Props)
       {additionalModals}
       <ContextMenu parentRef={parentRef} items={CONTEXT_MENU_ITEMS} />
       <CustomMenu
-        customButton={<IconButton variant="tertiary" size="lg" icon={MoreHorizontal} />}
+        customButton={<MoreHorizontal className="size-4" />}
+        customButtonClassName={getIconButtonStyling("tertiary", "lg")}
         placement="bottom-end"
         closeOnSelect
         buttonClassName={customClassName}

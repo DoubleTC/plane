@@ -88,13 +88,13 @@ export const ExtendedSidebarItem = observer(function ExtendedSidebarItem(props: 
         element,
         canDrop: ({ source }) =>
           !disableDrop && source?.data?.id !== item.key && source?.data?.dragInstanceId === "NAVIGATION",
-        getData: ({ input, element }) => {
-          const data = { id: item.key };
+        getData: ({ input, element: dropElement }) => {
+          const dropData = { id: item.key };
 
           // attach instruction for last in list
-          return attachInstruction(data, {
+          return attachInstruction(dropData, {
             input,
-            element,
+            element: dropElement,
             currentLevel: 0,
             indentPerLevel: 0,
             mode: isLastChild ? "last-in-group" : "standard",
@@ -176,19 +176,16 @@ export const ExtendedSidebarItem = observer(function ExtendedSidebarItem(props: 
             position="top-start"
             disabled={isDragging}
           >
-            <button
-              type="button"
+            <DragHandle
+              ref={dragHandleRef}
               className={cn(
-                "absolute top-1/2 -left-3 flex -translate-y-1/2 cursor-grab items-center justify-center rounded text-placeholder opacity-0 group-hover/project-item:opacity-100",
+                "absolute top-1/2 -left-3 bg-transparent text-placeholder opacity-0 group-hover/project-item:opacity-100",
                 {
                   "cursor-grabbing": isDragging,
                   "opacity-100": isDragging,
                 }
               )}
-              ref={dragHandleRef}
-            >
-              <DragHandle className="bg-transparent" />
-            </button>
+            />
           </Tooltip>
         )}
         <SidebarNavItem isActive={isActive}>

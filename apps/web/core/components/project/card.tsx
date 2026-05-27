@@ -235,15 +235,8 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
                   >
                     {/* 3-dot context menu */}
                     <CustomMenu
-                      customButton={
-                        <button
-                          type="button"
-                          className="my-auto grid place-items-center rounded-sm p-0.5 text-on-color"
-                        >
-                          <MoreHorizontal className="size-4" />
-                        </button>
-                      }
-                      customButtonClassName="flex justify-center items-center opacity-0 z-[10] pointer-events-none flex-shrink-0 group-hover/project-card:opacity-100 group-hover/project-card:pointer-events-auto my-auto bg-white/30 rounded-sm h-6 w-6"
+                      customButton={<MoreHorizontal className="size-4" />}
+                      customButtonClassName="flex justify-center items-center opacity-0 z-[10] pointer-events-none flex-shrink-0 group-hover/project-card:opacity-100 group-hover/project-card:pointer-events-auto my-auto bg-white/30 rounded-sm h-6 w-6 text-on-color"
                       placement="bottom-end"
                       closeOnSelect
                     >

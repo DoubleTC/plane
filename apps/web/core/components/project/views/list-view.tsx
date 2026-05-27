@@ -341,14 +341,8 @@ const ProjectListRow = observer(function ProjectListRow({ project, projectStates
               }}
             >
               <CustomMenu
-                customButton={
-                  <button
-                    type="button"
-                    className="grid h-5 w-6 place-items-center rounded-sm text-secondary hover:bg-layer-1"
-                  >
-                    <MoreHorizontal className="size-4" />
-                  </button>
-                }
+                customButton={<MoreHorizontal className="size-4" />}
+                customButtonClassName="grid h-5 w-6 place-items-center rounded-sm text-secondary hover:bg-layer-1"
                 placement="bottom-end"
                 closeOnSelect
               >

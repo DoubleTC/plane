@@ -87,7 +87,6 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
   const isProjectListOpen = getIsProjectListOpen(projectId);
   const [instruction, setInstruction] = useState<"DRAG_OVER" | "DRAG_BELOW" | undefined>(undefined);
   // refs
-  const actionSectionRef = useRef<HTMLButtonElement | null>(null);
   const projectRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement | null>(null);
   // router
@@ -177,13 +176,13 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
         element,
         canDrop: ({ source }) =>
           !disableDrop && source?.data?.id !== projectId && source?.data?.dragInstanceId === "PROJECTS",
-        getData: ({ input, element }) => {
-          const data = { id: projectId };
+        getData: ({ input, element: dropElement }) => {
+          const dropData = { id: projectId };
 
           // attach instruction for last in list
-          return attachInstruction(data, {
+          return attachInstruction(dropData, {
             input,
-            element,
+            element: dropElement,
             currentLevel: 0,
             indentPerLevel: 0,
             mode: isLastChild ? "last-in-group" : "standard",
@@ -222,6 +221,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
         },
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, isLastChild, projectListType, handleOnProjectDrop]);
 
   useEffect(() => {
@@ -229,7 +229,6 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
     else toggleAnySidebarDropdown(false);
   }, [isMenuActive, toggleAnySidebarDropdown]);
 
-  useOutsideClickDetector(actionSectionRef, () => setIsMenuActive(false));
   useOutsideClickDetector(projectRef, () => projectRef?.current?.classList?.remove(HIGHLIGHT_CLASS));
 
   useEffect(() => {
@@ -308,20 +307,17 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
                 position="top-end"
                 disabled={isDragging}
               >
-                <button
-                  type="button"
+                <DragHandle
+                  ref={dragHandleRef}
                   className={cn(
-                    "absolute top-1/2 -left-3 hidden -translate-y-1/2 cursor-grab items-center justify-center rounded-sm text-placeholder group-hover/project-item:flex",
+                    "absolute top-1/2 -left-3 hidden -translate-y-1/2 bg-transparent text-placeholder group-hover/project-item:flex",
                     {
                       "cursor-not-allowed opacity-60": project.sort_order === null,
                       "cursor-grabbing": isDragging,
                       flex: isMenuActive || renderInExtendedSidebar,
                     }
                   )}
-                  ref={dragHandleRef}
-                >
-                  <DragHandle className="bg-transparent" />
-                </button>
+                />
               </Tooltip>
             )}
             <>
@@ -353,23 +349,15 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
               </ControlLink>
               <div className="flex items-center gap-1">
                 <CustomMenu
-                  customButton={
-                    <IconButton
-                      ref={actionSectionRef}
-                      variant="ghost"
-                      size="sm"
-                      icon={MoreHorizontal}
-                      onClick={() => setIsMenuActive(!isMenuActive)}
-                      className="text-placeholder"
-                    />
-                  }
+                  customButton={<MoreHorizontal className="size-3.5" />}
+                  menuButtonOnClick={() => setIsMenuActive(!isMenuActive)}
                   className={cn(
                     "pointer-events-none flex-shrink-0 opacity-0 group-hover/project-item:pointer-events-auto group-hover/project-item:opacity-100",
                     {
                       "pointer-events-auto opacity-100": isMenuActive,
                     }
                   )}
-                  customButtonClassName="grid place-items-center"
+                  customButtonClassName="inline-flex aspect-square size-5 items-center justify-center rounded-sm bg-layer-transparent text-placeholder transition-colors hover:bg-layer-transparent-hover"
                   placement="bottom-start"
                   ariaLabel={t("aria_labels.projects_sidebar.toggle_quick_actions_menu")}
                   useCaptureForOutsideClick
