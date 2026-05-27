@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "백로그",
+    "unstarted": "시작 안 함",
+    "started": "시작됨",
+    "cancelled": "취소됨",
+    "phases": "단계"
   },
   "chart": {
     "x_axis": "X축",
@@ -867,5 +872,11 @@
       "description": "작업 항목을 JSON 파일로 내보냅니다.",
       "short_description": "JSON으로 내보내기"
     }
+  },
+  "overview": {
+    "no_modules": "아직 모듈이 없습니다.",
+    "no_phases": "아직 단계가 없습니다.",
+    "completion_summary": "{completed}/{total}개 작업 완료 ({percent}%)",
+    "cycle_completion_summary": "{completed}/{total} 사이클 완료 ({percent}%)"
   }
 }

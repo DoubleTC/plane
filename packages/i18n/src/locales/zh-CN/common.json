@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "待办",
+    "unstarted": "未开始",
+    "started": "进行中",
+    "cancelled": "已取消",
+    "phases": "阶段"
   },
   "chart": {
     "x_axis": "X轴",
@@ -867,5 +872,11 @@
       "description": "将工作项导出为 JSON 文件。",
       "short_description": "导出为 JSON"
     }
+  },
+  "overview": {
+    "no_modules": "暂无模块。",
+    "no_phases": "暂无阶段。",
+    "completion_summary": "已完成 {completed}/{total} 项工作 ({percent}%)",
+    "cycle_completion_summary": "已完成 {completed}/{total} 个周期 ({percent}%)"
   }
 }

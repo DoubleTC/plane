@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Бэклог",
+    "unstarted": "Не начато",
+    "started": "Начато",
+    "cancelled": "Отменено",
+    "phases": "Фазы"
   },
   "chart": {
     "x_axis": "Ось X",
@@ -867,5 +872,11 @@
       "description": "Экспорт рабочих элементов в JSON-файл.",
       "short_description": "Экспорт в json"
     }
+  },
+  "overview": {
+    "no_modules": "Модулей пока нет.",
+    "no_phases": "Фаз пока нет.",
+    "completion_summary": "Выполнено {completed}/{total} задач ({percent}%)",
+    "cycle_completion_summary": "Выполнено {completed}/{total} циклов ({percent}%)"
   }
 }

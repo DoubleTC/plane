@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Nezačaté",
+    "started": "Začaté",
+    "cancelled": "Zrušené",
+    "phases": "Fázy"
   },
   "chart": {
     "x_axis": "Os X",
@@ -867,5 +872,11 @@
       "description": "Exportujte položky do JSON.",
       "short_description": "Exportovať ako JSON"
     }
+  },
+  "overview": {
+    "no_modules": "Zatiaľ žiadne moduly.",
+    "no_phases": "Zatiaľ žiadne fázy.",
+    "completion_summary": "Dokončené {completed}/{total} úlohy ({percent}%)",
+    "cycle_completion_summary": "Dokončené {completed}/{total} cykly ({percent}%)"
   }
 }

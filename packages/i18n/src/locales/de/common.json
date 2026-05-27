@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Nicht gestartet",
+    "started": "Gestartet",
+    "cancelled": "Abgebrochen",
+    "phases": "Phasen"
   },
   "chart": {
     "x_axis": "X-Achse",
@@ -867,5 +872,11 @@
       "description": "Arbeitselemente in JSON exportieren.",
       "short_description": "Als JSON exportieren"
     }
+  },
+  "overview": {
+    "no_modules": "Noch keine Module.",
+    "no_phases": "Noch keine Phasen.",
+    "completion_summary": "{completed}/{total} Aufgaben abgeschlossen ({percent}%)",
+    "cycle_completion_summary": "{completed}/{total} Zyklen abgeschlossen ({percent}%)"
   }
 }

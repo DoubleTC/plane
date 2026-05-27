@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Chưa bắt đầu",
+    "started": "Đang làm",
+    "cancelled": "Đã hủy",
+    "phases": "Giai đoạn"
   },
   "chart": {
     "x_axis": "Trục X",
@@ -867,5 +872,11 @@
       "description": "Xuất mục công việc thành tệp JSON.",
       "short_description": "Xuất sang JSON"
     }
+  },
+  "overview": {
+    "no_modules": "Chưa có module nào.",
+    "no_phases": "Chưa có giai đoạn nào.",
+    "completion_summary": "Đã hoàn thành {completed}/{total} công việc tương đương {percent}%",
+    "cycle_completion_summary": "Đã hoàn thành {completed}/{total} chu kỳ tương đương {percent}%"
   }
 }

@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "バックログ",
+    "unstarted": "未開始",
+    "started": "開始済み",
+    "cancelled": "キャンセル",
+    "phases": "フェーズ"
   },
   "chart": {
     "x_axis": "エックス アクシス",
@@ -867,5 +872,11 @@
       "description": "作業項目をJSONファイルにエクスポートします。",
       "short_description": "JSONとしてエクスポート"
     }
+  },
+  "overview": {
+    "no_modules": "モジュールはまだありません。",
+    "no_phases": "フェーズはまだありません。",
+    "completion_summary": "{completed}/{total} 件完了 ({percent}%)",
+    "cycle_completion_summary": "{completed}/{total} サイクル完了 ({percent}%)"
   }
 }

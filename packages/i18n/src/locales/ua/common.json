@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Беклог",
+    "unstarted": "Не розпочато",
+    "started": "Розпочато",
+    "cancelled": "Скасовано",
+    "phases": "Фази"
   },
   "chart": {
     "x_axis": "Вісь X",
@@ -867,5 +872,11 @@
       "description": "Експортуйте одиниці у формат JSON.",
       "short_description": "Експортувати як JSON"
     }
+  },
+  "overview": {
+    "no_modules": "Поки немає модулів.",
+    "no_phases": "Поки немає фаз.",
+    "completion_summary": "Виконано {completed}/{total} завдань ({percent}%)",
+    "cycle_completion_summary": "Виконано {completed}/{total} циклів ({percent}%)"
   }
 }

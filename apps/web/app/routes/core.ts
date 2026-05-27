@@ -194,6 +194,14 @@ export const coreRoutes: RouteConfigEntry[] = [
             ),
           ]),
 
+          // Project Overview
+          layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/overview/layout.tsx", [
+            route(
+              ":workspaceSlug/projects/:projectId/overview",
+              "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/overview/page.tsx"
+            ),
+          ]),
+
           // View Detail
           layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/views/(detail)/layout.tsx", [
             route(

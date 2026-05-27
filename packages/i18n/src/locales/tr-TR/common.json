@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Başlanmadı",
+    "started": "Başlatıldı",
+    "cancelled": "İptal edildi",
+    "phases": "Aşamalar"
   },
   "chart": {
     "x_axis": "X ekseni",
@@ -867,5 +872,11 @@
       "description": "İş öğelerini JSON dosyasına aktarın.",
       "short_description": "JSON olarak aktar"
     }
+  },
+  "overview": {
+    "no_modules": "Henüz modül yok.",
+    "no_phases": "Henüz aşama yok.",
+    "completion_summary": "{completed}/{total} iş öğesi tamamlandı ({percent}%)",
+    "cycle_completion_summary": "{completed}/{total} döngü tamamlandı ({percent}%)"
   }
 }

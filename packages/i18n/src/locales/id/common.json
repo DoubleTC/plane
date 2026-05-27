@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Belum dimulai",
+    "started": "Dimulai",
+    "cancelled": "Dibatalkan",
+    "phases": "Fase"
   },
   "chart": {
     "x_axis": "Sumbu-X",
@@ -867,5 +872,11 @@
       "description": "Ekspor item kerja ke file JSON.",
       "short_description": "Ekspor sebagai json"
     }
+  },
+  "overview": {
+    "no_modules": "Belum ada modul.",
+    "no_phases": "Belum ada fase.",
+    "completion_summary": "{completed}/{total} item selesai ({percent}%)",
+    "cycle_completion_summary": "{completed}/{total} siklus selesai ({percent}%)"
   }
 }

@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Neînceput",
+    "started": "Început",
+    "cancelled": "Anulat",
+    "phases": "Faze"
   },
   "chart": {
     "x_axis": "axa-X",
@@ -867,5 +872,11 @@
       "description": "Exportă activitățile într-un fișier JSON.",
       "short_description": "Exportă ca JSON"
     }
+  },
+  "overview": {
+    "no_modules": "Încă nu există module.",
+    "no_phases": "Încă nu există faze.",
+    "completion_summary": "{completed}/{total} elemente finalizate ({percent}%)",
+    "cycle_completion_summary": "{completed}/{total} cicluri finalizate ({percent}%)"
   }
 }

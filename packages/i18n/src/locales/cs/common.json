@@ -717,7 +717,12 @@
     "developer": "Developer",
     "work_structure": "Work structure",
     "execution": "Execution",
-    "administration": "Administration"
+    "administration": "Administration",
+    "backlog": "Backlog",
+    "unstarted": "Nezahájeno",
+    "started": "Zahájeno",
+    "cancelled": "Zrušeno",
+    "phases": "Fáze"
   },
   "chart": {
     "x_axis": "Osa X",
@@ -867,5 +872,11 @@
       "description": "Exportujte položky do JSON.",
       "short_description": "Exportovat jako JSON"
     }
+  },
+  "overview": {
+    "no_modules": "Zatím žádné moduly.",
+    "no_phases": "Zatím žádné fáze.",
+    "completion_summary": "Dokončeno {completed}/{total} úkolů ({percent}%)",
+    "cycle_completion_summary": "Dokončeno {completed}/{total} cyklů ({percent}%)"
   }
 }
