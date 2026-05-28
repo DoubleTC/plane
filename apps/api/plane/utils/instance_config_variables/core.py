@@ -144,6 +144,63 @@ gitea_config_variables = [
     },
 ]
 
+cenhomes_config_variables = [
+    {
+        "key": "IS_CENHOMES_ENABLED",
+        "value": os.environ.get("IS_CENHOMES_ENABLED", "0"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "CENHOMES_CLIENT_ID",
+        "value": os.environ.get("CENHOMES_CLIENT_ID"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "CENHOMES_CLIENT_SECRET",
+        "value": os.environ.get("CENHOMES_CLIENT_SECRET"),
+        "category": "CENHOMES",
+        "is_encrypted": True,
+    },
+    {
+        "key": "CENHOMES_AUTHORIZE_URL",
+        "value": os.environ.get("CENHOMES_AUTHORIZE_URL", "https://id.cenhomes.vn/connect/authorize"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "CENHOMES_TOKEN_URL",
+        "value": os.environ.get("CENHOMES_TOKEN_URL", "https://id.cenhomes.vn/connect/token"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "CENHOMES_USERINFO_URL",
+        "value": os.environ.get("CENHOMES_USERINFO_URL", "https://id.cenhomes.vn/connect/userinfo"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "CENHOMES_SCOPE",
+        "value": os.environ.get("CENHOMES_SCOPE", "openid profile email phone"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "CENHOMES_FALLBACK_EMAIL_DOMAIN",
+        "value": os.environ.get("CENHOMES_FALLBACK_EMAIL_DOMAIN", "pm.cenz.pro"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+    {
+        "key": "ENABLE_CENHOMES_SYNC",
+        "value": os.environ.get("ENABLE_CENHOMES_SYNC", "0"),
+        "category": "CENHOMES",
+        "is_encrypted": False,
+    },
+]
+
 smtp_config_variables = [
     {
         "key": "ENABLE_SMTP",
@@ -239,6 +296,7 @@ core_config_variables = [
     *github_config_variables,
     *gitlab_config_variables,
     *gitea_config_variables,
+    *cenhomes_config_variables,
     *smtp_config_variables,
     *llm_config_variables,
     *unsplash_config_variables,

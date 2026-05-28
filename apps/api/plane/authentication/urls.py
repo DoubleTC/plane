@@ -44,6 +44,10 @@ from .views import (
     GiteaOauthInitiateEndpoint,
     GiteaCallbackSpaceEndpoint,
     GiteaOauthInitiateSpaceEndpoint,
+    CenhomesCallbackEndpoint,
+    CenhomesOauthInitiateEndpoint,
+    CenhomesCallbackSpaceEndpoint,
+    CenhomesOauthInitiateSpaceEndpoint,
 )
 
 urlpatterns = [
@@ -149,5 +153,18 @@ urlpatterns = [
         "spaces/gitea/callback/",
         GiteaCallbackSpaceEndpoint.as_view(),
         name="space-gitea-callback",
+    ),
+    ## Cenhomes Oauth
+    path("cenhomes/", CenhomesOauthInitiateEndpoint.as_view(), name="cenhomes-initiate"),
+    path("cenhomes/callback/", CenhomesCallbackEndpoint.as_view(), name="cenhomes-callback"),
+    path(
+        "spaces/cenhomes/",
+        CenhomesOauthInitiateSpaceEndpoint.as_view(),
+        name="space-cenhomes-initiate",
+    ),
+    path(
+        "spaces/cenhomes/callback/",
+        CenhomesCallbackSpaceEndpoint.as_view(),
+        name="space-cenhomes-callback",
     ),
 ]

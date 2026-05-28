@@ -10,7 +10,8 @@ export type TCoreInstanceAuthenticationModeKeys =
   | "google"
   | "github"
   | "gitlab"
-  | "gitea";
+  | "gitea"
+  | "cenhomes";
 
 export type TInstanceAuthenticationModeKeys = TCoreInstanceAuthenticationModeKeys;
 
@@ -31,7 +32,8 @@ export type TInstanceAuthenticationMethodKeys =
   | "IS_GOOGLE_ENABLED"
   | "IS_GITHUB_ENABLED"
   | "IS_GITLAB_ENABLED"
-  | "IS_GITEA_ENABLED";
+  | "IS_GITEA_ENABLED"
+  | "IS_CENHOMES_ENABLED";
 
 export type TInstanceGoogleAuthenticationConfigurationKeys =
   | "GOOGLE_CLIENT_ID"
@@ -56,11 +58,22 @@ export type TInstanceGiteaAuthenticationConfigurationKeys =
   | "GITEA_CLIENT_SECRET"
   | "ENABLE_GITEA_SYNC";
 
+export type TInstanceCenhomesAuthenticationConfigurationKeys =
+  | "CENHOMES_CLIENT_ID"
+  | "CENHOMES_CLIENT_SECRET"
+  | "CENHOMES_AUTHORIZE_URL"
+  | "CENHOMES_TOKEN_URL"
+  | "CENHOMES_USERINFO_URL"
+  | "CENHOMES_SCOPE"
+  | "CENHOMES_FALLBACK_EMAIL_DOMAIN"
+  | "ENABLE_CENHOMES_SYNC";
+
 export type TInstanceAuthenticationConfigurationKeys =
   | TInstanceGoogleAuthenticationConfigurationKeys
   | TInstanceGithubAuthenticationConfigurationKeys
   | TInstanceGitlabAuthenticationConfigurationKeys
-  | TInstanceGiteaAuthenticationConfigurationKeys;
+  | TInstanceGiteaAuthenticationConfigurationKeys
+  | TInstanceCenhomesAuthenticationConfigurationKeys;
 
 export type TInstanceAuthenticationKeys = TInstanceAuthenticationMethodKeys | TInstanceAuthenticationConfigurationKeys;
 
@@ -83,4 +96,4 @@ export type TOAuthConfigs = {
   oAuthOptions: TOAuthOption[];
 };
 
-export type TCoreLoginMediums = "email" | "magic-code" | "github" | "gitlab" | "google" | "gitea";
+export type TCoreLoginMediums = "email" | "magic-code" | "github" | "gitlab" | "google" | "gitea" | "cenhomes";
