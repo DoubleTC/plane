@@ -877,6 +877,10 @@
     "no_modules": "Belum ada modul.",
     "no_phases": "Belum ada fase.",
     "completion_summary": "{completed}/{total} item selesai ({percent}%)",
-    "cycle_completion_summary": "{completed}/{total} siklus selesai ({percent}%)"
+    "cycle_completion_summary": "{completed}/{total} siklus selesai ({percent}%)",
+    "initiatives": "Inisiatif",
+    "add_initiative": "Tambah inisiatif",
+    "member_count": "{count} anggota",
+    "no_activity": "Belum ada aktivitas."
   }
 }

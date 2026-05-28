@@ -877,6 +877,10 @@
     "no_modules": "尚無模組。",
     "no_phases": "尚無階段。",
     "completion_summary": "已完成 {completed}/{total} 項工作 ({percent}%)",
-    "cycle_completion_summary": "已完成 {completed}/{total} 個週期 ({percent}%)"
+    "cycle_completion_summary": "已完成 {completed}/{total} 個週期 ({percent}%)",
+    "initiatives": "倡議",
+    "add_initiative": "新增倡議",
+    "member_count": "{count} 位成員",
+    "no_activity": "尚無活動。"
   }
 }

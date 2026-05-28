@@ -877,6 +877,10 @@
     "no_modules": "Încă nu există module.",
     "no_phases": "Încă nu există faze.",
     "completion_summary": "{completed}/{total} elemente finalizate ({percent}%)",
-    "cycle_completion_summary": "{completed}/{total} cicluri finalizate ({percent}%)"
+    "cycle_completion_summary": "{completed}/{total} cicluri finalizate ({percent}%)",
+    "initiatives": "Inițiative",
+    "add_initiative": "Adaugă inițiativă",
+    "member_count": "{count} membru(i)",
+    "no_activity": "Încă nu există activitate."
   }
 }

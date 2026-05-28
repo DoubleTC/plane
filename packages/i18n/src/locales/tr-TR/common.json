@@ -877,6 +877,10 @@
     "no_modules": "Henüz modül yok.",
     "no_phases": "Henüz aşama yok.",
     "completion_summary": "{completed}/{total} iş öğesi tamamlandı ({percent}%)",
-    "cycle_completion_summary": "{completed}/{total} döngü tamamlandı ({percent}%)"
+    "cycle_completion_summary": "{completed}/{total} döngü tamamlandı ({percent}%)",
+    "initiatives": "Girişimler",
+    "add_initiative": "Girişim ekle",
+    "member_count": "{count} üye",
+    "no_activity": "Henüz etkinlik yok."
   }
 }

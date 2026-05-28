@@ -32,6 +32,33 @@ export type TProjectStateDistribution = {
   cancelled: number;
 };
 
+/**
+ * Single activity row returned by the project activity endpoint. Mirrors the
+ * Django `IssueActivitySerializer` shape, narrowed to the fields the right
+ * sidebar actually renders.
+ */
+export type TProjectActivity = {
+  id: string;
+  verb: string;
+  field: string | null;
+  new_value: string | null;
+  old_value: string | null;
+  comment: string;
+  created_at: string;
+  actor_detail?: {
+    id: string;
+    display_name?: string;
+    first_name?: string;
+    last_name?: string;
+    avatar_url?: string | null;
+  } | null;
+  issue_detail?: {
+    id: string;
+    name: string;
+    sequence_id?: number;
+  } | null;
+};
+
 export class ProjectOverviewService extends APIService {
   constructor() {
     super(API_BASE_URL);
@@ -66,6 +93,18 @@ export class ProjectOverviewService extends APIService {
     moduleId: string
   ): Promise<TProjectStateDistribution> {
     return this.fetchStateDistribution(workspaceSlug, projectId, { module_id: moduleId });
+  }
+
+  /**
+   * Recent project activity (issue history rows aggregated across the
+   * project). The endpoint accepts an optional `limit` query (default 50,
+   * server-side cap 200) — kept small because the sidebar surface only
+   * shows a recent feed.
+   */
+  async getProjectActivity(workspaceSlug: string, projectId: string, limit?: number): Promise<TProjectActivity[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/projects/${projectId}/activity/`, {
+      params: { limit },
+    }).then((res) => res?.data ?? []);
   }
 
   private async fetchStateDistribution(

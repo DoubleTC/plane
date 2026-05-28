@@ -23,6 +23,7 @@ from plane.app.serializers import (
     ProjectSerializer,
 )
 from plane.app.views.base import BaseAPIView, BaseViewSet
+from plane.app.views.project.activity import record_project_property_activity
 from plane.bgtasks.recent_visited_task import recent_visited_task
 from plane.bgtasks.webhook_task import model_activity, webhook_activity
 from plane.db.models import (
@@ -370,6 +371,17 @@ class ProjectViewSet(BaseViewSet):
                 slug=slug,
                 origin=base_host(request=request, is_app=True),
             )
+
+            # Record project property changes (state, priority, lead, dates, …)
+            # into the activity feed surfaced on the project overview page.
+            record_project_property_activity(
+                project=project,
+                old_data=json.loads(current_instance),
+                request_data=request.data,
+                actor=request.user,
+                workspace=workspace,
+            )
+
             serializer = ProjectListSerializer(project)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

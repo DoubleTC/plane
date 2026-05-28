@@ -877,6 +877,10 @@
     "no_modules": "Zatiaľ žiadne moduly.",
     "no_phases": "Zatiaľ žiadne fázy.",
     "completion_summary": "Dokončené {completed}/{total} úlohy ({percent}%)",
-    "cycle_completion_summary": "Dokončené {completed}/{total} cykly ({percent}%)"
+    "cycle_completion_summary": "Dokončené {completed}/{total} cykly ({percent}%)",
+    "initiatives": "Iniciatívy",
+    "add_initiative": "Pridať iniciatívu",
+    "member_count": "{count} člen(ov)",
+    "no_activity": "Zatiaľ žiadna aktivita."
   }
 }

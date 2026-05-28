@@ -877,6 +877,10 @@
     "no_modules": "モジュールはまだありません。",
     "no_phases": "フェーズはまだありません。",
     "completion_summary": "{completed}/{total} 件完了 ({percent}%)",
-    "cycle_completion_summary": "{completed}/{total} サイクル完了 ({percent}%)"
+    "cycle_completion_summary": "{completed}/{total} サイクル完了 ({percent}%)",
+    "initiatives": "イニシアチブ",
+    "add_initiative": "イニシアチブを追加",
+    "member_count": "{count} 人のメンバー",
+    "no_activity": "アクティビティはまだありません。"
   }
 }

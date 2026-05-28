@@ -877,6 +877,10 @@
     "no_modules": "No modules yet.",
     "no_phases": "No phases yet.",
     "completion_summary": "Completed {completed}/{total} work items ({percent}%)",
-    "cycle_completion_summary": "Completed {completed}/{total} cycles ({percent}%)"
+    "cycle_completion_summary": "Completed {completed}/{total} cycles ({percent}%)",
+    "initiatives": "Initiatives",
+    "add_initiative": "Add initiative",
+    "member_count": "{count} member(s)",
+    "no_activity": "No activity yet."
   }
 }

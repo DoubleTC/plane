@@ -877,6 +877,10 @@
     "no_modules": "Nessun modulo ancora.",
     "no_phases": "Nessuna fase ancora.",
     "completion_summary": "{completed}/{total} elementi completati ({percent}%)",
-    "cycle_completion_summary": "{completed}/{total} cicli completati ({percent}%)"
+    "cycle_completion_summary": "{completed}/{total} cicli completati ({percent}%)",
+    "initiatives": "Iniziative",
+    "add_initiative": "Aggiungi iniziativa",
+    "member_count": "{count} membro/i",
+    "no_activity": "Nessuna attività ancora."
   }
 }

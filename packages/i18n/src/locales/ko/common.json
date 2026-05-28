@@ -877,6 +877,10 @@
     "no_modules": "아직 모듈이 없습니다.",
     "no_phases": "아직 단계가 없습니다.",
     "completion_summary": "{completed}/{total}개 작업 완료 ({percent}%)",
-    "cycle_completion_summary": "{completed}/{total} 사이클 완료 ({percent}%)"
+    "cycle_completion_summary": "{completed}/{total} 사이클 완료 ({percent}%)",
+    "initiatives": "이니셔티브",
+    "add_initiative": "이니셔티브 추가",
+    "member_count": "{count} 명의 구성원",
+    "no_activity": "아직 활동이 없습니다."
   }
 }

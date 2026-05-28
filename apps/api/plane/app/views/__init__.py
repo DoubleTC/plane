@@ -24,6 +24,8 @@ from .project.member import (
     ProjectMemberPreferenceEndpoint,
 )
 
+from .project.activity import ProjectActivityEndpoint
+
 from .user.base import (
     UserEndpoint,
     UpdateUserOnBoardedEndpoint,

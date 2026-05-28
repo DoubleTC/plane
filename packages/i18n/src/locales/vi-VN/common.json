@@ -877,6 +877,10 @@
     "no_modules": "Chưa có module nào.",
     "no_phases": "Chưa có giai đoạn nào.",
     "completion_summary": "Đã hoàn thành {completed}/{total} công việc tương đương {percent}%",
-    "cycle_completion_summary": "Đã hoàn thành {completed}/{total} chu kỳ tương đương {percent}%"
+    "cycle_completion_summary": "Đã hoàn thành {completed}/{total} chu kỳ tương đương {percent}%",
+    "initiatives": "Sáng kiến",
+    "add_initiative": "Thêm Sáng kiến",
+    "member_count": "{count} thành viên",
+    "no_activity": "Chưa có hoạt động nào."
   }
 }

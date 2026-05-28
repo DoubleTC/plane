@@ -877,6 +877,10 @@
     "no_modules": "Поки немає модулів.",
     "no_phases": "Поки немає фаз.",
     "completion_summary": "Виконано {completed}/{total} завдань ({percent}%)",
-    "cycle_completion_summary": "Виконано {completed}/{total} циклів ({percent}%)"
+    "cycle_completion_summary": "Виконано {completed}/{total} циклів ({percent}%)",
+    "initiatives": "Ініціативи",
+    "add_initiative": "Додати ініціативу",
+    "member_count": "{count} учасник(ів)",
+    "no_activity": "Поки немає активності."
   }
 }

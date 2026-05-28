@@ -877,6 +877,10 @@
     "no_modules": "暂无模块。",
     "no_phases": "暂无阶段。",
     "completion_summary": "已完成 {completed}/{total} 项工作 ({percent}%)",
-    "cycle_completion_summary": "已完成 {completed}/{total} 个周期 ({percent}%)"
+    "cycle_completion_summary": "已完成 {completed}/{total} 个周期 ({percent}%)",
+    "initiatives": "倡议",
+    "add_initiative": "添加倡议",
+    "member_count": "{count} 位成员",
+    "no_activity": "暂无活动。"
   }
 }

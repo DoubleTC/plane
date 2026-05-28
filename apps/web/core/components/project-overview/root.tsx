@@ -11,10 +11,13 @@ import { useCycle } from "@/hooks/store/use-cycle";
 import { useModule } from "@/hooks/store/use-module";
 import { usePhase } from "@/hooks/store/use-phase";
 import { useProject } from "@/hooks/store/use-project";
+import { useWorkspace } from "@/hooks/store/use-workspace";
+import { useWorkspaceProjectState } from "@/hooks/store/use-workspace-project-state";
 import { ProjectOverviewHero } from "./hero";
 import { MetricsModules } from "./metrics-modules";
 import { MetricsOverall } from "./metrics-overall";
 import { MetricsPhases } from "./metrics-phases";
+import { ProjectOverviewRightSidebar } from "./right-sidebar";
 
 type Props = {
   workspaceSlug: string;
@@ -34,9 +37,12 @@ export const ProjectOverviewRoot = observer(function ProjectOverviewRoot({ works
   const { fetchAllCycles } = useCycle();
   const { fetchPhases, getPhaseFetchStatusByProjectId } = usePhase();
   const { fetchModules } = useModule();
+  const { currentWorkspace } = useWorkspace();
+  const { fetchStates } = useWorkspaceProjectState();
 
   const project = getProjectById(projectId) ?? currentProjectDetails;
   const phasesFetched = getPhaseFetchStatusByProjectId(projectId);
+  const projectStatesEnabled = !!currentWorkspace?.project_states_enabled;
 
   // Bootstrap stores. Each fetcher is idempotent on the store side; we
   // re-trigger whenever the project changes so navigating between projects
@@ -49,7 +55,22 @@ export const ProjectOverviewRoot = observer(function ProjectOverviewRoot({ works
     if (!phasesFetched) {
       fetchPhases(workspaceSlug, projectId).catch(() => undefined);
     }
-  }, [workspaceSlug, projectId, phasesFetched, fetchAllCycles, fetchModules, fetchPhases]);
+    // Workspace project states power the State picker in the right sidebar.
+    // The list endpoint isn't called automatically when entering the overview
+    // page directly (e.g. via sidebar nav), so we trigger it here.
+    if (projectStatesEnabled) {
+      fetchStates(workspaceSlug).catch(() => undefined);
+    }
+  }, [
+    workspaceSlug,
+    projectId,
+    phasesFetched,
+    projectStatesEnabled,
+    fetchAllCycles,
+    fetchModules,
+    fetchPhases,
+    fetchStates,
+  ]);
 
   if (!project) {
     return (
@@ -62,13 +83,16 @@ export const ProjectOverviewRoot = observer(function ProjectOverviewRoot({ works
   }
 
   return (
-    <div className="h-full w-full overflow-y-auto">
-      <ProjectOverviewHero project={project} />
-      <div className="flex w-full flex-col px-10 py-8">
-        <MetricsOverall workspaceSlug={workspaceSlug} projectId={projectId} />
-        <MetricsPhases workspaceSlug={workspaceSlug} projectId={projectId} />
-        <MetricsModules projectId={projectId} />
+    <div className="relative flex h-full w-full overflow-hidden">
+      <div className="flex h-full w-full flex-col overflow-y-auto">
+        <ProjectOverviewHero project={project} />
+        <div className="flex w-full flex-col px-10 py-8">
+          <MetricsOverall workspaceSlug={workspaceSlug} projectId={projectId} />
+          <MetricsPhases workspaceSlug={workspaceSlug} projectId={projectId} />
+          <MetricsModules projectId={projectId} />
+        </div>
       </div>
+      <ProjectOverviewRightSidebar project={project} />
     </div>
   );
 });

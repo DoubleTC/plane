@@ -877,6 +877,10 @@
     "no_modules": "Brak modułów.",
     "no_phases": "Brak faz.",
     "completion_summary": "Ukończono {completed}/{total} zadań ({percent}%)",
-    "cycle_completion_summary": "Ukończono {completed}/{total} cykli ({percent}%)"
+    "cycle_completion_summary": "Ukończono {completed}/{total} cykli ({percent}%)",
+    "initiatives": "Inicjatywy",
+    "add_initiative": "Dodaj inicjatywę",
+    "member_count": "{count} członek(-ów)",
+    "no_activity": "Brak aktywności."
   }
 }

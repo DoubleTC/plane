@@ -877,6 +877,10 @@
     "no_modules": "Модулей пока нет.",
     "no_phases": "Фаз пока нет.",
     "completion_summary": "Выполнено {completed}/{total} задач ({percent}%)",
-    "cycle_completion_summary": "Выполнено {completed}/{total} циклов ({percent}%)"
+    "cycle_completion_summary": "Выполнено {completed}/{total} циклов ({percent}%)",
+    "initiatives": "Инициативы",
+    "add_initiative": "Добавить инициативу",
+    "member_count": "{count} участник(ов)",
+    "no_activity": "Активности пока нет."
   }
 }
