@@ -63,7 +63,9 @@
       "Bash(grep -v \"^--$\")",
       "Bash(node\" | tail -10)",
       "Bash(grep -v \"^$\\\\|Warning\\\\|MODULE_TYPELESS\\\\|Reparsing\\\\|To eliminate\\\\|Use `node\" | tail -10)",
-      "Bash(grep -v \"^$\\\\|Warning\\\\|MODULE_TYPELESS\\\\|Reparsing\\\\|To eliminate\\\\|Use \\\\`node\")"
+      "Bash(grep -v \"^$\\\\|Warning\\\\|MODULE_TYPELESS\\\\|Reparsing\\\\|To eliminate\\\\|Use \\\\`node\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('plane/app/views/project/activity.py'\\).read\\(\\)\\); ast.parse\\(open\\('plane/app/urls/project.py'\\).read\\(\\)\\); print\\('API syntax OK'\\)\")",
+      "Bash(grep -vE \"^\\\\s*$\")"
     ]
   }
 }
