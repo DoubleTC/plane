@@ -4,6 +4,8 @@
  * See the LICENSE file for details.
  */
 
+import { renderFormattedDate } from "@plane/utils";
+
 /**
  * Aggregate state counts for the project metrics progress bar.
  *
@@ -84,4 +86,16 @@ export const compareByStartDateAsc = <T extends { start_date?: string | null }>(
   if (!av) return 1;
   if (!bv) return -1;
   return av < bv ? -1 : av > bv ? 1 : 0;
+};
+
+/**
+ * Build a "dd/MM/yyyy - dd/MM/yyyy" range label for a phase/cycle/module
+ * subtitle. Returns null when neither endpoint is set; when only one endpoint
+ * is present it falls back to showing just that single date.
+ */
+export const formatDateRange = (start?: string | null, end?: string | null): string | null => {
+  const startLabel = renderFormattedDate(start, "dd/MM/yyyy");
+  const endLabel = renderFormattedDate(end, "dd/MM/yyyy");
+  if (startLabel && endLabel) return `${startLabel} - ${endLabel}`;
+  return startLabel ?? endLabel ?? null;
 };

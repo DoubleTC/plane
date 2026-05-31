@@ -15,7 +15,7 @@ import { useCycle } from "@/hooks/store/use-cycle";
 import { usePhase } from "@/hooks/store/use-phase";
 import { ProjectOverviewService } from "@/services/project/project-overview.service";
 import { MetricsProgressBar } from "./metrics-progress-bar";
-import { compareByStartDateAsc, completionPercent, type TStateCounts } from "./metrics-utils";
+import { compareByStartDateAsc, completionPercent, formatDateRange, type TStateCounts } from "./metrics-utils";
 
 // Cycle list response only ships total/completed/cancelled — we lazy-fetch
 // the full per-state breakdown via the advance-analytics endpoint when a
@@ -133,6 +133,8 @@ const PhaseCard = observer(function PhaseCard({
 
   if (!phase) return null;
 
+  const phaseDateRange = formatDateRange(phase.start_date, phase.end_date);
+
   // Phase header shows CYCLE completion, not work-item completion. Backend
   // ships `total_cycles` and `completed_cycles` directly on the phase record.
   const totalCycles = phase.total_cycles ?? cycles.length;
@@ -162,7 +164,10 @@ const PhaseCard = observer(function PhaseCard({
                 className={cn("size-3.5 shrink-0 text-tertiary transition-transform", open ? "" : "-rotate-90")}
                 aria-hidden
               />
-              <span className="truncate text-13 font-medium text-primary">{phase.name}</span>
+              <div className="flex min-w-0 flex-col text-left">
+                <span className="truncate text-13 font-medium text-primary">{phase.name}</span>
+                {phaseDateRange && <span className="truncate text-10 text-tertiary">{phaseDateRange}</span>}
+              </div>
             </div>
             <span className="shrink-0 text-11 text-tertiary">
               {t("overview.cycle_completion_summary", {
@@ -198,6 +203,8 @@ const PhaseCard = observer(function PhaseCard({
                       projectId={projectId}
                       cycleId={cycle.id}
                       cycleName={cycle.name}
+                      cycleStartDate={cycle.start_date}
+                      cycleEndDate={cycle.end_date}
                     />
                   ))}
                 </div>
@@ -215,6 +222,8 @@ type CycleRowProps = {
   projectId: string;
   cycleId: string;
   cycleName: string;
+  cycleStartDate?: string | null;
+  cycleEndDate?: string | null;
 };
 
 /**
@@ -224,11 +233,12 @@ type CycleRowProps = {
  * counts — only total/completed/cancelled — so we hit advance-analytics
  * scoped to `cycle_id`). SWR dedupes and caches automatically.
  */
-const CycleRow = ({ workspaceSlug, projectId, cycleId, cycleName }: CycleRowProps) => {
+const CycleRow = ({ workspaceSlug, projectId, cycleId, cycleName, cycleStartDate, cycleEndDate }: CycleRowProps) => {
   const { t } = useTranslation();
   const { data } = useSWR(["cycleStateDistribution", workspaceSlug, projectId, cycleId], () =>
     projectOverviewService.getCycleStateDistribution(workspaceSlug, projectId, cycleId)
   );
+  const cycleDateRange = formatDateRange(cycleStartDate, cycleEndDate);
 
   const counts: TStateCounts = {
     backlog_issues: data?.backlog ?? 0,
@@ -243,7 +253,10 @@ const CycleRow = ({ workspaceSlug, projectId, cycleId, cycleName }: CycleRowProp
   return (
     <div className="mb-2 flex flex-col gap-1.5 border-b border-subtle-1 pb-3">
       <div className="flex items-center justify-between gap-2">
-        <span className="truncate text-11 text-secondary">{cycleName}</span>
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate text-11 text-secondary">{cycleName}</span>
+          {cycleDateRange && <span className="truncate text-10 text-placeholder">{cycleDateRange}</span>}
+        </div>
         <span className="shrink-0 text-11 text-tertiary">
           {t("overview.completion_summary", {
             completed: counts.completed_issues,

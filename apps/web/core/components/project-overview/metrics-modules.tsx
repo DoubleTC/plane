@@ -8,7 +8,7 @@ import { observer } from "mobx-react";
 import { useTranslation } from "@plane/i18n";
 import { useModule } from "@/hooks/store/use-module";
 import { MetricsProgressBar } from "./metrics-progress-bar";
-import { compareByStartDateAsc, completionPercent, type TStateCounts } from "./metrics-utils";
+import { compareByStartDateAsc, completionPercent, formatDateRange, type TStateCounts } from "./metrics-utils";
 
 type Props = {
   projectId: string;
@@ -53,13 +53,17 @@ export const MetricsModules = observer(function MetricsModules({ projectId }: Pr
         {modules.map((m) => {
           const counts = m as unknown as TStateCounts;
           const pct = completionPercent(counts);
+          const moduleDateRange = formatDateRange(m.start_date, m.target_date);
           return (
             <div
               key={m.id}
               className="rounded-lg border-[0.5px] border-subtle bg-surface-1 p-4 transition-shadow hover:shadow-raised-200"
             >
               <div className="mb-3 flex items-center justify-between gap-3">
-                <span className="truncate text-13 font-medium text-primary">{m.name}</span>
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate text-13 font-medium text-primary">{m.name}</span>
+                  {moduleDateRange && <span className="truncate text-10 text-tertiary">{moduleDateRange}</span>}
+                </div>
                 <span className="shrink-0 text-11 text-tertiary">
                   {t("overview.completion_summary", {
                     completed: counts.completed_issues,
