@@ -217,6 +217,7 @@ from .analytic.project_analytics import (
     ProjectAdvanceAnalyticsEndpoint,
     ProjectAdvanceAnalyticsStatsEndpoint,
     ProjectAdvanceAnalyticsChartEndpoint,
+    ProjectAnalyticsOverviewEndpoint,
 )
 
 from .notification.base import (

@@ -718,7 +718,7 @@
     "work_structure": "Work structure",
     "execution": "Execution",
     "administration": "Administration",
-    "backlog": "Backlog",
+    "backlog": "Tồn đọng",
     "unstarted": "Chưa bắt đầu",
     "started": "Đang làm",
     "cancelled": "Đã hủy",
@@ -882,5 +882,55 @@
     "add_initiative": "Thêm Sáng kiến",
     "member_count": "{count} thành viên",
     "no_activity": "Chưa có hoạt động nào."
+  },
+  "analytics_project": {
+    "tab": "Dự án",
+    "title": "Dự án",
+    "no_projects": "Chưa có dự án nào.",
+    "no_dated_items": "Chưa có công việc hoàn thành kèm ngày để đánh giá.",
+    "no_stages": "Không có trạng thái.",
+    "no_members": "Không có thành viên.",
+    "current": "Hiện tại",
+    "rating": {
+      "excellent": "Xuất sắc",
+      "good": "Tốt",
+      "attention": "Cần chú ý",
+      "delayed": "Chậm",
+      "none": "—"
+    },
+    "timeliness": {
+      "early": "Trước hạn",
+      "on_time": "Đúng hạn",
+      "delayed": "Trễ hạn"
+    },
+    "role": {
+      "admin": "Quản trị",
+      "member": "Thành viên",
+      "guest": "Khách"
+    },
+    "section": {
+      "status": "Tình trạng dự án",
+      "work_items": "Công việc",
+      "stage_breakdown": "Phân bổ theo trạng thái",
+      "phases": "Giai đoạn",
+      "modules": "Mô đun",
+      "members": "Thành viên"
+    },
+    "stat": {
+      "members": "Thành viên",
+      "modules": "Mô đun",
+      "phases": "Giai đoạn",
+      "cycles": "Chu kỳ",
+      "total_work_items": "Tổng công việc",
+      "completed_caption": "Trước {early} · Đúng {on_time} · Trễ {delayed}"
+    },
+    "member": {
+      "name": "Tên",
+      "role": "Vai trò",
+      "allocation": "Phân bổ",
+      "completed": "Đã hoàn thành",
+      "on_time_rate": "Tỷ lệ đúng hạn",
+      "performance": "Hiệu suất"
+    }
   }
 }

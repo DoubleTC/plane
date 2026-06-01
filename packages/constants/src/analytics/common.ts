@@ -78,6 +78,9 @@ export const ANALYTICS_INSIGHTS_FIELDS: Record<TAnalyticsTabsBase, IInsightField
       },
     },
   ],
+  // The Projects tab renders its own per-project summary cards rather than the
+  // shared TotalInsights strip, so it has no aggregate insight fields.
+  projects: [],
   "work-items": [
     {
       key: "total_work_items",

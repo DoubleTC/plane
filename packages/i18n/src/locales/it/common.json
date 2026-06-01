@@ -882,5 +882,55 @@
     "add_initiative": "Aggiungi iniziativa",
     "member_count": "{count} membro/i",
     "no_activity": "Nessuna attività ancora."
+  },
+  "analytics_project": {
+    "tab": "Projects",
+    "title": "Projects",
+    "no_projects": "No projects yet.",
+    "no_dated_items": "No completed work items with dates to evaluate.",
+    "no_stages": "No stages.",
+    "no_members": "No members.",
+    "current": "Current",
+    "rating": {
+      "excellent": "Excellent",
+      "good": "On track",
+      "attention": "Needs attention",
+      "delayed": "Delayed",
+      "none": "—"
+    },
+    "timeliness": {
+      "early": "Early",
+      "on_time": "On time",
+      "delayed": "Late"
+    },
+    "role": {
+      "admin": "Admin",
+      "member": "Member",
+      "guest": "Guest"
+    },
+    "section": {
+      "status": "Project status",
+      "work_items": "Work items",
+      "stage_breakdown": "Stage breakdown",
+      "phases": "Phases",
+      "modules": "Modules",
+      "members": "Members"
+    },
+    "stat": {
+      "members": "Members",
+      "modules": "Modules",
+      "phases": "Phases",
+      "cycles": "Cycles",
+      "total_work_items": "Total work items",
+      "completed_caption": "Early {early} · On time {on_time} · Late {delayed}"
+    },
+    "member": {
+      "name": "Name",
+      "role": "Role",
+      "allocation": "Allocation",
+      "completed": "Completed",
+      "on_time_rate": "On-time rate",
+      "performance": "Performance"
+    }
   }
 }

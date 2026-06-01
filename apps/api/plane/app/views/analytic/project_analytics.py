@@ -4,12 +4,13 @@
 
 from rest_framework.response import Response
 from rest_framework import status
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+from collections import defaultdict
+from datetime import date, datetime, timedelta
 from django.db.models import QuerySet, Q, Count
 from django.http import HttpRequest
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
-from datetime import timedelta
 from plane.app.views.base import BaseAPIView
 from plane.app.permissions import ROLE, allow_permission
 from plane.db.models import (
@@ -19,6 +20,8 @@ from plane.db.models import (
     Module,
     CycleIssue,
     ModuleIssue,
+    ProjectMember,
+    State,
 )
 from django.db import models
 from django.db.models import F, Case, When, Value
@@ -177,6 +180,227 @@ class ProjectAdvanceAnalyticsStatsEndpoint(ProjectAdvanceAnalyticsBaseView):
             )
 
         return Response({"message": "Invalid type"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Number of days a work item must finish ahead of its target date to count as
+# "early" rather than merely "on-time". 0–1 day ahead is on-time; >=2 is early.
+EARLY_THRESHOLD_DAYS = 2
+
+
+def classify_timeliness(completed_at: Optional[datetime], target_date: Optional[date]) -> Optional[str]:
+    """
+    Classify a completed work item's timeliness relative to its target date.
+
+    Returns one of "early" | "on_time" | "delayed", or None when either input is
+    missing. ``diff`` is how many days *before* the deadline the item finished:
+    negative means it finished late.
+    """
+    if completed_at is None or target_date is None:
+        return None
+    completed_date = completed_at.date() if hasattr(completed_at, "date") else completed_at
+    diff = (target_date - completed_date).days
+    if diff < 0:
+        return "delayed"
+    if diff >= EARLY_THRESHOLD_DAYS:
+        return "early"
+    return "on_time"
+
+
+class ProjectAnalyticsOverviewEndpoint(ProjectAdvanceAnalyticsBaseView):
+    """
+    Aggregated per-project payload powering the Analytics → Projects BI tab.
+
+    One round-trip returns everything the dashboard needs that isn't already
+    available from the cycle/phase/module stores or the existing
+    advance-analytics endpoint:
+
+    - ``schedule``: project-level completion timeliness (early/on_time/delayed),
+      computed only over completed work items that carry BOTH a start_date and a
+      target_date (and a completed_at).
+    - ``cycle_schedule`` / ``module_schedule``: the same buckets keyed by cycle
+      and module id, so the frontend can rate each phase (= sum of its cycles),
+      cycle and module.
+    - ``state_breakdown``: every project state (stage) with its work-item count,
+      including zero-count states.
+    - ``members``: per project member — role / custom role, 30-day allocation %
+      (this project vs. all the requesting user's workspace projects), completed
+      vs. total assigned, on-time rate and the timeliness buckets used to rate
+      individual performance.
+
+    All aggregation is done with a handful of grouped queries (no per-member /
+    per-cycle round-trips).
+    """
+
+    @staticmethod
+    def _empty_buckets() -> Dict[str, int]:
+        return {"early": 0, "on_time": 0, "delayed": 0}
+
+    def _completed_dated_queryset(self, project_id: str) -> QuerySet:
+        return Issue.issue_objects.filter(
+            **self.filters["base_filters"],
+            project_id=project_id,
+            state__group="completed",
+            start_date__isnull=False,
+            target_date__isnull=False,
+            completed_at__isnull=False,
+        )
+
+    def get_project_schedule(self, completed_dated: QuerySet) -> Dict[str, int]:
+        buckets = self._empty_buckets()
+        # No join here, so one row per issue — safe to count directly.
+        for row in completed_dated.values("id", "completed_at", "target_date"):
+            label = classify_timeliness(row["completed_at"], row["target_date"])
+            if label:
+                buckets[label] += 1
+        return buckets
+
+    def get_grouped_schedule(self, completed_dated: QuerySet, group_field: str) -> Dict[str, Dict[str, int]]:
+        """Bucket completed-dated items by an arbitrary grouping column."""
+        grouped: Dict[str, Dict[str, int]] = defaultdict(self._empty_buckets)
+        for row in completed_dated.values(group_field, "completed_at", "target_date"):
+            key = row[group_field]
+            if not key:
+                continue
+            label = classify_timeliness(row["completed_at"], row["target_date"])
+            if label:
+                grouped[str(key)][label] += 1
+        return grouped
+
+    def get_state_breakdown(self, project_id: str) -> list:
+        states = (
+            State.objects.filter(project_id=project_id)
+            .values("id", "name", "group", "color", "sequence")
+            .order_by("sequence")
+        )
+        counts = (
+            Issue.issue_objects.filter(**self.filters["base_filters"], project_id=project_id)
+            .values("state_id")
+            .annotate(count=Count("id", distinct=True))
+        )
+        count_map = {str(row["state_id"]): row["count"] for row in counts}
+        return [
+            {
+                "id": str(state["id"]),
+                "name": state["name"],
+                "group": state["group"],
+                "color": state["color"],
+                "count": count_map.get(str(state["id"]), 0),
+            }
+            for state in states
+        ]
+
+    def get_members(self, project_id: str, member_schedule: Dict[str, Dict[str, int]]) -> list:
+        # Per-member completed vs. total assigned within this project.
+        member_totals = (
+            Issue.issue_objects.filter(**self.filters["base_filters"], project_id=project_id)
+            .values("assignees__id")
+            .annotate(
+                total=Count("id", distinct=True),
+                completed=Count("id", filter=Q(state__group="completed"), distinct=True),
+            )
+        )
+        totals_map = {
+            str(row["assignees__id"]): row for row in member_totals if row["assignees__id"] is not None
+        }
+
+        # Allocation: distinct issues a member touched in the last 30 days, this
+        # project vs. across all of the requesting user's workspace projects.
+        cutoff = timezone.now() - timedelta(days=30)
+        ws_alloc = (
+            Issue.issue_objects.filter(**self.filters["base_filters"], updated_at__gte=cutoff)
+            .values("assignees__id")
+            .annotate(count=Count("id", distinct=True))
+        )
+        project_alloc = (
+            Issue.issue_objects.filter(
+                **self.filters["base_filters"], project_id=project_id, updated_at__gte=cutoff
+            )
+            .values("assignees__id")
+            .annotate(count=Count("id", distinct=True))
+        )
+        ws_map = {str(r["assignees__id"]): r["count"] for r in ws_alloc if r["assignees__id"] is not None}
+        project_map = {
+            str(r["assignees__id"]): r["count"] for r in project_alloc if r["assignees__id"] is not None
+        }
+
+        members_qs = (
+            ProjectMember.objects.filter(project_id=project_id, is_active=True, member__isnull=False)
+            .select_related("member", "custom_role")
+            .annotate(
+                avatar_url=Case(
+                    When(
+                        member__avatar_asset__isnull=False,
+                        then=Concat(
+                            Value("/api/assets/v2/static/"),
+                            "member__avatar_asset",
+                            Value("/"),
+                        ),
+                    ),
+                    When(member__avatar_asset__isnull=True, then="member__avatar"),
+                    default=Value(None),
+                    output_field=models.CharField(),
+                )
+            )
+        )
+
+        members = []
+        for pm in members_qs:
+            member_id = str(pm.member_id)
+            schedule = member_schedule.get(member_id, self._empty_buckets())
+            dated_total = schedule["early"] + schedule["on_time"] + schedule["delayed"]
+            on_time_rate = (
+                round((schedule["early"] + schedule["on_time"]) / dated_total * 100, 1) if dated_total else 0.0
+            )
+            ws_count = ws_map.get(member_id, 0)
+            project_count = project_map.get(member_id, 0)
+            allocation_pct = round(project_count / ws_count * 100, 1) if ws_count else 0.0
+            totals = totals_map.get(member_id, {})
+            members.append(
+                {
+                    "member_id": member_id,
+                    "display_name": pm.member.display_name,
+                    "avatar_url": pm.avatar_url,
+                    "role": pm.role,
+                    "custom_role": pm.custom_role.name if pm.custom_role else None,
+                    "allocation_pct": allocation_pct,
+                    "completed": totals.get("completed", 0),
+                    "total_assigned": totals.get("total", 0),
+                    "on_time_rate": on_time_rate,
+                    "schedule": dict(schedule),
+                }
+            )
+        # Heaviest allocation first so the table leads with the most-loaded members.
+        members.sort(key=lambda m: m["allocation_pct"], reverse=True)
+        return members
+
+    @allow_permission([ROLE.ADMIN, ROLE.MEMBER])
+    def get(self, request: HttpRequest, slug: str, project_id: str) -> Response:
+        self.initialize_workspace(slug, type="analytics")
+
+        completed_dated = self._completed_dated_queryset(project_id)
+        member_schedule = {
+            key: dict(value)
+            for key, value in self.get_grouped_schedule(completed_dated, "assignees__id").items()
+        }
+
+        return Response(
+            {
+                "schedule": self.get_project_schedule(completed_dated),
+                "cycle_schedule": {
+                    key: dict(value)
+                    for key, value in self.get_grouped_schedule(completed_dated, "issue_cycle__cycle_id").items()
+                },
+                "module_schedule": {
+                    key: dict(value)
+                    for key, value in self.get_grouped_schedule(
+                        completed_dated, "issue_module__module_id"
+                    ).items()
+                },
+                "state_breakdown": self.get_state_breakdown(project_id),
+                "members": self.get_members(project_id, member_schedule),
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class ProjectAdvanceAnalyticsChartEndpoint(ProjectAdvanceAnalyticsBaseView):
