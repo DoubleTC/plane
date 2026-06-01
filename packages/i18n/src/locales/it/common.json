@@ -932,5 +932,74 @@
       "on_time_rate": "On-time rate",
       "performance": "Performance"
     }
+  },
+  "members_analytics": {
+    "tab": "Members",
+    "title": "Member scorecard",
+    "subtitle": "Performance signals for 1:1s and review — figures inform judgment, they don't replace it.",
+    "member": "Member",
+    "index": "Index",
+    "pillars": "Pillars",
+    "no_members": "No members to evaluate.",
+    "no_data": "No data for this period.",
+    "no_estimate_data": "No estimated items to plot.",
+    "on_time": "On time",
+    "late": "Late",
+    "period": {
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    },
+    "pillar": {
+      "delivery": "Delivery",
+      "quality": "Quality",
+      "predictability": "Predictability",
+      "flow": "Flow",
+      "collaboration": "Collaboration"
+    },
+    "metric": {
+      "completed_count": "Completed",
+      "completed_points": "Points",
+      "on_time_rate": "On-time",
+      "reopen_count": "Reopened",
+      "bug_ratio": "Bug ratio",
+      "scope_adherence": "Scope adherence",
+      "avg_lead_time": "Avg lead time",
+      "wip": "WIP",
+      "comments": "Comments",
+      "projects_touched": "Projects",
+      "ownership": "Ownership",
+      "assigned_count": "Assigned",
+      "completion_rate": "Completion rate"
+    },
+    "summary": {
+      "avg_index": "Team avg index",
+      "evaluated": "Evaluated",
+      "top_performer": "Top performer",
+      "needs_support": "Needs support",
+      "distribution": "Index distribution"
+    },
+    "detail": {
+      "profile": "Capability profile",
+      "throughput_trend": "Throughput trend",
+      "cycle_time": "Cycle time",
+      "max": "Max",
+      "samples": "Samples",
+      "cycle_time_hint": "Days from start date to completion (dated items only).",
+      "estimate_accuracy": "Estimate vs actual",
+      "estimate": "Estimate",
+      "actual_days": "Actual (days)",
+      "activity": "Activity",
+      "key_metrics": "Key metrics",
+      "recent_issues": "Recent completed work",
+      "completion": "Completion & timeliness"
+    },
+    "legend_index": "Index = composite Performance Index (0–100) across the 5 pillars.",
+    "legend_percentile": "P = percentile rank within the evaluated team (higher = ahead of more peers).",
+    "timeliness": {
+      "early": "Early",
+      "on_time": "On time",
+      "delayed": "Late"
+    }
   }
 }

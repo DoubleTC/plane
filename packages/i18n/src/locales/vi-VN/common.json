@@ -932,5 +932,74 @@
       "on_time_rate": "Tỷ lệ đúng hạn",
       "performance": "Hiệu suất"
     }
+  },
+  "members_analytics": {
+    "tab": "Thành viên",
+    "title": "Bảng đánh giá thành viên",
+    "subtitle": "Tín hiệu hiệu suất cho 1:1 và review — con số để tham khảo, không thay thế đánh giá của con người.",
+    "member": "Thành viên",
+    "index": "Chỉ số",
+    "pillars": "Trụ cột",
+    "no_members": "Không có thành viên để đánh giá.",
+    "no_data": "Không có dữ liệu trong kỳ này.",
+    "no_estimate_data": "Không có công việc ước tính để vẽ.",
+    "on_time": "Đúng hạn",
+    "late": "Trễ hạn",
+    "period": {
+      "week": "Tuần",
+      "month": "Tháng",
+      "year": "Năm"
+    },
+    "pillar": {
+      "delivery": "Số lượng",
+      "quality": "Chất lượng",
+      "predictability": "Tính dự đoán",
+      "flow": "Hiệu suất",
+      "collaboration": "Hợp tác"
+    },
+    "metric": {
+      "completed_count": "Hoàn thành",
+      "completed_points": "Điểm",
+      "on_time_rate": "Đúng hạn",
+      "reopen_count": "Mở lại",
+      "bug_ratio": "Tỷ lệ bug",
+      "scope_adherence": "Bám phạm vi",
+      "avg_lead_time": "Lead time TB",
+      "wip": "Đang làm",
+      "comments": "Bình luận",
+      "projects_touched": "Dự án",
+      "ownership": "Phụ trách",
+      "assigned_count": "Được giao",
+      "completion_rate": "Tỷ lệ hoàn thành"
+    },
+    "summary": {
+      "avg_index": "Chỉ số TB nhóm",
+      "evaluated": "Số đánh giá",
+      "top_performer": "Xuất sắc nhất",
+      "needs_support": "Cần hỗ trợ",
+      "distribution": "Phân bố chỉ số"
+    },
+    "detail": {
+      "profile": "Hồ sơ năng lực",
+      "throughput_trend": "Xu hướng số lượng",
+      "cycle_time": "Cycle time",
+      "max": "Lớn nhất",
+      "samples": "Mẫu",
+      "cycle_time_hint": "Số ngày từ ngày bắt đầu đến khi hoàn thành (chỉ việc có gắn ngày).",
+      "estimate_accuracy": "Ước tính vs thực tế",
+      "estimate": "Ước tính",
+      "actual_days": "Thực tế (ngày)",
+      "activity": "Hoạt động",
+      "key_metrics": "Chỉ số chính",
+      "recent_issues": "Việc hoàn thành gần đây",
+      "completion": "Hoàn thành & đúng hạn"
+    },
+    "legend_index": "Chỉ số = Performance Index tổng hợp (0–100) từ 5 trụ cột.",
+    "legend_percentile": "P = Thứ hạng phần trăm trong nhóm được đánh giá (cao = vượt nhiều người hơn).",
+    "timeliness": {
+      "early": "Trước hạn",
+      "on_time": "Đúng hạn",
+      "delayed": "Trễ hạn"
+    }
   }
 }

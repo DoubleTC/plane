@@ -220,6 +220,11 @@ from .analytic.project_analytics import (
     ProjectAnalyticsOverviewEndpoint,
 )
 
+from .analytic.member_analytics import (
+    WorkspaceMemberAnalyticsEndpoint,
+    WorkspaceMemberAnalyticsDetailEndpoint,
+)
+
 from .notification.base import (
     NotificationViewSet,
     UnreadNotificationEndpoint,

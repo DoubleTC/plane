@@ -11,7 +11,7 @@ import { Button } from "@plane/propel/button";
 import type { AnalyticsTableDataMap, TAnalyticsTabsBase } from "@plane/types";
 import { DataTable } from "./data-table";
 import { TableLoader } from "./loader";
-interface InsightTableProps<T extends Exclude<TAnalyticsTabsBase, "overview" | "projects">> {
+interface InsightTableProps<T extends Exclude<TAnalyticsTabsBase, "overview" | "projects" | "members">> {
   analyticsType: T;
   data?: AnalyticsTableDataMap[T][];
   isLoading?: boolean;
@@ -21,7 +21,7 @@ interface InsightTableProps<T extends Exclude<TAnalyticsTabsBase, "overview" | "
   onExport?: (rows: Row<AnalyticsTableDataMap[T]>[]) => void;
 }
 
-export function InsightTable<T extends Exclude<TAnalyticsTabsBase, "overview" | "projects">>(
+export function InsightTable<T extends Exclude<TAnalyticsTabsBase, "overview" | "projects" | "members">>(
   props: InsightTableProps<T>
 ): React.ReactElement {
   const { data, isLoading, columns, headerText, onExport } = props;
