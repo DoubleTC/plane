@@ -1,6 +1,6 @@
 {
-  "name": "Plane",
-  "short_name": "Plane",
+  "name": "BananaZ",
+  "short_name": "BananaZ",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -20,7 +20,7 @@
     }
   ],
   "theme_color": "#FFFFFF",
-  "background_color": "#FFFFFF",
+  "background_color": "#000000",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait"
