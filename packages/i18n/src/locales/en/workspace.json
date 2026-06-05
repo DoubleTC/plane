@@ -54,11 +54,11 @@
     "empty_state": {
       "general": {
         "title": "Overview of your projects, activity, and metrics",
-        "description": "Welcome to Plane, we are excited to have you here. Create your first project and track your work items, and this page will transform into a space that helps you progress. Admins will also see items which help their team progress.",
+        "description": "Welcome to BananaZ, we are excited to have you here. Create your first project and track your work items, and this page will transform into a space that helps you progress. Admins will also see items which help their team progress.",
         "primary_button": {
           "text": "Build your first project",
           "comic": {
-            "title": "Everything starts with a project in Plane",
+            "title": "Everything starts with a project in BananaZ",
             "description": "A project could be a product's roadmap, a marketing campaign, or launching a new car."
           }
         }

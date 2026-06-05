@@ -378,7 +378,7 @@
         },
         "redirect_uris": {
           "label": "URI di reindirizzamento (separate da spazi)",
-          "description": "Gli utenti verranno reindirizzati a questo percorso dopo essersi autenticati con Plane.",
+          "description": "Gli utenti verranno reindirizzati a questo percorso dopo essersi autenticati con BananaZ.",
           "placeholder": "https://example.com https://example.com/"
         },
         "app_available_description": "Connetti un workspace Plane per iniziare a usarla",

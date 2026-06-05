@@ -20,6 +20,11 @@ export default defineConfig(() => ({
   },
   build: {
     assetsInlineLimit: 0,
+    // i18n locale keys like "10000_feet_view" are emitted as arbitrary string
+    // module-export names, which require ES2022. Vite 7's default target rejects
+    // them, so pin the output target to es2022 (still fully supported by all
+    // baseline browsers — chrome107+/safari16+/firefox104+).
+    target: "es2022",
   },
   plugins: [reactRouter(), tsconfigPaths({ projects: [path.resolve(__dirname, "tsconfig.json")] })],
   resolve: {

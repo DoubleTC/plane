@@ -1,0 +1,413 @@
+# ============================================================
+#  Plane — Cenhomes fork (Community Edition build)
+#  Target  : Docker Swarm (Portainer Swarm Stack)
+#  Images  : registry2.cenhomes.vn/doubletc/banana/*
+#  Network : overlay
+#  YAML anchors flattened (Portainer Swarm does not support them)
+#
+#  NOTE vs the commercial stack this replaces:
+#    - Built from the open-source fork, so the licensed-only
+#      services are REMOVED: monitor, silo, automation-consumer,
+#      outbox-poller (they require makeplane/*-commercial images).
+#    - api uses the CE entrypoint (docker-entrypoint-api.sh),
+#      not the -ee variant.
+# ============================================================
+#
+#  BEFORE DEPLOY (on a manager node):
+#    docker swarm init                      # if not initialised
+#    docker login registry2.cenhomes.vn     # so nodes can pull
+#
+#  REQUIRED env vars (Portainer > Stack > Environment variables):
+#    REGISTRY              = registry2.cenhomes.vn/doubletc/banana
+#    TAG                   = latest          (or v2.6.0, a git sha, …)
+#    DOMAIN_NAME           = plane.example.com
+#    SITE_ADDRESS          = plane.example.com   (Caddy: add :80 for HTTP-only)
+#    WEB_URL               = https://plane.example.com
+#    CORS_ALLOWED_ORIGINS  = https://plane.example.com
+#    SECRET_KEY            = $(openssl rand -hex 32)
+#    LIVE_SERVER_SECRET_KEY= $(openssl rand -hex 24)
+#    POSTGRES_PASSWORD     = (strong password)
+#    MINIO_ROOT_USER       = (access key)
+#    MINIO_ROOT_PASSWORD   = (secret key)
+#    AWS_ACCESS_KEY_ID     = (same as MINIO_ROOT_USER)
+#    AWS_SECRET_ACCESS_KEY = (same as MINIO_ROOT_PASSWORD)
+#    CERT_EMAIL            = admin@example.com
+# ============================================================
+
+services:
+
+  # ── Infrastructure ──────────────────────────────────────────
+
+  plane-db:
+    image: postgres:15.7-alpine
+    command: postgres -c 'max_connections=1000'
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-plane}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plane}
+      POSTGRES_DB: ${POSTGRES_DB:-plane}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - plane-network
+
+  plane-redis:
+    image: valkey/valkey:7.2.11-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - redisdata:/data
+    networks:
+      - plane-network
+
+  plane-mq:
+    image: rabbitmq:3.13.6-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-plane}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-plane}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-plane}
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - plane-network
+
+  plane-minio:
+    image: minio/minio:latest
+    command: server /export --console-address ":9090"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-access-key}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-secret-key}
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - uploads:/export
+    networks:
+      - plane-network
+
+  iframely:
+    image: makeplane/iframely:v1.2.0
+    deploy:
+      replicas: ${IFRAMELY_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    networks:
+      - plane-network
+
+  # ── Backend (CE image, shared by migrator/api/worker/beat) ──
+
+  migrator:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/backend:${TAG:-latest}
+    command: ./bin/docker-entrypoint-migrator.sh
+    environment:
+      APP_DOMAIN: ${DOMAIN_NAME:-localhost}
+      WEB_URL: ${WEB_URL:-http://localhost}
+      DEBUG: ${DEBUG:-0}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+      LIVE_BASE_URL: ${LIVE_BASE_URL:-http://live:3000}
+      LIVE_BASE_PATH: ${LIVE_BASE_PATH:-/live}
+      SECRET_KEY: ${SECRET_KEY:-60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-htbqvBJAgpm9bzvf3r4urJer0ENReatceh}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      POSTGRES_USER: ${POSTGRES_USER:-plane}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plane}
+      POSTGRES_DB: ${POSTGRES_DB:-plane}
+      POSTGRES_HOST: ${POSTGRES_HOST:-plane-db}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://plane:plane@plane-db/plane}
+      REDIS_HOST: ${REDIS_HOST:-plane-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://plane-redis:6379/}
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-plane-mq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-plane}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-plane}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-plane}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-plane}
+      AMQP_URL: ${AMQP_URL:-amqp://plane:plane@plane-mq:5672/plane}
+      USE_MINIO: ${USE_MINIO:-1}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-access-key}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-secret-key}
+      BUCKET_NAME: ${BUCKET_NAME:-uploads}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+    volumes:
+      - migrator_logs:/code/plane/logs
+    networks:
+      - plane-network
+
+  api:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/backend:${TAG:-latest}
+    command: ./bin/docker-entrypoint-api.sh
+    environment:
+      APP_DOMAIN: ${DOMAIN_NAME:-localhost}
+      WEB_URL: ${WEB_URL:-http://localhost}
+      DEBUG: ${DEBUG:-0}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+      LIVE_BASE_URL: ${LIVE_BASE_URL:-http://live:3000}
+      LIVE_BASE_PATH: ${LIVE_BASE_PATH:-/live}
+      SECRET_KEY: ${SECRET_KEY:-60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-htbqvBJAgpm9bzvf3r4urJer0ENReatceh}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      POSTGRES_USER: ${POSTGRES_USER:-plane}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plane}
+      POSTGRES_DB: ${POSTGRES_DB:-plane}
+      POSTGRES_HOST: ${POSTGRES_HOST:-plane-db}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://plane:plane@plane-db/plane}
+      REDIS_HOST: ${REDIS_HOST:-plane-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://plane-redis:6379/}
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-plane-mq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-plane}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-plane}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-plane}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-plane}
+      AMQP_URL: ${AMQP_URL:-amqp://plane:plane@plane-mq:5672/plane}
+      USE_MINIO: ${USE_MINIO:-1}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-access-key}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-secret-key}
+      BUCKET_NAME: ${BUCKET_NAME:-uploads}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
+    deploy:
+      replicas: ${API_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - api_logs:/code/plane/logs
+    networks:
+      - plane-network
+
+  worker:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/backend:${TAG:-latest}
+    command: ./bin/docker-entrypoint-worker.sh
+    environment:
+      APP_DOMAIN: ${DOMAIN_NAME:-localhost}
+      WEB_URL: ${WEB_URL:-http://localhost}
+      DEBUG: ${DEBUG:-0}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+      SECRET_KEY: ${SECRET_KEY:-60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-htbqvBJAgpm9bzvf3r4urJer0ENReatceh}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      POSTGRES_USER: ${POSTGRES_USER:-plane}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plane}
+      POSTGRES_DB: ${POSTGRES_DB:-plane}
+      POSTGRES_HOST: ${POSTGRES_HOST:-plane-db}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://plane:plane@plane-db/plane}
+      REDIS_HOST: ${REDIS_HOST:-plane-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://plane-redis:6379/}
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-plane-mq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-plane}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-plane}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-plane}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-plane}
+      AMQP_URL: ${AMQP_URL:-amqp://plane:plane@plane-mq:5672/plane}
+      USE_MINIO: ${USE_MINIO:-1}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-access-key}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-secret-key}
+      BUCKET_NAME: ${BUCKET_NAME:-uploads}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
+    deploy:
+      replicas: ${WORKER_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - worker_logs:/code/plane/logs
+    networks:
+      - plane-network
+
+  beat-worker:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/backend:${TAG:-latest}
+    command: ./bin/docker-entrypoint-beat.sh
+    environment:
+      APP_DOMAIN: ${DOMAIN_NAME:-localhost}
+      WEB_URL: ${WEB_URL:-http://localhost}
+      DEBUG: ${DEBUG:-0}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+      SECRET_KEY: ${SECRET_KEY:-60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-htbqvBJAgpm9bzvf3r4urJer0ENReatceh}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      POSTGRES_USER: ${POSTGRES_USER:-plane}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plane}
+      POSTGRES_DB: ${POSTGRES_DB:-plane}
+      POSTGRES_HOST: ${POSTGRES_HOST:-plane-db}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://plane:plane@plane-db/plane}
+      REDIS_HOST: ${REDIS_HOST:-plane-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://plane-redis:6379/}
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-plane-mq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-plane}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-plane}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-plane}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-plane}
+      AMQP_URL: ${AMQP_URL:-amqp://plane:plane@plane-mq:5672/plane}
+      USE_MINIO: ${USE_MINIO:-1}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-access-key}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-secret-key}
+      BUCKET_NAME: ${BUCKET_NAME:-uploads}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
+    deploy:
+      replicas: ${BEAT_WORKER_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - beat_worker_logs:/code/plane/logs
+    networks:
+      - plane-network
+
+  # ── Frontend ─────────────────────────────────────────────────
+
+  web:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/web:${TAG:-latest}
+    deploy:
+      replicas: ${WEB_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    networks:
+      - plane-network
+
+  space:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/space:${TAG:-latest}
+    deploy:
+      replicas: ${SPACE_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    networks:
+      - plane-network
+
+  admin:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/admin:${TAG:-latest}
+    deploy:
+      replicas: ${ADMIN_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    networks:
+      - plane-network
+
+  live:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/live:${TAG:-latest}
+    environment:
+      API_BASE_URL: ${API_BASE_URL:-http://api:8000}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-htbqvBJAgpm9bzvf3r4urJer0ENReatceh}
+      IFRAMELY_URL: ${IFRAMELY_URL:-http://iframely:8061}
+      REDIS_HOST: ${REDIS_HOST:-plane-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://plane-redis:6379/}
+    deploy:
+      replicas: ${LIVE_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    networks:
+      - plane-network
+
+  # ── Reverse Proxy (Caddy) ────────────────────────────────────
+  # The CE proxy image ships Caddyfile.ce baked in — no host mount
+  # needed. Remove this block if you already run an external proxy
+  # (Nginx/Traefik) and expose web/api/space/admin/live yourself.
+
+  proxy:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/proxy:${TAG:-latest}
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-localhost}
+      CERT_EMAIL: ${CERT_EMAIL:-admin@example.com}
+      BUCKET_NAME: ${BUCKET_NAME:-uploads}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-0.0.0.0/0}
+    ports:
+      - target: 80
+        published: ${LISTEN_HTTP_PORT:-2080}
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: ${LISTEN_HTTPS_PORT:-2043}
+        protocol: tcp
+        mode: host
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - proxy_config:/config
+      - proxy_data:/data
+    networks:
+      - plane-network
+
+# ── Volumes ──────────────────────────────────────────────────
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:
+  rabbitmq_data:
+  api_logs:
+  worker_logs:
+  beat_worker_logs:
+  migrator_logs:
+  proxy_config:
+  proxy_data:
+
+# ── Networks ─────────────────────────────────────────────────
+
+networks:
+  plane-network:
+    driver: overlay
+    attachable: true
