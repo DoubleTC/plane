@@ -27,29 +27,29 @@ type TAuthHeader = {
 const Titles = {
   [EAuthModes.SIGN_IN]: {
     [EAuthSteps.EMAIL]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
+      header: "Làm ít chơi nhiều vẫn hiệu quả.",
+      subHeader: "Chào mừng đến BananaZ.",
     },
     [EAuthSteps.PASSWORD]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
+      header: "Làm ít chơi nhiều vẫn hiệu quả.",
+      subHeader: "Chào mừng đến BananaZ.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
+      header: "Làm ít chơi nhiều vẫn hiệu quả.",
+      subHeader: "Chào mừng đến BananaZ.",
     },
   },
   [EAuthModes.SIGN_UP]: {
     [EAuthSteps.EMAIL]: {
-      header: "Work in all dimensions.",
+      header: "Làm ít chơi nhiều vẫn hiệu quả.",
       subHeader: "Create your Plane account.",
     },
     [EAuthSteps.PASSWORD]: {
-      header: "Work in all dimensions.",
+      header: "Làm ít chơi nhiều vẫn hiệu quả.",
       subHeader: "Create your Plane account.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Work in all dimensions.",
+      header: "Làm ít chơi nhiều vẫn hiệu quả.",
       subHeader: "Create your Plane account.",
     },
   },
@@ -118,7 +118,7 @@ export function AuthHeaderBase(props: TAuthHeaderBase) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-h4-semibold text-primary">{props.header}</span>
-      <span className="text-h4-semibold text-placeholder">{props.subHeader}</span>
+      <span className="text-h3-semibold text-placeholder">{props.subHeader}</span>
     </div>
   );
 }

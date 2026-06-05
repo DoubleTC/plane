@@ -31,6 +31,7 @@ import { WorkItemVersionService } from "@/services/issue";
 import { IssueDetailWidgets } from "../issue-detail-widgets";
 import { NameDescriptionUpdateStatus } from "../issue-update-status";
 import { PeekOverviewProperties } from "../peek-overview/properties";
+import { PeekOverviewQuickProperties } from "../peek-overview/quick-properties";
 import { IssueTitleInput } from "../title-input";
 import { IssueActivity } from "./issue-activity";
 import { IssueParentDetail } from "./parent";
@@ -130,6 +131,16 @@ export const IssueMainContent = observer(function IssueMainContent(props: Props)
           disabled={isArchived || !isEditable}
           value={issue.name}
           containerClassName="-ml-3"
+        />
+
+        {/* Compact property bar right under the title (state / priority /
+            assignees / start & due dates). */}
+        <PeekOverviewQuickProperties
+          workspaceSlug={workspaceSlug}
+          projectId={issue.project_id}
+          issueId={issue.id}
+          issueOperations={issueOperations}
+          disabled={isArchived || !isEditable}
         />
 
         <DescriptionInput

@@ -96,7 +96,7 @@ export const ProjectCard = observer(function ProjectCard({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Disclosure.Panel className="border-t border-subtle px-4 pt-4 pb-5">
+            <Disclosure.Panel className="border-t border-subtle px-5 pt-4 pb-5">
               <ProjectCardBody workspaceSlug={workspaceSlug} projectId={projectId} />
             </Disclosure.Panel>
           </Transition>

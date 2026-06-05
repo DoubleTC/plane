@@ -16,7 +16,7 @@ export function InstanceLoading() {
 
   return (
     <div className="flex items-center justify-center">
-      <img src={logoSrc} alt="logo" className="h-6 w-auto sm:h-11" />
+      <img src={logoSrc} alt="logo" className="h-24 w-auto sm:h-35" />
     </div>
   );
 }

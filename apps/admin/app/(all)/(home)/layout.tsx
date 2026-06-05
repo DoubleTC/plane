@@ -22,7 +22,7 @@ function RootLayout() {
   }, [replace, isUserLoggedIn]);
 
   return (
-    <div className="relative z-10 flex h-screen w-screen flex-col items-center overflow-hidden overflow-y-auto bg-surface-1 px-8 pt-6 pb-10">
+    <div className="relative z-10 flex h-screen w-screen flex-col items-center overflow-hidden overflow-y-auto bg-surface-1 px-5 pt-4 pb-5">
       <Outlet />
     </div>
   );

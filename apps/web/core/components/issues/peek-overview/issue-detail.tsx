@@ -33,6 +33,7 @@ import type { TIssueOperations } from "../issue-detail";
 import { IssueParentDetail } from "../issue-detail/parent";
 import { IssueReaction } from "../issue-detail/reactions";
 import { IssueTitleInput } from "../title-input";
+import { PeekOverviewQuickProperties } from "./quick-properties";
 // services init
 const workItemVersionService = new WorkItemVersionService();
 
@@ -129,6 +130,16 @@ export const PeekOverviewIssueDetails = observer(function PeekOverviewIssueDetai
         disabled={disabled || isArchived}
         value={issue.name}
         containerClassName="-ml-3"
+      />
+
+      {/* Compact property bar right under the title (state / priority /
+          assignees / start & due dates). */}
+      <PeekOverviewQuickProperties
+        workspaceSlug={workspaceSlug}
+        projectId={issue.project_id}
+        issueId={issue.id}
+        issueOperations={issueOperations}
+        disabled={disabled || isArchived}
       />
 
       <DescriptionInput
