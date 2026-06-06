@@ -371,7 +371,7 @@
         },
         "email": {
           "title": "Email",
-          "description": "Collect new work items from anyone who sends an email to a Plane email address.",
+          "description": "Collect new work items from anyone who sends an email to a BananaZ email address.",
           "fieldName": "Email ID"
         },
         "form": {
