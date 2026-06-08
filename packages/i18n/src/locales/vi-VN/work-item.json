@@ -15,7 +15,7 @@
         "success": "{count, plural, one {Mục công việc} other {Mục công việc}} đã được thêm vào chu kỳ thành công.",
         "loading": "Đang thêm {count, plural, one {mục công việc} other {mục công việc}} vào chu kỳ"
       },
-      "assignee": "Thêm người phụ trách",
+      "assignee": "Thêm người được giao",
       "start_date": "Thêm ngày bắt đầu",
       "due_date": "Thêm ngày hết hạn",
       "parent": "Thêm mục công việc cha",

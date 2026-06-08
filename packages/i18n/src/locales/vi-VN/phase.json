@@ -32,13 +32,13 @@
       "unarchived_title": "Giai đoạn đã được khôi phục",
       "cycles_added": "Đã thêm chu kỳ",
       "cycles_add_error": "Không thể thêm chu kỳ. Vui lòng thử lại.",
-      "cycle_removed": "Cycle removed from phase",
-      "cycle_remove_error": "Could not remove cycle. Please try again.",
-      "favoriting": "Adding phase to favorites...",
-      "favorited": "Phase added to favorites.",
-      "unfavoriting": "Removing phase from favorites...",
-      "unfavorited": "Phase removed from favorites.",
-      "favorite_error": "Could not update favorites. Please try again.",
+      "cycle_removed": "Đã xóa chu kỳ khỏi giai đoạn",
+      "cycle_remove_error": "Không thể xóa chu kỳ. Vui lòng thử lại.",
+      "favoriting": "Đang thêm giai đoạn vào mục yêu thích...",
+      "favorited": "Đã thêm giai đoạn vào mục yêu thích.",
+      "unfavoriting": "Đang xóa giai đoạn khỏi mục yêu thích...",
+      "unfavorited": "Đã xóa giai đoạn khỏi mục yêu thích.",
+      "favorite_error": "Không thể cập nhật mục yêu thích. Vui lòng thử lại.",
       "date_overlap_error": "Đã có giai đoạn khác trong khoảng thời gian này. Vui lòng chọn khoảng ngày khác."
     },
     "delete": {
@@ -48,7 +48,7 @@
     "empty_state": {
       "title": "Chưa có giai đoạn nào",
       "description": "Tạo giai đoạn để nhóm các chu kỳ thành các cột mốc có ý nghĩa.",
-      "no_cycles_to_add": "No available cycles to add."
+      "no_cycles_to_add": "Không có chu kỳ nào để thêm."
     },
     "disabled": {
       "title": "Giai đoạn bị tắt",
@@ -56,11 +56,11 @@
       "cta": "Bật giai đoạn"
     },
     "detail": {
-      "linked_cycles": "Linked cycles",
-      "no_cycles": "No cycles linked to this phase yet.",
-      "progress": "Progress",
-      "remove_cycle": "Remove cycle"
+      "linked_cycles": "Chu kỳ liên kết",
+      "no_cycles": "Chưa có chu kỳ nào được liên kết với giai đoạn này.",
+      "progress": "Tiến độ",
+      "remove_cycle": "Xóa chu kỳ"
     },
-    "no_lead": "No lead"
+    "no_lead": "Chưa có người phụ trách"
   }
 }

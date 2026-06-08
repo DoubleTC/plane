@@ -225,37 +225,37 @@
       }
     },
     "view_modes": {
-      "gallery": "Gallery",
-      "board": "Board",
-      "list": "List",
-      "timeline": "Timeline"
+      "gallery": "Thư viện",
+      "board": "Bảng",
+      "list": "Danh sách",
+      "timeline": "Dòng thời gian"
     },
     "project_state": {
-      "no_state": "No state",
-      "unassigned": "Unassigned"
+      "no_state": "Chưa có trạng thái",
+      "unassigned": "Chưa gán"
     },
     "board": {
-      "empty_column": "No projects"
+      "empty_column": "Không có dự án"
     },
     "timeline": {
-      "week": "Week",
-      "month": "Month",
-      "quarter": "Quarter",
-      "today": "Today",
-      "fullscreen": "Fullscreen",
-      "no_projects": "No projects to display",
+      "week": "Tuần",
+      "month": "Tháng",
+      "quarter": "Quý",
+      "today": "Hôm nay",
+      "fullscreen": "Toàn màn hình",
+      "no_projects": "Không có dự án để hiển thị",
       "duration": "Thời lượng"
     },
     "archived": {
-      "restore": "Restore"
+      "restore": "Khôi phục"
     },
     "member": {
-      "joined": "Joined"
+      "joined": "Đã tham gia"
     },
     "dates": {
-      "set_dates": "Set dates",
-      "select_start": "Click a start date",
-      "select_end": "Now pick an end date"
+      "set_dates": "Đặt ngày",
+      "select_start": "Chọn ngày bắt đầu",
+      "select_end": "Chọn ngày kết thúc"
     }
   },
   "workspace_views": {
