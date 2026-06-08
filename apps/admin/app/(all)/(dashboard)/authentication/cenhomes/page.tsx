@@ -69,7 +69,7 @@ const InstanceCenhomesAuthenticationPage = observer(function InstanceCenhomesAut
       customHeader={
         <AuthenticationMethodCard
           name="Cenhomes ID"
-          description="Allow members to log in or sign up to Plane with their Cenhomes ID accounts."
+          description="Allow members to log in or sign up to BananaZ with their Cenhomes ID accounts."
           icon={<img src={cenhomesLogo} height={24} width={24} alt="Cenhomes Logo" />}
           config={
             <ToggleSwitch

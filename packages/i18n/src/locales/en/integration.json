@@ -19,9 +19,9 @@
   },
   "github_integration": {
     "name": "GitHub",
-    "description": "Connect and sync your GitHub work items with Plane",
+    "description": "Connect and sync your GitHub work items with BananaZ",
     "connect_org": "Connect Organization",
-    "connect_org_description": "Connect your GitHub organization with Plane",
+    "connect_org_description": "Connect your GitHub organization with BananaZ",
     "processing": "Processing",
     "org_added_desc": "GitHub org added by and time",
     "connection_fetch_error": "Error fetching connection details from server",
@@ -107,9 +107,9 @@
   },
   "gitlab_enterprise_integration": {
     "name": "Gitlab Enterprise",
-    "description": "Connect and sync your Gitlab Enterprise instance with Plane.",
+    "description": "Connect and sync your Gitlab Enterprise instance with BananaZ.",
     "app_form_title": "Gitlab Enterprise Configuration",
-    "app_form_description": "Configure Gitlab Enterprise to connect with Plane.",
+    "app_form_description": "Configure Gitlab Enterprise to connect with BananaZ.",
     "base_url_title": "Base URL",
     "base_url_description": "The base URL of your Gitlab Enterprise instance.",
     "base_url_placeholder": "e.g., \"https://glab.plane.town\"",
@@ -131,10 +131,10 @@
   },
   "slack_integration": {
     "name": "Slack",
-    "description": "Connect your Slack workspace with Plane.",
-    "connect_personal_account": "Connect your personal Slack account with Plane.",
-    "personal_account_connected": "Your personal {providerName} account is now connected to Plane.",
-    "link_personal_account": "Link your personal {providerName} account to Plane.",
+    "description": "Connect your Slack workspace with BananaZ.",
+    "connect_personal_account": "Connect your personal Slack account with BananaZ.",
+    "personal_account_connected": "Your personal {providerName} account is now connected to BananaZ.",
+    "link_personal_account": "Link your personal {providerName} account to BananaZ.",
     "connected_slack_workspaces": "Connected Slack workspaces",
     "connected_on": "Connected on {date}",
     "disconnect_workspace": "Disconnect {name} workspace",
@@ -176,7 +176,7 @@
   },
   "sentry_integration": {
     "name": "Sentry",
-    "description": "Connect your Sentry workspace with Plane.",
+    "description": "Connect your Sentry workspace with BananaZ.",
     "connected_sentry_workspaces": "Connected Sentry workspaces",
     "connected_on": "Connected on {date}",
     "disconnect_workspace": "Disconnect {name} workspace",
@@ -196,12 +196,12 @@
   },
   "bitbucket_dc_integration": {
     "name": "Bitbucket Data Center",
-    "description": "Connect and sync your Bitbucket Data Center repositories with Plane."
+    "description": "Connect and sync your Bitbucket Data Center repositories with BananaZ."
   },
   "oauth_bridge_integration": {
     "name": "OAuth Bridge",
     "description": "Validate external IdP tokens for API access.",
-    "header_description": "Validate externally-issued OIDC/JWT tokens from your IdP (Azure AD, Okta, etc.) for Plane API access.",
+    "header_description": "Validate externally-issued OIDC/JWT tokens from your IdP (Azure AD, Okta, etc.) for BananaZ API access.",
     "connected": "Connected",
     "connect": "Connect",
     "uninstall": "Uninstall",
@@ -247,7 +247,7 @@
       "audience_description": "Expected aud claim(s) in the JWT, comma-separated.",
       "user_claims_label": "User claims",
       "user_claims_placeholder": "email, preferred_username, upn",
-      "user_claims_description": "Comma-separated JWT claims to match against the Plane email (first match wins)",
+      "user_claims_description": "Comma-separated JWT claims to match against the BananaZ email (first match wins)",
       "user_claims_required": "At least one user claim is required.",
       "allowed_algorithms_label": "Allowed signing algorithms",
       "allowed_algorithms_description": "Asymmetric algorithms accepted for JWT signature verification",
@@ -266,9 +266,9 @@
   },
   "github_enterprise_integration": {
     "name": "GitHub Enterprise",
-    "description": "Connect and sync your GitHub Enterprise organization with Plane.",
+    "description": "Connect and sync your GitHub Enterprise organization with BananaZ.",
     "app_form_title": "GitHub Enterprise Configuration",
-    "app_form_description": "Configure GitHub Enterprise to connect with Plane.",
+    "app_form_description": "Configure GitHub Enterprise to connect with BananaZ.",
     "app_id_title": "App ID",
     "app_id_description": "The ID of the app you created in your GitHub Enterprise organization.",
     "app_id_placeholder": "e.g., \"1234567890\"",

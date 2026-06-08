@@ -12,15 +12,15 @@ SPECTACULAR_SETTINGS = {
     # ========================================================================
     # Basic API Information
     # ========================================================================
-    "TITLE": "The Plane REST API",
+    "TITLE": "The BananaZ REST API",
     "DESCRIPTION": (
-        "The Plane REST API\n\n"
+        "The BananaZ REST API\n\n"
         "Visit our quick start guide and full API documentation at "
-        "[developers.plane.so](https://developers.plane.so/api-reference/introduction)."
+        "[developers.pm.cenz.pro](https://developers.pm.cenz.pro/api-reference/introduction)."
     ),
     "CONTACT": {
-        "name": "Plane",
-        "url": "https://plane.so",
+        "name": "BananaZ",
+        "url": "https://pm.cenz.pro",
         "email": "gmail@doubletc.com",
     },
     "VERSION": "0.0.1",
@@ -45,7 +45,7 @@ SPECTACULAR_SETTINGS = {
     # ========================================================================
     "SERVERS": [
         {"url": "http://localhost:8000", "description": "Local"},
-        {"url": "https://api.plane.so", "description": "Production"},
+        {"url": "https://api.pm.cenz.pro", "description": "Production"},
     ],
     # ========================================================================
     # API Tag Definitions

@@ -103,7 +103,7 @@ To ensure consistency throughout the source code, please keep these rules in min
 - Help create tutorials and blog posts
 - Request a feature by submitting a proposal
 - Report a bug
-- **Improve documentation** - fix incomplete or missing [docs](https://docs.plane.so/), bad wording, examples or explanations.
+- **Improve documentation** - fix incomplete or missing [docs](https://docs.pm.cenz.pro/), bad wording, examples or explanations.
 
 ## Contributing to language support
 
@@ -244,4 +244,4 @@ Happy translating! 🌍✨
 
 ## Need help? Questions and suggestions
 
-Questions, suggestions, and thoughts are most welcome. We can also be reached in our [Forum](https://forum.plane.so).
+Questions, suggestions, and thoughts are most welcome. We can also be reached in our [Forum](https://forum.pm.cenz.pro).

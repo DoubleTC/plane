@@ -35,7 +35,7 @@ def init_tracer():
     trace.set_tracer_provider(tracer_provider)
 
     # Configure the OTLP exporter
-    otel_endpoint = os.environ.get("OTLP_ENDPOINT", "https://telemetry.plane.so")
+    otel_endpoint = os.environ.get("OTLP_ENDPOINT", "https://telemetry.pm.cenz.pro")
     otlp_exporter = OTLPSpanExporter(endpoint=otel_endpoint)
     span_processor = BatchSpanProcessor(otlp_exporter)
     tracer_provider.add_span_processor(span_processor)

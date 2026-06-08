@@ -3,7 +3,7 @@
     "label": "Çalışma Alanı Ayarları",
     "page_label": "{workspace} - Genel ayarlar",
     "key_created": "Anahtar oluşturuldu",
-    "copy_key": "Bu gizli anahtarı Plane Pages'e kopyalayıp kaydedin. Kapat düğmesine bastıktan sonra bu anahtarı göremezsiniz. Anahtar içeren bir CSV dosyası indirildi.",
+    "copy_key": "Bu gizli anahtarı BananaZ Pages'e kopyalayıp kaydedin. Kapat düğmesine bastıktan sonra bu anahtarı göremezsiniz. Anahtar içeren bir CSV dosyası indirildi.",
     "token_copied": "Token panoya kopyalandı.",
     "settings": {
       "general": {
@@ -162,7 +162,7 @@
         "generating": "Oluşturuluyor",
         "delete": {
           "title": "API Token'ını sil",
-          "description": "Bu token'ı kullanan uygulamalar artık Plane verilerine erişemeyecek. Bu işlem geri alınamaz.",
+          "description": "Bu token'ı kullanan uygulamalar artık BananaZ verilerine erişemeyecek. Bu işlem geri alınamaz.",
           "success": {
             "title": "Başarılı!",
             "message": "API token'ı başarıyla silindi"
@@ -177,7 +177,7 @@
         "title": "Entegrasyonlar",
         "heading": "Entegrasyonlar",
         "description": "Tüm iş akışı ekosisteminizde işinizi senkronize etmek için popüler araçlar ve hizmetlerle bağlantı kurun.",
-        "page_title": "Plane verilerinizi mevcut uygulamalarda veya kendi uygulamalarınızda kullanın.",
+        "page_title": "BananaZ verilerinizi mevcut uygulamalarda veya kendi uygulamalarınızda kullanın.",
         "page_description": "Bu çalışma alanı veya sizin tarafınızdan kullanılan tüm entegrasyonları görüntüleyin."
       },
       "imports": {
@@ -259,7 +259,7 @@
       "project_states": {
         "title": "Proje durumları",
         "heading": "Tüm projeler için ilerleme özetini görün.",
-        "description": "Proje Durumları, herhangi bir proje özelliğine göre tüm projelerinizin ilerlemesini takip etmek için Plane'e özgü bir özelliktir.",
+        "description": "Proje Durumları, herhangi bir proje özelliğine göre tüm projelerinizin ilerlemesini takip etmek için BananaZ'e özgü bir özelliktir.",
         "go_to_settings": "Ayarlara git",
         "toggle_title": "Enable Project States",
         "toggle_description": "Track the lifecycle of each project by assigning a custom state. States are grouped by phase (Draft, Planning, Execution, Monitoring, Completed, Cancelled).",
@@ -337,7 +337,7 @@
         },
         "app_created": {
           "title": "Uygulama başarıyla oluşturuldu",
-          "description": "Uygulamayı bir Plane çalışma alanına yüklemek için kimlik bilgilerini kullanın"
+          "description": "Uygulamayı bir BananaZ çalışma alanına yüklemek için kimlik bilgilerini kullanın"
         },
         "installed_apps": "Yüklü uygulamalar",
         "all_apps": "Tüm uygulamalar",
@@ -378,7 +378,7 @@
         },
         "redirect_uris": {
           "label": "Yönlendirme URI'leri (boşluk ile ayrılmış)",
-          "description": "Kullanıcılar Plane ile kimlik doğrulaması yaptıktan sonra bu yola yönlendirilecektir.",
+          "description": "Kullanıcılar BananaZ ile kimlik doğrulaması yaptıktan sonra bu yola yönlendirilecektir.",
           "placeholder": "https://example.com https://example.com/"
         },
         "app_available_description": "Kullanmaya başlamak için bir Pleyn workspeysi bağlayın",
@@ -477,7 +477,7 @@
         "upload_and_save": "Yükle ve kaydet",
         "app_consent_no_access_title": "Yükleme talebi",
         "app_consent_no_access_description": "Bu uygulama yalnızca bir workspace yöneticisi tarafından kurulduktan sonra yüklenebilir. Devam etmek için workspace yöneticinizle iletişime geçin.",
-        "app_consent_unapproved_title": "Bu uygulama henüz Plane tarafından incelenmedi veya onaylanmadı.",
+        "app_consent_unapproved_title": "Bu uygulama henüz BananaZ tarafından incelenmedi veya onaylanmadı.",
         "app_consent_unapproved_description": "Bu uygulamayı çalışma alanınıza bağlamadan önce güvendiğinizden emin olun.",
         "go_to_app": "Uygulamaya git",
         "enable_app_mentions": "Uygulama bahsini etkinleştir",
@@ -502,12 +502,12 @@
         }
       },
       "plane-intelligence": {
-        "title": "Plane AI",
-        "heading": "Plane AI",
+        "title": "BananaZ AI",
+        "heading": "BananaZ AI",
         "description": "İşinizi daha akıllı ve daha hızlı hale getirmek için doğal olarak işinize ve bilgi tabanınıza bağlı olan AI kullanın."
       },
       "runners": {
-        "title": "Plane Runner",
+        "title": "BananaZ Runner",
         "heading": "Komut Dosyaları",
         "new_script": "Yeni Komut Dosyası",
         "description": "İş akışlarınızı özel komut dosyaları ve otomasyon kurallarıyla otomatikleştirin."
@@ -553,7 +553,7 @@
     "empty_state": {
       "api_tokens": {
         "title": "API token'ı oluşturulmadı",
-        "description": "Plane API'lerini harici sistemlere entegre etmek için bir token oluşturun."
+        "description": "BananaZ API'lerini harici sistemlere entegre etmek için bir token oluşturun."
       },
       "webhooks": {
         "title": "Webhook eklenmedi",

@@ -60,7 +60,7 @@ export function InstanceCenhomesConfigForm(props: Props) {
       key: "CENHOMES_CLIENT_ID",
       type: "text",
       label: "Client ID",
-      description: "The OAuth client id issued by Cenhomes ID for this Plane instance.",
+      description: "The OAuth client id issued by Cenhomes ID for this BananaZ instance.",
       placeholder: "cenfiliate",
       error: Boolean(errors.CENHOMES_CLIENT_ID),
       required: true,
@@ -132,7 +132,7 @@ export function InstanceCenhomesConfigForm(props: Props) {
       label: "Fallback email domain",
       description: (
         <>
-          When Cenhomes returns no email, Plane mints a placeholder address (<CodeBlock>{`{phone}@domain`}</CodeBlock>)
+          When Cenhomes returns no email, BananaZ mints a placeholder address (<CodeBlock>{`{phone}@domain`}</CodeBlock>)
           on this domain. Identity is still linked by the Cenhomes ID.
         </>
       ),
@@ -197,7 +197,7 @@ export function InstanceCenhomesConfigForm(props: Props) {
       <div className="flex flex-col gap-8">
         <div className="grid w-full grid-cols-2 gap-x-12 gap-y-8">
           <div className="col-span-2 flex flex-col gap-y-4 pt-1 md:col-span-1">
-            <div className="pt-2.5 text-18 font-medium">Cenhomes ID-provided details for Plane</div>
+            <div className="pt-2.5 text-18 font-medium">Cenhomes ID-provided details for BananaZ</div>
             {CENHOMES_FORM_FIELDS.map((field) => (
               <ControllerInput
                 key={field.key}
@@ -230,7 +230,7 @@ export function InstanceCenhomesConfigForm(props: Props) {
           </div>
           <div className="col-span-2 md:col-span-1">
             <div className="flex flex-col gap-y-4 rounded-lg bg-layer-3 px-6 pt-1.5 pb-4">
-              <div className="pt-2 text-18 font-medium">Plane-provided details for Cenhomes ID</div>
+              <div className="pt-2 text-18 font-medium">BananaZ-provided details for Cenhomes ID</div>
               {CENHOMES_SERVICE_FIELD.map((field) => (
                 <CopyField key={field.key} label={field.label} url={field.url} description={field.description} />
               ))}

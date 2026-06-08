@@ -1,7 +1,7 @@
 {
   "workspace_creation": {
     "heading": "Create your workspace",
-    "subheading": "To start using Plane, you need to create or join a workspace.",
+    "subheading": "To start using BananaZ, you need to create or join a workspace.",
     "form": {
       "name": {
         "label": "Name your workspace",
@@ -200,7 +200,7 @@
         "primary_button": {
           "text": "Start your first project",
           "comic": {
-            "title": "Everything starts with a project in Plane",
+            "title": "Everything starts with a project in BananaZ",
             "description": "A project could be a product's roadmap, a marketing campaign, or launching a new car."
           }
         }
@@ -211,7 +211,7 @@
         "primary_button": {
           "text": "Start your first project",
           "comic": {
-            "title": "Everything starts with a project in Plane",
+            "title": "Everything starts with a project in BananaZ",
             "description": "A project could be a product's roadmap, a marketing campaign, or launching a new car."
           }
         }
@@ -322,8 +322,8 @@
   "workspace_pages": {
     "empty_state": {
       "general": {
-        "title": "Write a note, a doc, or a full knowledge base. Get Galileo, Plane's AI assistant, to help you get started",
-        "description": "Pages are thoughts potting space in Plane. Take down meeting notes, format them easily, embed work items, lay them out using a library of components, and keep them all in your project's context. To make short work of any doc, invoke Galileo, Plane's AI, with a shortcut or the click of a button.",
+        "title": "Write a note, a doc, or a full knowledge base. Get Galileo, BananaZ's AI assistant, to help you get started",
+        "description": "Pages are thoughts potting space in BananaZ. Take down meeting notes, format them easily, embed work items, lay them out using a library of components, and keep them all in your project's context. To make short work of any doc, invoke Galileo, BananaZ's AI, with a shortcut or the click of a button.",
         "primary_button": {
           "text": "Create your first page"
         }
