@@ -21,7 +21,9 @@
       "close_project_menu": "Projekt-Menü schließen",
       "collapse_sidebar": "Seitenleiste einklappen",
       "expand_sidebar": "Seitenleiste ausklappen",
-      "edition_badge": "Modal für kostenpflichtige Pläne öffnen"
+      "edition_badge": "Modal für kostenpflichtige Pläne öffnen",
+      "open_workspace_menu": "Open workspace menu",
+      "close_workspace_menu": "Close workspace menu"
     },
     "auth_forms": {
       "clear_email": "E-Mail löschen",

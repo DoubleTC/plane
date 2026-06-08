@@ -21,7 +21,9 @@
       "close_project_menu": "Tutup menu proyek",
       "collapse_sidebar": "Tutup sidebar",
       "expand_sidebar": "Perluas sidebar",
-      "edition_badge": "Buka modal paket berbayar"
+      "edition_badge": "Buka modal paket berbayar",
+      "open_workspace_menu": "Open workspace menu",
+      "close_workspace_menu": "Close workspace menu"
     },
     "auth_forms": {
       "clear_email": "Hapus email",

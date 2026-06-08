@@ -21,7 +21,9 @@
       "close_project_menu": "Închide meniul proiectului",
       "collapse_sidebar": "Restrânge bara laterală",
       "expand_sidebar": "Extinde bara laterală",
-      "edition_badge": "Deschide modalul planurilor plătite"
+      "edition_badge": "Deschide modalul planurilor plătite",
+      "open_workspace_menu": "Open workspace menu",
+      "close_workspace_menu": "Close workspace menu"
     },
     "auth_forms": {
       "clear_email": "Șterge e-mailul",
