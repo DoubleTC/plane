@@ -43,6 +43,11 @@ export const ExtendedSidebarWrapper = observer(function ExtendedSidebarWrapper(p
     <div
       id={excludedElementId}
       ref={extendedSidebarRef}
+      // The extended sidebar is rendered as a sibling of the main sidebar, so it lies outside the main
+      // sidebar's outside-click detector. On mobile that detector fires on `mousedown` and collapses the
+      // main sidebar, which hides this panel (display:none) before the `click` reaches the link — breaking
+      // navigation. Marking the panel prevents it from being treated as an outside click.
+      data-prevent-outside-click
       className={cn(
         "shadow-sm absolute z-[21] flex h-full transform flex-col border-r border-subtle bg-surface-1 p-4 py-2 transition-all duration-300 ease-in-out",
         {

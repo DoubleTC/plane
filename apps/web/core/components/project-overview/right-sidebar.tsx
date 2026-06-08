@@ -6,7 +6,7 @@
 
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { Activity, CalendarCheck, Clock, Crosshair, Info, SignalHigh, User, Users } from "lucide-react";
+import { Activity, CalendarCheck, Clock, Crosshair, Info, SignalHigh, User, Users, X } from "lucide-react";
 import { Tab } from "@headlessui/react";
 import { useTranslation } from "@plane/i18n";
 import type { IProject, TIssuePriorities } from "@plane/types";
@@ -21,6 +21,10 @@ import { RightSidebarActivity } from "./right-sidebar-activity";
 
 type Props = {
   project: IProject;
+  /** Whether the off-canvas overlay is open on mobile. Ignored at `sm` and up, where the panel is always inline. */
+  isMobileOpen?: boolean;
+  /** Closes the mobile overlay. */
+  onMobileClose?: () => void;
 };
 
 /**
@@ -31,7 +35,11 @@ type Props = {
  * Each Properties row is wired to `updateProject` (via the underlying
  * pickers' managed mode, or a local handler for priority/dates).
  */
-export const ProjectOverviewRightSidebar = observer(function ProjectOverviewRightSidebar({ project }: Props) {
+export const ProjectOverviewRightSidebar = observer(function ProjectOverviewRightSidebar({
+  project,
+  isMobileOpen = false,
+  onMobileClose,
+}: Props) {
   const { t } = useTranslation();
   const { workspaceSlug } = useParams();
   const { updateProject } = useProject();
@@ -60,7 +68,24 @@ export const ProjectOverviewRightSidebar = observer(function ProjectOverviewRigh
   };
 
   return (
-    <aside className="absolute right-0 flex h-full w-full min-w-90 flex-col gap-4 border-l border-subtle bg-surface-1 p-6 transition-[width] ease-linear sm:relative sm:w-1/2 md:w-1/3 lg:min-w-80 xl:min-w-96">
+    <aside
+      className={cn(
+        // Mobile: off-canvas overlay sliding in from the right. sm+: inline panel that is always visible.
+        "shadow-lg absolute inset-y-0 right-0 z-10 flex h-full w-full flex-col gap-4 border-l border-subtle bg-surface-1 p-6 transition-[transform,width] duration-300 ease-in-out sm:relative sm:z-auto sm:w-1/2 sm:min-w-90 sm:translate-x-0 sm:shadow-none md:w-1/3 lg:min-w-80 xl:min-w-96",
+        isMobileOpen ? "translate-x-0" : "translate-x-full sm:translate-x-0"
+      )}
+    >
+      {/* Mobile-only close button; the panel is permanent on larger screens. */}
+      <div className="flex justify-end sm:hidden">
+        <button
+          type="button"
+          onClick={onMobileClose}
+          aria-label={t("common.close")}
+          className="rounded-md p-1 text-tertiary hover:bg-layer-transparent-hover"
+        >
+          <X className="size-4" aria-hidden />
+        </button>
+      </div>
       <Tab.Group as="div" className="flex h-full w-full flex-col">
         <Tab.List className="relative flex w-full items-center justify-between gap-1.5 overflow-auto rounded-lg bg-layer-3 p-0.5 text-13">
           <SidebarTab icon={Info} />

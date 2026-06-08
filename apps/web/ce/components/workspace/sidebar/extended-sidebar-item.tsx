@@ -55,7 +55,7 @@ export const ExtendedSidebarItem = observer(function ExtendedSidebarItem(props: 
   const pathname = usePathname();
   const { workspaceSlug } = useParams();
   // store hooks
-  const { toggleExtendedSidebar } = useAppTheme();
+  const { toggleSidebar, toggleExtendedSidebar } = useAppTheme();
   const { data } = useUser();
   const { allowPermissions } = useUserPermissions();
   const { preferences: workspacePreferences, toggleWorkspaceItem } = useWorkspaceNavigationPreferences();
@@ -63,7 +63,13 @@ export const ExtendedSidebarItem = observer(function ExtendedSidebarItem(props: 
   // derived values
   const isPinned = workspacePreferences.items[item.key]?.is_pinned ?? false;
 
-  const handleLinkClick = () => toggleExtendedSidebar(true);
+  const handleLinkClick = () => {
+    // On mobile, collapse the main sidebar so the navigated page content is visible immediately
+    // (collapsing also closes this extended panel via the wrapper's sidebarCollapsed effect).
+    // On desktop, keep the extended sidebar open so multiple items can be opened in sequence.
+    if (window.innerWidth < 768) toggleSidebar(true);
+    else toggleExtendedSidebar(true);
+  };
 
   useEffect(() => {
     const element = navigationIemRef.current;

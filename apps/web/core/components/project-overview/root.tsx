@@ -4,8 +4,10 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
+import { PanelRightOpen } from "lucide-react";
+import { useTranslation } from "@plane/i18n";
 import { Loader } from "@plane/ui";
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useModule } from "@/hooks/store/use-module";
@@ -33,6 +35,9 @@ type Props = {
  * have been hydrated.
  */
 export const ProjectOverviewRoot = observer(function ProjectOverviewRoot({ workspaceSlug, projectId }: Props) {
+  const { t } = useTranslation();
+  // On mobile the right sidebar is an overlay; keep it closed by default so the main content is visible.
+  const [isPropertiesOpen, setIsPropertiesOpen] = useState(false);
   const { getProjectById, currentProjectDetails } = useProject();
   const { fetchAllCycles } = useCycle();
   const { fetchPhases, getPhaseFetchStatusByProjectId } = usePhase();
@@ -85,6 +90,17 @@ export const ProjectOverviewRoot = observer(function ProjectOverviewRoot({ works
   return (
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="flex h-full w-full flex-col overflow-y-auto">
+        {/* Mobile-only trigger to reveal the right sidebar, which is an off-canvas overlay on small screens. */}
+        <div className="mb-3 flex items-center justify-end px-4 pt-3 sm:hidden">
+          <button
+            type="button"
+            onClick={() => setIsPropertiesOpen(true)}
+            className="flex items-center gap-1.5 rounded-md border border-subtle bg-surface-1 px-2.5 py-1 text-13 font-medium text-secondary hover:bg-layer-transparent-hover"
+          >
+            <PanelRightOpen className="size-4" aria-hidden />
+            {t("common.properties")}
+          </button>
+        </div>
         <ProjectOverviewHero project={project} />
         <div className="flex w-full flex-col px-10 py-8">
           <MetricsOverall workspaceSlug={workspaceSlug} projectId={projectId} />
@@ -92,7 +108,11 @@ export const ProjectOverviewRoot = observer(function ProjectOverviewRoot({ works
           <MetricsModules projectId={projectId} />
         </div>
       </div>
-      <ProjectOverviewRightSidebar project={project} />
+      <ProjectOverviewRightSidebar
+        project={project}
+        isMobileOpen={isPropertiesOpen}
+        onMobileClose={() => setIsPropertiesOpen(false)}
+      />
     </div>
   );
 });
