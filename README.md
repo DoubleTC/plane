@@ -15,7 +15,7 @@
 </p>
 
 <p>
-    <a href="https://app.plane.so/#gh-light-mode-only" target="_blank">
+    <a href="https://pm.cenz.pro/#gh-light-mode-only" target="_blank">
       <img
         src="https://media.docs.plane.so/GitHub-readme/github-top.webp"
         alt="Plane Screens"
@@ -33,7 +33,7 @@ Meet [Plane](https://plane.so/), an open-source project management tool to track
 Getting started with Plane is simple. Choose the setup that works best for you:
 
 - **Plane Cloud**
-  Sign up for a free account on [Plane Cloud](https://app.plane.so)—it's the fastest way to get up and running without worrying about infrastructure.
+  Sign up for a free account on [Plane Cloud](https://pm.cenz.pro)—it's the fastest way to get up and running without worrying about infrastructure.
 
 - **Self-host Plane**
   Prefer full control over your data and infrastructure? Install and run Plane on your own servers. Follow our detailed [deployment guides](https://developers.plane.so/self-hosting/overview) to get started.

@@ -133,12 +133,12 @@ export const SUBSCRIPTION_REDIRECTION_URLS: Record<EProductSubscriptionEnum, Rec
     year: TALK_TO_SALES_URL,
   },
   [EProductSubscriptionEnum.PRO]: {
-    month: "https://app.plane.so/upgrade/pro/self-hosted?plan=month",
-    year: "https://app.plane.so/upgrade/pro/self-hosted?plan=year",
+    month: "https://pm.cenz.pro/upgrade/pro/self-hosted?plan=month",
+    year: "https://pm.cenz.pro/upgrade/pro/self-hosted?plan=year",
   },
   [EProductSubscriptionEnum.BUSINESS]: {
-    month: "https://app.plane.so/upgrade/business/self-hosted?plan=month",
-    year: "https://app.plane.so/upgrade/business/self-hosted?plan=year",
+    month: "https://pm.cenz.pro/upgrade/business/self-hosted?plan=month",
+    year: "https://pm.cenz.pro/upgrade/business/self-hosted?plan=year",
   },
   [EProductSubscriptionEnum.ENTERPRISE]: {
     month: TALK_TO_SALES_URL,

@@ -100,13 +100,13 @@ export const meta: Route.MetaFunction = () => [
   { property: "og:title", content: APP_TITLE },
   {
     property: "og:description",
-    content: "Open-source project management tool to manage work items, cycles, and product roadmaps easily",
+    content: "Được vận hành bởi chuối và cà phê.",
   },
-  { property: "og:url", content: "https://app.plane.so/" },
+  { property: "og:url", content: "https://pm.cenz.pro/" },
   { property: "og:image", content: ogImage },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },
-  { property: "og:image:alt", content: "Plane - Modern project management" },
+  { property: "og:image:alt", content: "BananaZ | Làm ít chơi nhiều vẫn hiệu quả" },
   {
     name: "keywords",
     content:
@@ -117,7 +117,7 @@ export const meta: Route.MetaFunction = () => [
   { name: "twitter:image", content: ogImage },
   { name: "twitter:image:width", content: "1200" },
   { name: "twitter:image:height", content: "630" },
-  { name: "twitter:image:alt", content: "Plane - Modern project management" },
+  { name: "twitter:image:alt", content: "BananaZ | Làm ít chơi nhiều vẫn hiệu quả" },
 ];
 
 export default function Root() {

@@ -23,7 +23,7 @@ import "@fontsource/ibm-plex-mono";
 
 const APP_TITLE = "BananaZ | Làm ít chơi nhiều vẫn hiệu quả.";
 const APP_DESCRIPTION =
-  "Open-source project management tool to manage work items, sprints, and product roadmaps with peace of mind.";
+  "Được vận hành bởi chuối và cà phê.";
 
 export const links: LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },
@@ -63,13 +63,13 @@ export const meta: Route.MetaFunction = () => [
   { name: "description", content: APP_DESCRIPTION },
   { property: "og:title", content: APP_TITLE },
   { property: "og:description", content: APP_DESCRIPTION },
-  { property: "og:url", content: "https://plane.so/" },
+  { property: "og:url", content: "https://pm.cenz.pro/" },
   {
     name: "keywords",
     content:
       "software development, customer feedback, software, accelerate, code management, release management, project management, work items tracking, agile, scrum, kanban, collaboration",
   },
-  { name: "twitter:site", content: "@planepowers" },
+  { name: "twitter:site", content: "@bananazpowers" },
 ];
 
 export default function Root() {

@@ -40,19 +40,19 @@ export const meta = () => [
   { property: "og:title", content: "BananaZ | Làm ít chơi nhiều vẫn hiệu quả." },
   {
     property: "og:description",
-    content: "Open-source project management tool to manage work items, cycles, and product roadmaps easily",
+    content: "Được vận hành bởi chuối và cà phê.",
   },
-  { property: "og:url", content: "https://app.plane.so/" },
-  { property: "og:image", content: "https://app.plane.so/og-image.png" },
+  { property: "og:url", content: "https://pm.cenz.pro/" },
+  { property: "og:image", content: "https://pm.cenz.pro/og-image.png" },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },
-  { property: "og:image:alt", content: "Plane - Modern project management" },
+  { property: "og:image:alt", content: "BananaZ | Làm ít chơi nhiều vẫn hiệu quả" },
   { name: "twitter:site", content: "@planepowers" },
   { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:image", content: "https://app.plane.so/og-image.png" },
+  { name: "twitter:image", content: "https://pm.cenz.pro/og-image.png" },
   { name: "twitter:image:width", content: "1200" },
   { name: "twitter:image:height", content: "630" },
-  { name: "twitter:image:alt", content: "Plane - Modern project management" },
+  { name: "twitter:image:alt", content: "BananaZ | Làm ít chơi nhiều vẫn hiệu quả" },
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
