@@ -21,7 +21,7 @@ SPECTACULAR_SETTINGS = {
     "CONTACT": {
         "name": "Plane",
         "url": "https://plane.so",
-        "email": "support@plane.so",
+        "email": "gmail@doubletc.com",
     },
     "VERSION": "0.0.1",
     "LICENSE": {
