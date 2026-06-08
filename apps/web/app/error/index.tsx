@@ -21,5 +21,6 @@ export function CustomErrorComponent({ error }: { error: unknown }) {
     return <DevErrorComponent error={error} onGoHome={handleGoHome} onReload={handleReload} />;
   }
 
-  return <ProdErrorComponent onGoHome={handleGoHome} />;
+  // TEMPORARY DEBUG: pass `error` so it is shown on-screen in production builds. Remove once diagnosed.
+  return <ProdErrorComponent onGoHome={handleGoHome} error={error} />;
 }

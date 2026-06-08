@@ -77,9 +77,16 @@ function RenderIfVisible(props: Props) {
   //Set height after render
   useEffect(() => {
     if (intersectionRef.current && isVisible && shouldRecordHeights) {
-      window.requestIdleCallback(() => {
+      const recordHeight = () => {
         if (intersectionRef.current) placeholderHeight.current = `${intersectionRef.current.offsetHeight}px`;
-      });
+      };
+      // Safari/WebKit (incl. all iOS browsers) does not implement requestIdleCallback; calling it
+      // unguarded throws and crashes the whole layout. Fall back to a timeout when it is unavailable.
+      if (typeof window !== "undefined" && typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(recordHeight);
+      } else {
+        setTimeout(recordHeight, 0);
+      }
     }
   }, [isVisible, intersectionRef, shouldRecordHeights]);
 

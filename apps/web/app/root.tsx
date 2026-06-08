@@ -154,5 +154,12 @@ export function HydrateFallback() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  // Surface the captured error in the console. Production builds render the friendly prod
+  // error screen and otherwise discard the error, leaving no trace to debug from; logging
+  // it here keeps the message + stack inspectable in any build/browser.
+  useEffect(() => {
+    console.error("[ErrorBoundary]", error);
+  }, [error]);
+
   return <CustomErrorComponent error={error} />;
 }
