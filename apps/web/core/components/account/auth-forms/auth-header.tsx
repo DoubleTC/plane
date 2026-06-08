@@ -42,15 +42,15 @@ const Titles = {
   [EAuthModes.SIGN_UP]: {
     [EAuthSteps.EMAIL]: {
       header: "Làm ít chơi nhiều vẫn hiệu quả.",
-      subHeader: "Create your Plane account.",
+      subHeader: "Create your BananaZ account.",
     },
     [EAuthSteps.PASSWORD]: {
       header: "Làm ít chơi nhiều vẫn hiệu quả.",
-      subHeader: "Create your Plane account.",
+      subHeader: "Create your BananaZ account.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
       header: "Làm ít chơi nhiều vẫn hiệu quả.",
-      subHeader: "Create your Plane account.",
+      subHeader: "Create your BananaZ account.",
     },
   },
 };
@@ -74,11 +74,11 @@ export const AuthHeader = observer(function AuthHeader(props: TAuthHeader) {
   const getHeaderSubHeader = (
     step: EAuthSteps,
     mode: EAuthModes,
-    invitation: IWorkspaceMemberInvitation | undefined,
+    memberInvitation: IWorkspaceMemberInvitation | undefined,
     email: string | undefined
   ) => {
-    if (invitation && email && invitation.email === email && invitation.workspace) {
-      const workspace = invitation.workspace;
+    if (memberInvitation && email && memberInvitation.email === email && memberInvitation.workspace) {
+      const workspace = memberInvitation.workspace;
       return {
         header: (
           <div className="relative inline-flex items-center gap-2">
