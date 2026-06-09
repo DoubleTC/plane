@@ -306,16 +306,22 @@ class WorkspaceUserProfileEndpoint(BaseAPIView):
                             project_issue__archived_at__isnull=True,
                             project_issue__is_draft=False,
                         ),
+                        distinct=True,
                     )
                 )
                 .annotate(
+                    # Count through the IssueAssignee join and ignore soft-deleted (removed) links so
+                    # work items the user was unassigned from are no longer counted. distinct=True
+                    # avoids double counting when an issue has multiple assignee link rows.
                     assigned_issues=Count(
                         "project_issue",
                         filter=Q(
-                            project_issue__assignees__in=[user_id],
+                            project_issue__issue_assignee__assignee_id=user_id,
+                            project_issue__issue_assignee__deleted_at__isnull=True,
                             project_issue__archived_at__isnull=True,
                             project_issue__is_draft=False,
                         ),
+                        distinct=True,
                     )
                 )
                 .annotate(
@@ -323,10 +329,12 @@ class WorkspaceUserProfileEndpoint(BaseAPIView):
                         "project_issue",
                         filter=Q(
                             project_issue__completed_at__isnull=False,
-                            project_issue__assignees__in=[user_id],
+                            project_issue__issue_assignee__assignee_id=user_id,
+                            project_issue__issue_assignee__deleted_at__isnull=True,
                             project_issue__archived_at__isnull=True,
                             project_issue__is_draft=False,
                         ),
+                        distinct=True,
                     )
                 )
                 .annotate(
@@ -338,10 +346,12 @@ class WorkspaceUserProfileEndpoint(BaseAPIView):
                                 "unstarted",
                                 "started",
                             ],
-                            project_issue__assignees__in=[user_id],
+                            project_issue__issue_assignee__assignee_id=user_id,
+                            project_issue__issue_assignee__deleted_at__isnull=True,
                             project_issue__archived_at__isnull=True,
                             project_issue__is_draft=False,
                         ),
+                        distinct=True,
                     )
                 )
                 .values(
