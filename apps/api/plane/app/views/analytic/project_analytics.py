@@ -290,37 +290,56 @@ class ProjectAnalyticsOverviewEndpoint(ProjectAdvanceAnalyticsBaseView):
         ]
 
     def get_members(self, project_id: str, member_schedule: Dict[str, Dict[str, int]]) -> list:
-        # Per-member completed vs. total assigned within this project.
+        # Per-member completed vs. total assigned within this project. We group through the
+        # IssueAssignee join (issue_assignee) and keep only non-soft-deleted links
+        # (deleted_at__isnull=True). The m2m `assignees` traversal would otherwise still include
+        # assignees that were later removed from a work item (their link row is only soft-deleted),
+        # inflating every member's total by the number of items they were unassigned from.
         member_totals = (
-            Issue.issue_objects.filter(**self.filters["base_filters"], project_id=project_id)
-            .values("assignees__id")
+            Issue.issue_objects.filter(
+                **self.filters["base_filters"], project_id=project_id, issue_assignee__deleted_at__isnull=True
+            )
+            .values("issue_assignee__assignee_id")
             .annotate(
                 total=Count("id", distinct=True),
                 completed=Count("id", filter=Q(state__group="completed"), distinct=True),
             )
         )
         totals_map = {
-            str(row["assignees__id"]): row for row in member_totals if row["assignees__id"] is not None
+            str(row["issue_assignee__assignee_id"]): row
+            for row in member_totals
+            if row["issue_assignee__assignee_id"] is not None
         }
 
         # Allocation: distinct issues a member touched in the last 30 days, this
         # project vs. across all of the requesting user's workspace projects.
         cutoff = timezone.now() - timedelta(days=30)
         ws_alloc = (
-            Issue.issue_objects.filter(**self.filters["base_filters"], updated_at__gte=cutoff)
-            .values("assignees__id")
+            Issue.issue_objects.filter(
+                **self.filters["base_filters"], updated_at__gte=cutoff, issue_assignee__deleted_at__isnull=True
+            )
+            .values("issue_assignee__assignee_id")
             .annotate(count=Count("id", distinct=True))
         )
         project_alloc = (
             Issue.issue_objects.filter(
-                **self.filters["base_filters"], project_id=project_id, updated_at__gte=cutoff
+                **self.filters["base_filters"],
+                project_id=project_id,
+                updated_at__gte=cutoff,
+                issue_assignee__deleted_at__isnull=True,
             )
-            .values("assignees__id")
+            .values("issue_assignee__assignee_id")
             .annotate(count=Count("id", distinct=True))
         )
-        ws_map = {str(r["assignees__id"]): r["count"] for r in ws_alloc if r["assignees__id"] is not None}
+        ws_map = {
+            str(r["issue_assignee__assignee_id"]): r["count"]
+            for r in ws_alloc
+            if r["issue_assignee__assignee_id"] is not None
+        }
         project_map = {
-            str(r["assignees__id"]): r["count"] for r in project_alloc if r["assignees__id"] is not None
+            str(r["issue_assignee__assignee_id"]): r["count"]
+            for r in project_alloc
+            if r["issue_assignee__assignee_id"] is not None
         }
 
         members_qs = (
@@ -378,9 +397,13 @@ class ProjectAnalyticsOverviewEndpoint(ProjectAdvanceAnalyticsBaseView):
         self.initialize_workspace(slug, type="analytics")
 
         completed_dated = self._completed_dated_queryset(project_id)
+        # Group per-member timeliness through the IssueAssignee join, excluding soft-deleted (removed)
+        # assignee links so on-time rate / rating only reflect work the member is still assigned to.
         member_schedule = {
             key: dict(value)
-            for key, value in self.get_grouped_schedule(completed_dated, "assignees__id").items()
+            for key, value in self.get_grouped_schedule(
+                completed_dated.filter(issue_assignee__deleted_at__isnull=True), "issue_assignee__assignee_id"
+            ).items()
         }
 
         return Response(
