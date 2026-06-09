@@ -18,14 +18,14 @@ import { ProjectCard } from "./project-card";
 import { isTodayWithin } from "./utils";
 
 /**
- * Analytics → Projects tab. Lists every workspace project as a collapsible
- * card; expanding one reveals its full BI dashboard (ProjectCard body).
+ * Analytics → Projects tab. Lists the projects the current user is a member of
+ * as collapsible cards; expanding one reveals its full BI dashboard (ProjectCard body).
  */
 export const ProjectsAnalytics = observer(function ProjectsAnalytics() {
   const { t } = useTranslation();
   const params = useParams();
   const workspaceSlug = params.workspaceSlug?.toString();
-  const { workspaceProjectIds, loader, fetchStatus, fetchProjects, getProjectById } = useProject();
+  const { workspaceProjectIds, joinedProjectIds, loader, fetchStatus, fetchProjects, getProjectById } = useProject();
   const { selectedProjects } = useAnalytics();
   const { currentWorkspace } = useWorkspace();
   const { fetchStates } = useWorkspaceProjectState();
@@ -48,10 +48,10 @@ export const ProjectsAnalytics = observer(function ProjectsAnalytics() {
     fetchStates(workspaceSlug).catch(() => undefined);
   }, [workspaceSlug, projectStatesEnabled, fetchStates]);
 
-  // Honor the header "All projects" filter; when nothing is selected, show all.
-  // Then order by start_date descending (latest start first), with date-less
-  // projects sinking to the bottom.
-  const orderedProjectIds = (workspaceProjectIds ?? [])
+  // Only the projects the current user is a member of (joinedProjectIds), then honor the header
+  // "All projects" filter; when nothing is selected, show all joined ones. Order by start_date
+  // descending (latest start first), with date-less projects sinking to the bottom.
+  const orderedProjectIds = joinedProjectIds
     .filter((id) => selectedProjects.length === 0 || selectedProjects.includes(id))
     .slice()
     // eslint-disable-next-line no-array-sort-mutation -- operating on a copy
