@@ -140,6 +140,20 @@ export const MemberDetail = ({ workspaceSlug, memberId, period, projectIds, pill
             margin={{ top: 28, right: 64, bottom: 28, left: 64 }}
             showTooltip
           />
+          {/* Legend explaining what each pillar measures and how the scores are derived. */}
+          <div className="mt-3 space-y-2 border-t border-subtle pt-3">
+            {PILLAR_META.map((p) => (
+              <div key={p.key} className="flex items-start gap-2 text-12">
+                <span className="mt-1 size-2 flex-shrink-0 rounded-full" style={{ backgroundColor: p.color }} />
+                <span className="text-secondary">
+                  <span className="font-medium text-primary">{t(p.i18nKey)}</span>
+                  {" — "}
+                  {t(`${p.i18nKey}_hint`)}
+                </span>
+              </div>
+            ))}
+            <p className="pt-1 text-11 text-tertiary">{t("members_analytics.pillar.note")}</p>
+          </div>
         </Panel>
 
         <Panel title={t("members_analytics.detail.throughput_trend")}>

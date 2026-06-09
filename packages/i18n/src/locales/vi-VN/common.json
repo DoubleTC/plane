@@ -955,7 +955,13 @@
       "quality": "Chất lượng",
       "predictability": "Tính dự đoán",
       "flow": "Hiệu suất",
-      "collaboration": "Hợp tác"
+      "collaboration": "Hợp tác",
+      "delivery_hint": "Khối lượng hoàn thành — số mục công việc và điểm (story points) đã xong.",
+      "quality_hint": "Đúng hạn, ít bị mở lại, tỉ lệ lỗi thấp và ít việc quá hạn còn mở.",
+      "predictability_hint": "Bám sát phạm vi ước tính và thời gian chu kỳ ổn định (ít dao động).",
+      "flow_hint": "Tốc độ xử lý — thời gian chu kỳ và lead time càng ngắn điểm càng cao.",
+      "collaboration_hint": "Mức tham gia — bình luận, được nhắc tên (@mention), số dự án tham gia và vai trò sở hữu/phụ trách.",
+      "note": "Mỗi chỉ số được chuẩn hoá 0–100 so với toàn đội trong kỳ đã chọn; Index là trung bình của 5 chỉ số."
     },
     "metric": {
       "completed_count": "Hoàn thành",

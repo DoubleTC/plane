@@ -955,7 +955,13 @@
       "quality": "Quality",
       "predictability": "Predictability",
       "flow": "Flow",
-      "collaboration": "Collaboration"
+      "collaboration": "Collaboration",
+      "delivery_hint": "Throughput — work items and story points completed.",
+      "quality_hint": "On-time delivery, few reopens, low bug ratio, and few overdue open items.",
+      "predictability_hint": "Adherence to estimated scope and a stable (low-variance) cycle time.",
+      "flow_hint": "Speed of work — shorter cycle time and lead time score higher.",
+      "collaboration_hint": "Engagement — comments, @mentions received, projects touched, and ownership/lead roles.",
+      "note": "Each score is normalized 0–100 relative to the team for the selected period; the Index is the average of the five pillars."
     },
     "metric": {
       "completed_count": "Completed",
