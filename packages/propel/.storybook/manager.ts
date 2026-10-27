@@ -10,7 +10,7 @@ import { create } from "storybook/theming";
 const planeTheme = create({
   base: "dark",
   brandTitle: "BananaZ UI",
-  brandUrl: "https://pm.cenz.pro",
+  brandUrl: "https://pm.cenhomes.net",
   brandImage: "plane-lockup-light.svg",
   brandTarget: "_self",
 });

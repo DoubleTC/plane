@@ -162,7 +162,7 @@
           },
           "website": {
             "label": "URL вебсайту",
-            "placeholder": "https://pm.cenz.pro",
+            "placeholder": "https://pm.cenhomes.net",
             "validation": {
               "invalid": "Некоректний URL",
               "maxLength": "URL має бути менше 800 символів"
@@ -178,7 +178,7 @@
           },
           "contact_email": {
             "label": "Email підтримки",
-            "placeholder": "help@pm.cenz.pro",
+            "placeholder": "help@pm.cenhomes.net",
             "validation": {
               "invalid": "Некоректна email адреса",
               "maxLength": "Email підтримки має бути менше 255 символів"

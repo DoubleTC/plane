@@ -49,7 +49,7 @@ export function InstanceCenhomesConfigForm(props: Props) {
       CENHOMES_TOKEN_URL: config["CENHOMES_TOKEN_URL"] || "https://id.cenhomes.vn/connect/token",
       CENHOMES_USERINFO_URL: config["CENHOMES_USERINFO_URL"] || "https://id.cenhomes.vn/connect/userinfo",
       CENHOMES_SCOPE: config["CENHOMES_SCOPE"] || "openid profile email phone",
-      CENHOMES_FALLBACK_EMAIL_DOMAIN: config["CENHOMES_FALLBACK_EMAIL_DOMAIN"] || "pm.cenz.pro",
+      CENHOMES_FALLBACK_EMAIL_DOMAIN: config["CENHOMES_FALLBACK_EMAIL_DOMAIN"] || "pm.cenhomes.net",
     },
   });
 
@@ -136,7 +136,7 @@ export function InstanceCenhomesConfigForm(props: Props) {
           on this domain. Identity is still linked by the Cenhomes ID.
         </>
       ),
-      placeholder: "pm.cenz.pro",
+      placeholder: "pm.cenhomes.net",
       error: Boolean(errors.CENHOMES_FALLBACK_EMAIL_DOMAIN),
       required: false,
     },

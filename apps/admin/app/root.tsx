@@ -63,7 +63,7 @@ export const meta: Route.MetaFunction = () => [
   { name: "description", content: APP_DESCRIPTION },
   { property: "og:title", content: APP_TITLE },
   { property: "og:description", content: APP_DESCRIPTION },
-  { property: "og:url", content: "https://pm.cenz.pro/" },
+  { property: "og:url", content: "https://pm.cenhomes.net/" },
   {
     name: "keywords",
     content:

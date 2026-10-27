@@ -27,7 +27,7 @@ export function IssueEmbedUpgradeCard(props: any) {
         </p>
       </div>
       <a
-        href="https://pm.cenz.pro/pro"
+        href="https://pm.cenhomes.net/pro"
         target="_blank"
         rel="noopener noreferrer"
         className={cn(getButtonStyling("primary", "base"), "no-underline")}

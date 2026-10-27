@@ -189,7 +189,7 @@ cenhomes_config_variables = [
     },
     {
         "key": "CENHOMES_FALLBACK_EMAIL_DOMAIN",
-        "value": os.environ.get("CENHOMES_FALLBACK_EMAIL_DOMAIN", "pm.cenz.pro"),
+        "value": os.environ.get("CENHOMES_FALLBACK_EMAIL_DOMAIN", "pm.cenhomes.net"),
         "category": "CENHOMES",
         "is_encrypted": False,
     },

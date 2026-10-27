@@ -24,7 +24,7 @@ CENHOMES_CONFIG = [
     {"key": "CENHOMES_TOKEN_URL", "default": "https://id.cenhomes.vn/connect/token", "is_encrypted": False},
     {"key": "CENHOMES_USERINFO_URL", "default": "https://id.cenhomes.vn/connect/userinfo", "is_encrypted": False},
     {"key": "CENHOMES_SCOPE", "default": "openid profile email phone", "is_encrypted": False},
-    {"key": "CENHOMES_FALLBACK_EMAIL_DOMAIN", "default": "pm.cenz.pro", "is_encrypted": False},
+    {"key": "CENHOMES_FALLBACK_EMAIL_DOMAIN", "default": "pm.cenhomes.net", "is_encrypted": False},
     {"key": "ENABLE_CENHOMES_SYNC", "default": "0", "is_encrypted": False},
 ]
 

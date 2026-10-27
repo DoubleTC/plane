@@ -117,7 +117,7 @@ export const PLANE_COMMUNITY_PRODUCTS: Record<string, IPaymentProduct> = {
 /**
  * URL for the "Talk to Sales" page where users can contact sales team
  */
-export const TALK_TO_SALES_URL = "https://pm.cenz.pro/talk-to-sales";
+export const TALK_TO_SALES_URL = "https://pm.cenhomes.net/talk-to-sales";
 
 /**
  * Mapping of subscription types to their respective upgrade/redirection URLs based on billing frequency
@@ -133,12 +133,12 @@ export const SUBSCRIPTION_REDIRECTION_URLS: Record<EProductSubscriptionEnum, Rec
     year: TALK_TO_SALES_URL,
   },
   [EProductSubscriptionEnum.PRO]: {
-    month: "https://pm.cenz.pro/upgrade/pro/self-hosted?plan=month",
-    year: "https://pm.cenz.pro/upgrade/pro/self-hosted?plan=year",
+    month: "https://pm.cenhomes.net/upgrade/pro/self-hosted?plan=month",
+    year: "https://pm.cenhomes.net/upgrade/pro/self-hosted?plan=year",
   },
   [EProductSubscriptionEnum.BUSINESS]: {
-    month: "https://pm.cenz.pro/upgrade/business/self-hosted?plan=month",
-    year: "https://pm.cenz.pro/upgrade/business/self-hosted?plan=year",
+    month: "https://pm.cenhomes.net/upgrade/business/self-hosted?plan=month",
+    year: "https://pm.cenhomes.net/upgrade/business/self-hosted?plan=year",
   },
   [EProductSubscriptionEnum.ENTERPRISE]: {
     month: TALK_TO_SALES_URL,
@@ -153,7 +153,7 @@ export const SUBSCRIPTION_REDIRECTION_URLS: Record<EProductSubscriptionEnum, Rec
 export const SUBSCRIPTION_WEBPAGE_URLS: Record<EProductSubscriptionEnum, string> = {
   [EProductSubscriptionEnum.FREE]: TALK_TO_SALES_URL,
   [EProductSubscriptionEnum.ONE]: TALK_TO_SALES_URL,
-  [EProductSubscriptionEnum.PRO]: "https://pm.cenz.pro/pro",
-  [EProductSubscriptionEnum.BUSINESS]: "https://pm.cenz.pro/business",
-  [EProductSubscriptionEnum.ENTERPRISE]: "https://pm.cenz.pro/business",
+  [EProductSubscriptionEnum.PRO]: "https://pm.cenhomes.net/pro",
+  [EProductSubscriptionEnum.BUSINESS]: "https://pm.cenhomes.net/business",
+  [EProductSubscriptionEnum.ENTERPRISE]: "https://pm.cenhomes.net/business",
 };

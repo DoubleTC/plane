@@ -162,7 +162,7 @@
           },
           "website": {
             "label": "URL do site",
-            "placeholder": "https://pm.cenz.pro",
+            "placeholder": "https://pm.cenhomes.net",
             "validation": {
               "invalid": "URL inválida",
               "maxLength": "A URL deve ter menos de 800 caracteres"
@@ -178,7 +178,7 @@
           },
           "contact_email": {
             "label": "Email podpory",
-            "placeholder": "help@pm.cenz.pro",
+            "placeholder": "help@pm.cenhomes.net",
             "validation": {
               "invalid": "Nieprawidłowy adres e-mail",
               "maxLength": "Email podpory powinien mieć mniej niż 255 znaków"

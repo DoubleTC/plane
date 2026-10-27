@@ -102,7 +102,7 @@ export const meta: Route.MetaFunction = () => [
     property: "og:description",
     content: "Được vận hành bởi chuối và cà phê.",
   },
-  { property: "og:url", content: "https://pm.cenz.pro/" },
+  { property: "og:url", content: "https://pm.cenhomes.net/" },
   { property: "og:image", content: ogImage },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },

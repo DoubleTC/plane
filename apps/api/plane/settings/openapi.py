@@ -16,11 +16,11 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": (
         "The BananaZ REST API\n\n"
         "Visit our quick start guide and full API documentation at "
-        "[developers.pm.cenz.pro](https://developers.pm.cenz.pro/api-reference/introduction)."
+        "[developers.pm.cenhomes.net](https://developers.pm.cenhomes.net/api-reference/introduction)."
     ),
     "CONTACT": {
         "name": "BananaZ",
-        "url": "https://pm.cenz.pro",
+        "url": "https://pm.cenhomes.net",
         "email": "gmail@doubletc.com",
     },
     "VERSION": "0.0.1",
@@ -45,7 +45,7 @@ SPECTACULAR_SETTINGS = {
     # ========================================================================
     "SERVERS": [
         {"url": "http://localhost:8000", "description": "Local"},
-        {"url": "https://api.pm.cenz.pro", "description": "Production"},
+        {"url": "https://api.pm.cenhomes.net", "description": "Production"},
     ],
     # ========================================================================
     # API Tag Definitions

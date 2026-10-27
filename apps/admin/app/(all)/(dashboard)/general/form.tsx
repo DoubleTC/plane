@@ -112,7 +112,7 @@ export const GeneralConfigurationForm = observer(function GeneralConfigurationFo
                 No PII is collected.This anonymized data is used to understand how you use BananaZ and build new features
                 in line with{" "}
                 <a
-                  href="https://developers.pm.cenz.pro/self-hosting/telemetry"
+                  href="https://developers.pm.cenhomes.net/self-hosting/telemetry"
                   target="_blank"
                   className="text-accent-primary hover:underline"
                   rel="noreferrer"

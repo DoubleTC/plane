@@ -75,7 +75,7 @@ class CenhomesOAuthProvider(OauthAdapter):
                 },
                 {
                     "key": "CENHOMES_FALLBACK_EMAIL_DOMAIN",
-                    "default": os.environ.get("CENHOMES_FALLBACK_EMAIL_DOMAIN", "pm.cenz.pro"),
+                    "default": os.environ.get("CENHOMES_FALLBACK_EMAIL_DOMAIN", "pm.cenhomes.net"),
                 },
             ]
         )
@@ -89,7 +89,7 @@ class CenhomesOAuthProvider(OauthAdapter):
         self.token_url = CENHOMES_TOKEN_URL
         self.userinfo_url = CENHOMES_USERINFO_URL
         self.scope = CENHOMES_SCOPE or "openid profile email phone"
-        self.fallback_email_domain = (CENHOMES_FALLBACK_EMAIL_DOMAIN or "pm.cenz.pro").lstrip("@")
+        self.fallback_email_domain = (CENHOMES_FALLBACK_EMAIL_DOMAIN or "pm.cenhomes.net").lstrip("@")
 
         client_id = CENHOMES_CLIENT_ID
         client_secret = CENHOMES_CLIENT_SECRET

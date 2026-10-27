@@ -14,8 +14,8 @@ interface TermsAndConditionsProps {
 
 // Constants for better maintainability
 // const LEGAL_LINKS = {
-//   termsOfService: "https://pm.cenz.pro/legals/terms-and-conditions",
-//   privacyPolicy: "https://pm.cenz.pro/legals/privacy-policy",
+//   termsOfService: "https://pm.cenhomes.net/legals/terms-and-conditions",
+//   privacyPolicy: "https://pm.cenhomes.net/legals/privacy-policy",
 // } as const;
 //
 // const MESSAGES = {

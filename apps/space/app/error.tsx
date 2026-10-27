@@ -24,7 +24,7 @@ function ErrorPage() {
               gmail@doubletc.com
             </a>{" "}
             or on our{" "}
-            <a href="https://forum.pm.cenz.pro" target="_blank" className="text-accent-primary" rel="noopener noreferrer">
+            <a href="https://forum.pm.cenhomes.net" target="_blank" className="text-accent-primary" rel="noopener noreferrer">
               Forum
             </a>
             .

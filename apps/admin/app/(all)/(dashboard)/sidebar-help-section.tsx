@@ -21,12 +21,12 @@ import { useInstance, useTheme } from "@/hooks/store";
 const helpOptions = [
   {
     name: "Documentation",
-    href: "https://docs.pm.cenz.pro/",
+    href: "https://docs.pm.cenhomes.net/",
     Icon: PageIcon,
   },
   {
     name: "Join our Forum",
-    href: "https://forum.pm.cenz.pro",
+    href: "https://forum.pm.cenhomes.net",
     Icon: MessageSquare,
   },
   {

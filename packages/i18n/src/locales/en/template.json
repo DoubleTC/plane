@@ -162,7 +162,7 @@
           },
           "website": {
             "label": "Website URL",
-            "placeholder": "https://pm.cenz.pro",
+            "placeholder": "https://pm.cenhomes.net",
             "validation": {
               "invalid": "Invalid URL",
               "maxLength": "URL should be less than 800 characters"
@@ -178,7 +178,7 @@
           },
           "contact_email": {
             "label": "Contact email",
-            "placeholder": "help@pm.cenz.pro",
+            "placeholder": "help@pm.cenhomes.net",
             "validation": {
               "invalid": "Invalid email address",
               "maxLength": "Contact email should be less than 255 characters"
