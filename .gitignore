@@ -116,3 +116,4 @@ scripts/
 packages/i18n/src/types/keys.generated.ts
 /data/state_store.db
 /data/stream_store
+/.claude
