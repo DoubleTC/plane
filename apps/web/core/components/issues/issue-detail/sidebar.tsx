@@ -29,10 +29,7 @@ import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 // plane web components
 // components
-import { WorkItemAdditionalSidebarProperties } from "@/plane-web/components/issues/issue-details/additional-properties";
-import { IssueParentSelectRoot } from "@/plane-web/components/issues/issue-details/parent-select-root";
-import { TransferHopInfo } from "@/plane-web/components/issues/issue-details/sidebar/transfer-hop-info";
-import { IssueWorklogProperty } from "@/plane-web/components/issues/worklog/property";
+import { IssueParentSelectRoot } from "@/components/issues/parent-select-root";
 import { SidebarPropertyListItem } from "@/components/common/layout/sidebar/property-list-item";
 import { IssueCycleSelect } from "./cycle-select";
 import { IssueLabel } from "./label";
@@ -145,21 +142,6 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                   disabled={!isEditable}
                 />
               </SidebarPropertyListItem>
-
-              <IssueWorklogProperty
-                workspaceSlug={workspaceSlug}
-                projectId={projectId}
-                issueId={issueId}
-                disabled={!isEditable}
-              />
-
-              <WorkItemAdditionalSidebarProperties
-                workItemId={issue.id}
-                workItemTypeId={issue.type_id}
-                projectId={projectId}
-                workspaceSlug={workspaceSlug}
-                isEditable={isEditable}
-              />
             </CollapsibleSection>
 
             {(projectDetails?.module_view || projectDetails?.cycle_view) && (
@@ -167,11 +149,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                 <div className="w-full border-t border-subtle" />
                 <CollapsibleSection title={t("common.project_structure")}>
                   {projectDetails?.cycle_view && (
-                    <SidebarPropertyListItem
-                      icon={CycleIcon}
-                      label={t("common.cycle")}
-                      appendElement={<TransferHopInfo workItem={issue} />}
-                    >
+                    <SidebarPropertyListItem icon={CycleIcon} label={t("common.cycle")} appendElement={null}>
                       <IssueCycleSelect
                         className="h-7.5 w-full grow"
                         workspaceSlug={workspaceSlug}

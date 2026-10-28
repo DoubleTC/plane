@@ -28,10 +28,7 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 // plane web components
-import { WorkItemAdditionalSidebarProperties } from "@/plane-web/components/issues/issue-details/additional-properties";
-import { IssueParentSelectRoot } from "@/plane-web/components/issues/issue-details/parent-select-root";
-import { TransferHopInfo } from "@/plane-web/components/issues/issue-details/sidebar/transfer-hop-info";
-import { IssueWorklogProperty } from "@/plane-web/components/issues/worklog/property";
+import { IssueParentSelectRoot } from "@/components/issues/parent-select-root";
 import type { TIssueOperations } from "../issue-detail";
 import { IssueCycleSelect } from "../issue-detail/cycle-select";
 import { IssueLabel } from "../issue-detail/label";
@@ -96,10 +93,10 @@ export const PeekOverviewProperties = observer(function PeekOverviewProperties(p
             >
               <ButtonAvatars
                 showTooltip
-                userIds={createdByDetails?.display_name.includes("-intake") ? null : createdByDetails?.id}
+                userIds={createdByDetails?.display_name?.includes("-intake") ? null : createdByDetails?.id}
               />
               <span className="grow truncate text-body-xs-medium leading-5 text-secondary">
-                {createdByDetails?.display_name.includes("-intake") ? "BananaZ" : createdByDetails?.display_name}
+                {createdByDetails?.display_name?.includes("-intake") ? "BananaZ" : createdByDetails?.display_name}
               </span>
             </SidebarPropertyListItem>
           )}
@@ -137,22 +134,6 @@ export const PeekOverviewProperties = observer(function PeekOverviewProperties(p
           <SidebarPropertyListItem icon={LabelPropertyIcon} label={t("common.labels")}>
             <IssueLabel workspaceSlug={workspaceSlug} projectId={projectId} issueId={issueId} disabled={disabled} />
           </SidebarPropertyListItem>
-
-          <IssueWorklogProperty
-            workspaceSlug={workspaceSlug}
-            projectId={projectId}
-            issueId={issueId}
-            disabled={disabled}
-          />
-
-          <WorkItemAdditionalSidebarProperties
-            workItemId={issue.id}
-            workItemTypeId={issue.type_id}
-            projectId={projectId}
-            workspaceSlug={workspaceSlug}
-            isEditable={!disabled}
-            isPeekView
-          />
         </CollapsibleSection>
 
         {(projectDetails?.module_view || projectDetails?.cycle_view) && (
@@ -160,11 +141,7 @@ export const PeekOverviewProperties = observer(function PeekOverviewProperties(p
             <div className="w-full border-t border-subtle" />
             <CollapsibleSection title={t("common.project_structure")}>
               {projectDetails?.cycle_view && (
-                <SidebarPropertyListItem
-                  icon={CycleIcon}
-                  label={t("common.cycle")}
-                  appendElement={<TransferHopInfo workItem={issue} />}
-                >
+                <SidebarPropertyListItem icon={CycleIcon} label={t("common.cycle")} appendElement={null}>
                   <IssueCycleSelect
                     className="h-7.5 w-full grow"
                     workspaceSlug={workspaceSlug}

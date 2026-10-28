@@ -9,7 +9,7 @@ import { Breadcrumbs, Header } from "@plane/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
+import { CommonProjectBreadcrumbs } from "@/components/breadcrumbs/common";
 
 export const ProjectOverviewHeader = observer(function ProjectOverviewHeader() {
   const router = useAppRouter();

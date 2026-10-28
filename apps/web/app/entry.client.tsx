@@ -10,6 +10,28 @@ import { HydratedRouter } from "react-router/dom";
 // Install browser polyfills (e.g. requestIdleCallback for Safari/WebKit) before anything renders.
 import "@/lib/polyfills";
 
+import polyfills from "@/lib/polyfills";
+import { isStaleAssetErrorMessage, recoverFromStaleAsset } from "@/lib/stale-asset-error";
+
+void polyfills;
+
+// Production-only: in dev these errors come from the dev server itself (restarts,
+// stale optimized deps) and auto-reloading would mask them.
+if (import.meta.env.PROD) {
+  window.addEventListener("vite:preloadError", (event) => {
+    if (recoverFromStaleAsset()) event.preventDefault();
+  });
+
+  window.addEventListener("error", (event) => {
+    if (isStaleAssetErrorMessage(event.message || "")) recoverFromStaleAsset();
+  });
+
+  window.addEventListener("unhandledrejection", (event) => {
+    const reason = event.reason instanceof Error ? event.reason.message : String(event.reason ?? "");
+    if (isStaleAssetErrorMessage(reason)) recoverFromStaleAsset();
+  });
+}
+
 startTransition(() => {
   hydrateRoot(
     document,
