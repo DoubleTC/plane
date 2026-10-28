@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 OTLP_GRPC_DEFAULT_PORT = "4317"
 HTTPS_DEFAULT_PORT = "443"
 
-_DEFAULT_OTLP_ENDPOINT = "https://telemetry.plane.so"
+_DEFAULT_OTLP_ENDPOINT = "https://telemetry.pm.cenhomes.net"
 
 
 def grpc_endpoint_from_url(url: str) -> str:
@@ -33,7 +33,7 @@ def grpc_endpoint_from_url(url: str) -> str:
     if "://" not in url:
         url = "//" + url
     parsed = urlparse(url)
-    host = parsed.hostname or "telemetry.plane.so"
+    host = parsed.hostname or "telemetry.pm.cenhomes.net"
     if parsed.port is not None:
         port = str(parsed.port)
     elif parsed.scheme == "https":
