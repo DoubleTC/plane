@@ -23,6 +23,9 @@ export const getTimelineStore = (
   if (timelineType === GANTT_TIMELINE_TYPE.MODULE) {
     return timelineStore.modulesTimeLineStore as IBaseTimelineStore;
   }
+  if (timelineType === GANTT_TIMELINE_TYPE.PHASE) {
+    return timelineStore.phasesTimeLineStore as IBaseTimelineStore;
+  }
   if (timelineType === GANTT_TIMELINE_TYPE.PROJECT) {
     return timelineStore.projectTimeLineStore;
   }
