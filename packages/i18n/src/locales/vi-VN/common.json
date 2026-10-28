@@ -943,6 +943,7 @@
     "no_members": "Không có thành viên để đánh giá.",
     "no_data": "Không có dữ liệu trong kỳ này.",
     "no_estimate_data": "Không có công việc ước tính để vẽ.",
+    "no_assigned_work": "Không có công việc được giao trong kỳ này.",
     "on_time": "Đúng hạn",
     "late": "Trễ hạn",
     "period": {
@@ -998,6 +999,8 @@
       "activity": "Hoạt động",
       "key_metrics": "Chỉ số chính",
       "recent_issues": "Việc hoàn thành gần đây",
+      "assigned_work": "Dự án & công việc đang phụ trách",
+      "assigned_work_hint": "Công việc đang giao cho thành viên ở các dự án thành viên đang tham gia và còn mở trong kỳ đã chọn (chưa xong, hoặc hoàn thành trong kỳ). Không tính công việc đã hủy.",
       "completion": "Hoàn thành & đúng hạn"
     },
     "legend_index": "Chỉ số = Performance Index tổng hợp (0–100) từ 5 trụ cột.",

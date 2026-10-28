@@ -24,6 +24,7 @@ from plane.db.models import (
     IssueMention,
     Module,
     Phase,
+    ProjectMember,
     State,
     WorkspaceMember,
 )
@@ -38,6 +39,10 @@ PILLARS = ("delivery", "quality", "predictability", "flow", "collaboration")
 
 # Neutral score used when the team is too small / uniform to normalize against.
 NEUTRAL_SCORE = 50.0
+
+# Display order of a member's assigned work items: active work first, finished
+# work last. Unknown groups (e.g. an issue without a state) sort after these.
+ASSIGNED_STATE_GROUP_ORDER = {"started": 0, "unstarted": 1, "backlog": 2, "completed": 3}
 
 
 def get_period_range(period: str, anchor: date) -> Tuple[date, date, date, date]:
@@ -66,6 +71,12 @@ def get_period_range(period: str, anchor: date) -> Tuple[date, date, date, date]
         prev_end = start - timedelta(days=1)
         prev_start = prev_end.replace(day=1)
     return start, end, prev_start, prev_end
+
+
+def open_during_period_q(start: date, end: date) -> Q:
+    """Issues that were on someone's plate during the period: created on/before
+    the period end and not already completed before it started."""
+    return Q(created_at__date__lte=end) & (Q(completed_at__isnull=True) | Q(completed_at__date__gte=start))
 
 
 def _norm(value: float, lo: float, hi: float, invert: bool = False) -> float:
@@ -185,8 +196,7 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         started. Used as the denominator for the completion rate."""
         rows = (
             self._scoped_issues()
-            .filter(created_at__date__lte=end)
-            .filter(Q(completed_at__isnull=True) | Q(completed_at__date__gte=start))
+            .filter(open_during_period_q(start, end))
             .values("assignees__id")
             .annotate(c=Count("id", distinct=True))
         )
@@ -451,8 +461,68 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
 
 class WorkspaceMemberAnalyticsDetailEndpoint(MemberAnalyticsBaseView):
     """Drill-down series for a single member: throughput trend, cycle-time
-    percentiles, estimate-vs-actual scatter, an activity heatmap and the most
-    recent completed issues (for verification against the headline numbers)."""
+    percentiles, estimate-vs-actual scatter, an activity heatmap, the most
+    recent completed issues (for verification against the headline numbers)
+    and the work items the member is assigned to in the period."""
+
+    def _assigned_work_items(self, slug: str, member_id: str, start: date, end: date) -> List[dict]:
+        """
+        Work items the member is actively assigned to that were open during the
+        period (still open, or completed within it), limited to projects the
+        member belongs to and to the analytics scope (viewer's projects + the
+        header project filter). Removed assignees are soft-deleted IssueAssignee
+        links, so the join is filtered on deleted_at. Cancelled items are left
+        out: they never get a completed_at, so they would linger in every period.
+        """
+        member_project_ids = ProjectMember.objects.filter(
+            workspace__slug=slug, member_id=member_id, is_active=True
+        ).values("project_id")
+        rows = (
+            self._scoped_issues()
+            .filter(issue_assignee__assignee_id=member_id, issue_assignee__deleted_at__isnull=True)
+            .filter(open_during_period_q(start, end), project_id__in=member_project_ids)
+            .exclude(state__group="cancelled")
+            .values(
+                "id",
+                "name",
+                "sequence_id",
+                "project_id",
+                "start_date",
+                "target_date",
+                "state__name",
+                "state__color",
+                "state__group",
+            )
+            .order_by()
+            .distinct()
+        )
+
+        unknown_rank = len(ASSIGNED_STATE_GROUP_ORDER)
+        ordered = sorted(
+            rows,
+            key=lambda row: (
+                ASSIGNED_STATE_GROUP_ORDER.get(row["state__group"], unknown_rank),
+                row["target_date"] or date.max,
+                row["start_date"] or date.max,
+                row["sequence_id"],
+            ),
+        )
+        return [
+            {
+                "id": str(row["id"]),
+                "name": row["name"],
+                "sequence_id": row["sequence_id"],
+                "project_id": str(row["project_id"]),
+                "state": (
+                    {"name": row["state__name"], "color": row["state__color"], "group": row["state__group"]}
+                    if row["state__group"]
+                    else None
+                ),
+                "start_date": row["start_date"].isoformat() if row["start_date"] else None,
+                "target_date": row["target_date"].isoformat() if row["target_date"] else None,
+            }
+            for row in ordered
+        ]
 
     def _trend_buckets(self, period: str, anchor: date) -> List[Tuple[str, date, date]]:
         buckets: List[Tuple[str, date, date]] = []
@@ -568,6 +638,7 @@ class WorkspaceMemberAnalyticsDetailEndpoint(MemberAnalyticsBaseView):
                 "estimate_scatter": scatter,
                 "heatmap": [{"date": d, "count": c} for d, c in sorted(heatmap_acc.items())],
                 "recent_issues": recent_issues,
+                "assigned_work_items": self._assigned_work_items(slug, member_id, start, end),
             },
             status=status.HTTP_200_OK,
         )

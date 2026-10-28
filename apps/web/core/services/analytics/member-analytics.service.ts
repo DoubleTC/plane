@@ -5,6 +5,7 @@
  */
 
 import { API_BASE_URL } from "@plane/constants";
+import type { TStateGroups } from "@plane/types";
 import { APIService } from "@/services/api.service";
 
 /** Time bucket for the member scorecard; each compared to the previous one. */
@@ -90,6 +91,21 @@ export type TMemberTrendPoint = {
   on_time_rate: number;
 };
 
+/**
+ * A work item the member is actively assigned to that was open during the
+ * period (still open, or completed within it). Cancelled items are excluded.
+ * Ordered by state group (started → unstarted → backlog → completed), then due date.
+ */
+export type TMemberAssignedWorkItem = {
+  id: string;
+  name: string;
+  sequence_id: number;
+  project_id: string;
+  state: { name: string; color: string; group: TStateGroups } | null;
+  start_date: string | null;
+  target_date: string | null;
+};
+
 export type TMemberDetail = {
   trend: TMemberTrendPoint[];
   cycle_time: { p50: number; p85: number; max: number; count: number };
@@ -103,6 +119,7 @@ export type TMemberDetail = {
     completed_at: string | null;
     on_time: boolean | null;
   }[];
+  assigned_work_items: TMemberAssignedWorkItem[];
 };
 
 type MemberAnalyticsParams = {

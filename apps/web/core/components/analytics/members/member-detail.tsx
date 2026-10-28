@@ -17,6 +17,7 @@ import {
   type TMemberPeriod,
   type TMemberPillars,
 } from "@/services/analytics/member-analytics.service";
+import { AssignedWorkList } from "./assigned-work";
 import { PILLAR_META, compactNumber } from "./metrics";
 
 const memberAnalyticsService = new MemberAnalyticsService();
@@ -319,6 +320,11 @@ export const MemberDetail = ({ workspaceSlug, memberId, period, projectIds, pill
           </div>
         </Panel>
       )}
+
+      <Panel title={t("members_analytics.detail.assigned_work")}>
+        <p className="text-12 text-placeholder">{t("members_analytics.detail.assigned_work_hint")}</p>
+        <AssignedWorkList items={data.assigned_work_items} />
+      </Panel>
     </div>
   );
 };

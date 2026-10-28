@@ -943,6 +943,7 @@
     "no_members": "No members to evaluate.",
     "no_data": "No data for this period.",
     "no_estimate_data": "No estimated items to plot.",
+    "no_assigned_work": "No assigned work items in this period.",
     "on_time": "On time",
     "late": "Late",
     "period": {
@@ -998,6 +999,8 @@
       "activity": "Activity",
       "key_metrics": "Key metrics",
       "recent_issues": "Recent completed work",
+      "assigned_work": "Projects & assigned work items",
+      "assigned_work_hint": "Work items currently assigned to this member, in projects they belong to, that were open during the selected period (still open, or completed within it). Cancelled items are excluded.",
       "completion": "Completion & timeliness"
     },
     "legend_index": "Index = composite Performance Index (0–100) across the 5 pillars.",
