@@ -8,7 +8,7 @@ from datetime import date, timedelta
 from typing import Dict, List, Tuple
 
 from django.db import models
-from django.db.models import Count, Q, Case, When, Value
+from django.db.models import Count, F, Q, Case, When, Value
 from django.db.models.functions import Concat
 from django.http import HttpRequest
 from django.utils import timezone
@@ -24,7 +24,6 @@ from plane.db.models import (
     IssueMention,
     Module,
     Phase,
-    ProjectMember,
     State,
     WorkspaceMember,
 )
@@ -77,6 +76,31 @@ def open_during_period_q(start: date, end: date) -> Q:
     """Issues that were on someone's plate during the period: created on/before
     the period end and not already completed before it started."""
     return Q(created_at__date__lte=end) & (Q(completed_at__isnull=True) | Q(completed_at__date__gte=start))
+
+
+def assigned_work_q(start: date, end: date) -> Q:
+    """
+    A member's assigned work for the period, matched per assignee link: the issue
+    was open during the period, is not cancelled (cancelled items never get a
+    completed_at, so they would linger in every period), the assignee link is still
+    active (removed assignees are soft-deleted IssueAssignee rows) and the assignee
+    is still an active member of the issue's project. Backs both the "assigned"
+    count and the assigned work list, so the two always agree.
+
+    Apply it in a single .filter() call, combined with any issue_assignee__*
+    condition: Django only reuses a multi-valued join within one filter() call, so
+    splitting it up would test the conditions against different assignee links.
+    """
+    return (
+        open_during_period_q(start, end)
+        & ~Q(state__group="cancelled")
+        & Q(
+            issue_assignee__deleted_at__isnull=True,
+            issue_assignee__assignee__member_project__project_id=F("project_id"),
+            issue_assignee__assignee__member_project__is_active=True,
+            issue_assignee__assignee__member_project__deleted_at__isnull=True,
+        )
+    )
 
 
 def _norm(value: float, lo: float, hi: float, invert: bool = False) -> float:
@@ -190,17 +214,34 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         ).values("assignees__id").annotate(c=Count("id", distinct=True))
         return {str(r["assignees__id"]): r["c"] for r in rows if r["assignees__id"] is not None}
 
-    def assigned_counts(self, start: date, end: date) -> Dict[str, int]:
-        """Distinct issues that were on a member's plate during the period:
-        created on/before the period end and not already completed before it
-        started. Used as the denominator for the completion rate."""
+    def assigned_counts(self, start: date, end: date) -> Dict[str, dict]:
+        """
+        Per member: ``assigned`` = distinct issues in their assigned work for the
+        period (see assigned_work_q; equals the length of the detail endpoint's
+        assigned work list) and ``done`` = how many of those were completed within
+        the period. ``done`` is the completion-rate numerator, so the rate stays
+        within 0–100% even when completed_count also credits completions the
+        assigned set leaves out (removed assignee links, projects since left).
+        """
         rows = (
             self._scoped_issues()
-            .filter(open_during_period_q(start, end))
-            .values("assignees__id")
-            .annotate(c=Count("id", distinct=True))
+            .filter(assigned_work_q(start, end))
+            # values() reuses the issue_assignee join made by the filter above.
+            .values("issue_assignee__assignee_id")
+            .annotate(
+                assigned=Count("id", distinct=True),
+                done=Count(
+                    "id",
+                    distinct=True,
+                    filter=Q(state__group="completed", completed_at__date__range=(start, end)),
+                ),
+            )
         )
-        return {str(r["assignees__id"]): r["c"] for r in rows if r["assignees__id"] is not None}
+        return {
+            str(r["issue_assignee__assignee_id"]): {"assigned": r["assigned"], "done": r["done"]}
+            for r in rows
+            if r["issue_assignee__assignee_id"] is not None
+        }
 
     def reopen_counts(self, slug: str, start: date, end: date) -> Dict[str, int]:
         group_map = self._state_group_map(slug)
@@ -343,11 +384,13 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
             cycle_times = bucket.get("cycle_times", [])
             lead_times = bucket.get("lead_times", [])
             completed = bucket.get("completed", 0)
-            assigned_count = assigned.get(member_id, 0)
+            assigned_bucket = assigned.get(member_id, {})
+            assigned_count = assigned_bucket.get("assigned", 0)
+            assigned_done = assigned_bucket.get("done", 0)
             metrics = {
                 "assigned_count": assigned_count,
                 "completed_count": completed,
-                "completion_rate": round(completed / assigned_count * 100, 1) if assigned_count else 0.0,
+                "completion_rate": round(assigned_done / assigned_count * 100, 1) if assigned_count else 0.0,
                 "completed_points": bucket.get("points", 0),
                 # Timeliness of the dated completed items (counts + rates).
                 "early": early,
@@ -465,23 +508,16 @@ class WorkspaceMemberAnalyticsDetailEndpoint(MemberAnalyticsBaseView):
     recent completed issues (for verification against the headline numbers)
     and the work items the member is assigned to in the period."""
 
-    def _assigned_work_items(self, slug: str, member_id: str, start: date, end: date) -> List[dict]:
+    def _assigned_work_items(self, member_id: str, start: date, end: date) -> List[dict]:
         """
-        Work items the member is actively assigned to that were open during the
-        period (still open, or completed within it), limited to projects the
-        member belongs to and to the analytics scope (viewer's projects + the
-        header project filter). Removed assignees are soft-deleted IssueAssignee
-        links, so the join is filtered on deleted_at. Cancelled items are left
-        out: they never get a completed_at, so they would linger in every period.
+        The member's assigned work for the period (see assigned_work_q: actively
+        assigned, open during the period, not cancelled, in projects the member
+        belongs to), within the analytics scope (viewer's projects + the header
+        project filter). Its length is the leaderboard's assigned_count.
         """
-        member_project_ids = ProjectMember.objects.filter(
-            workspace__slug=slug, member_id=member_id, is_active=True
-        ).values("project_id")
         rows = (
             self._scoped_issues()
-            .filter(issue_assignee__assignee_id=member_id, issue_assignee__deleted_at__isnull=True)
-            .filter(open_during_period_q(start, end), project_id__in=member_project_ids)
-            .exclude(state__group="cancelled")
+            .filter(assigned_work_q(start, end) & Q(issue_assignee__assignee_id=member_id))
             .values(
                 "id",
                 "name",
@@ -638,7 +674,7 @@ class WorkspaceMemberAnalyticsDetailEndpoint(MemberAnalyticsBaseView):
                 "estimate_scatter": scatter,
                 "heatmap": [{"date": d, "count": c} for d, c in sorted(heatmap_acc.items())],
                 "recent_issues": recent_issues,
-                "assigned_work_items": self._assigned_work_items(slug, member_id, start, end),
+                "assigned_work_items": self._assigned_work_items(member_id, start, end),
             },
             status=status.HTTP_200_OK,
         )

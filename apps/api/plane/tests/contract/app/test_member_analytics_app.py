@@ -31,6 +31,10 @@ def detail_url(slug: str, member_id) -> str:
     return f"/api/workspaces/{slug}/member-analytics/{member_id}/"
 
 
+def leaderboard_url(slug: str) -> str:
+    return f"/api/workspaces/{slug}/member-analytics/"
+
+
 @pytest.fixture
 def member(db, workspace):
     """The workspace member whose drill-down is requested."""
@@ -105,6 +109,10 @@ def scenario(workspace, create_user, member):
 
 def _names(response) -> list:
     return [row["name"] for row in response.data["assigned_work_items"]]
+
+
+def _member_metrics(response, member) -> dict:
+    return next(row["metrics"] for row in response.data["members"] if row["member_id"] == str(member.id))
 
 
 @pytest.mark.contract
@@ -188,3 +196,51 @@ class TestMemberAnalyticsAssignedWorkItems:
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data["assigned_work_items"] == []
+
+
+@pytest.mark.contract
+class TestMemberAnalyticsAssignedCount:
+    @pytest.mark.django_db
+    @pytest.mark.parametrize("period, expected", [("week", 5), ("month", 6)])
+    def test_assigned_count_matches_assigned_work_list(
+        self, session_client, workspace, member, scenario, period, expected
+    ):
+        params = {"period": period, "anchor": ANCHOR}
+        leaderboard = session_client.get(leaderboard_url(workspace.slug), params)
+        detail = session_client.get(detail_url(workspace.slug, member.id), params)
+
+        assert leaderboard.status_code == status.HTTP_200_OK
+        # Cancelled, removed-assignee and not-a-project-member items are left out of both.
+        assigned_count = _member_metrics(leaderboard, member)["assigned_count"]
+        assert assigned_count == len(detail.data["assigned_work_items"]) == expected
+
+    @pytest.mark.django_db
+    def test_assigned_count_honours_project_filter(self, session_client, workspace, member, scenario):
+        project_a = scenario["projects"]["a"]
+        response = session_client.get(
+            leaderboard_url(workspace.slug),
+            {"period": "month", "anchor": ANCHOR, "project_ids": str(project_a.id)},
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+        assert _member_metrics(response, member)["assigned_count"] == 5
+
+    @pytest.mark.django_db
+    def test_completion_rate_counts_only_completed_assigned_items(self, session_client, workspace, member, scenario):
+        other = User.objects.get(email="other@example.com")
+        # Completed within the period, but the member had been taken off it.
+        _issue(
+            scenario["projects"]["a"],
+            scenario["states"]["completed"],
+            "A removed done",
+            [other],
+            completed=_dt(2026, 3, 12),
+            removed=[member],
+        )
+
+        response = session_client.get(leaderboard_url(workspace.slug), {"period": "month", "anchor": ANCHOR})
+
+        metrics = _member_metrics(response, member)
+        assert metrics["assigned_count"] == 6
+        # 2 of the 6 assigned items ("A done this week", "A done this month") were completed in March.
+        assert metrics["completion_rate"] == 33.3
