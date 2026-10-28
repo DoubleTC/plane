@@ -226,8 +226,16 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         return result
 
     def bug_counts(self, start: date, end: date) -> Dict[str, int]:
+        # Labels go through the IssueLabel join for the same reason as assignees: a
+        # removed label is a soft-deleted link the `labels` m2m still joins through.
+        # A deleted label is checked too, since its links are only soft-deleted later
+        # by a background task.
         rows = self._assigned_issues(
-            state__group="completed", completed_at__date__range=(start, end), labels__name__icontains="bug"
+            state__group="completed",
+            completed_at__date__range=(start, end),
+            label_issue__deleted_at__isnull=True,
+            label_issue__label__deleted_at__isnull=True,
+            label_issue__label__name__icontains="bug",
         ).values(ASSIGNEE_ID).annotate(c=Count("id", distinct=True))
         return {str(r[ASSIGNEE_ID]): r["c"] for r in rows if r[ASSIGNEE_ID] is not None}
 
@@ -290,9 +298,14 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         return wip, overdue
 
     def scope_adherence(self, start: date, end: date) -> Dict[str, float]:
-        """Share of a member's cycle-committed issues finished by the cycle end."""
+        """Share of a member's cycle-committed issues finished by the cycle end.
+        Only issues still in a (non-deleted) cycle are commitments: taking an issue
+        out of a cycle soft-deletes its CycleIssue link, and a deleted cycle's links
+        are only soft-deleted later by a background task."""
         rows = self._assigned_issues(
-            issue_cycle__cycle__end_date__date__range=(start, end)
+            issue_cycle__deleted_at__isnull=True,
+            issue_cycle__cycle__deleted_at__isnull=True,
+            issue_cycle__cycle__end_date__date__range=(start, end),
         ).values(ASSIGNEE_ID, "id", "completed_at", "issue_cycle__cycle__end_date")
         committed: Dict[str, int] = defaultdict(int)
         kept: Dict[str, int] = defaultdict(int)

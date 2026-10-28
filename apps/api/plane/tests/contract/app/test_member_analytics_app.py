@@ -326,3 +326,55 @@ class TestMemberAnalyticsRemovedAssignee:
         after = session_client.get(detail_url(workspace.slug, member.id), self.PARAMS).data
 
         assert after == before
+
+
+@pytest.mark.contract
+class TestMemberAnalyticsRemovedLabelAndCycleLinks:
+    """Labels and cycle links are soft-deleted too; only live ones may count."""
+
+    PARAMS = {"period": "month", "anchor": ANCHOR}
+
+    @pytest.mark.django_db
+    def test_bug_ratio_counts_only_live_bug_labels(self, session_client, workspace, member, scenario):
+        project_a, items = scenario["projects"]["a"], scenario["items"]
+        bug = Label.objects.create(name="Bug", project=project_a)
+        old_bug = Label.objects.create(name="bug (old)", project=project_a)
+        Label.all_objects.filter(pk=old_bug.pk).update(deleted_at=_dt(2026, 3, 1))
+        # Of the member's two March completions, one is still labelled as a bug ...
+        IssueLabel.objects.create(issue=items["a_done_week"], label=bug, project=project_a)
+        # ... the other had its bug label removed, and carries a label deleted since.
+        IssueLabel.objects.create(issue=items["a_done_month"], label=bug, project=project_a, deleted_at=_dt(2026, 3, 5))
+        IssueLabel.objects.create(issue=items["a_done_month"], label=old_bug, project=project_a)
+
+        response = session_client.get(leaderboard_url(workspace.slug), self.PARAMS)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert _member_metrics(response, member)["bug_ratio"] == 50.0
+
+    @pytest.mark.django_db
+    def test_scope_adherence_counts_only_issues_still_in_a_live_cycle(
+        self, session_client, workspace, create_user, member, scenario, march_cycle
+    ):
+        project_a, items = scenario["projects"]["a"], scenario["items"]
+        # march_cycle holds "A done this week" (kept); "A started" is still in it, unfinished.
+        CycleIssue.objects.create(issue=items["a_started"], cycle=march_cycle, project=project_a)
+        # Taken out of the cycle before it ended.
+        CycleIssue.objects.create(
+            issue=items["a_unstarted"], cycle=march_cycle, project=project_a, deleted_at=_dt(2026, 3, 8)
+        )
+        # In a cycle that was deleted (its links not yet cleaned up).
+        deleted_cycle = Cycle.objects.create(
+            name="Dropped",
+            project=project_a,
+            start_date=_dt(2026, 3, 1),
+            end_date=_dt(2026, 3, 25),
+            owned_by=create_user,
+        )
+        CycleIssue.objects.create(issue=items["a_backlog"], cycle=deleted_cycle, project=project_a)
+        Cycle.all_objects.filter(pk=deleted_cycle.pk).update(deleted_at=_dt(2026, 3, 9))
+
+        response = session_client.get(leaderboard_url(workspace.slug), self.PARAMS)
+
+        assert response.status_code == status.HTTP_200_OK
+        # 1 kept out of the 2 issues still committed to a live cycle.
+        assert _member_metrics(response, member)["scope_adherence"] == 50.0
