@@ -34,10 +34,15 @@ export const MembersAnalytics = observer(function MembersAnalytics() {
   const [period, setPeriod] = useState<TMemberPeriod>("month");
 
   const projectKey = selectedProjects.join(",");
+  // keepPreviousData keeps the leaderboard mounted while another period / project filter
+  // loads, so expanded member rows stay open instead of collapsing behind a skeleton.
   const { data, isLoading } = useSWR(
     workspaceSlug ? ["memberAnalytics", workspaceSlug, period, projectKey] : null,
-    () => memberAnalyticsService.getMemberAnalytics(workspaceSlug, { period, projectIds: selectedProjects })
+    () => memberAnalyticsService.getMemberAnalytics(workspaceSlug, { period, projectIds: selectedProjects }),
+    { keepPreviousData: true }
   );
+  // isLoading stays true for the new key while `data` still holds the previous key's result.
+  const isShowingPrevious = isLoading && !!data;
 
   return (
     <AnalyticsWrapper i18nTitle="members_analytics.title">
@@ -60,7 +65,7 @@ export const MembersAnalytics = observer(function MembersAnalytics() {
         </div>
       </div>
 
-      {isLoading || !data ? (
+      {!data ? (
         <Loader className="flex flex-col gap-4">
           <Loader.Item height="90px" />
           <Loader.Item height="320px" />
@@ -68,7 +73,10 @@ export const MembersAnalytics = observer(function MembersAnalytics() {
       ) : data.members.length === 0 ? (
         <p className="text-13 text-placeholder">{t("members_analytics.no_members")}</p>
       ) : (
-        <div className="flex flex-col gap-6">
+        <div
+          aria-busy={isShowingPrevious}
+          className={cn("flex flex-col gap-6 transition-opacity", isShowingPrevious && "opacity-60")}
+        >
           <TeamSummary data={data} />
           <Leaderboard
             workspaceSlug={workspaceSlug}
