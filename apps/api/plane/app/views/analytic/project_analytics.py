@@ -358,7 +358,7 @@ class ProjectAnalyticsOverviewEndpoint(ProjectAdvanceAnalyticsBaseView):
                         member__avatar_asset__isnull=False,
                         then=Concat(
                             Value("/api/assets/v2/static/"),
-                            "member__avatar_asset",
+                            Cast("member__avatar_asset", models.CharField()),
                             Value("/"),
                         ),
                     ),

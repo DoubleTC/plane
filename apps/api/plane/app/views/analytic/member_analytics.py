@@ -9,7 +9,7 @@ from typing import Dict, List, Tuple
 
 from django.db import models
 from django.db.models import Count, F, Q, Case, When, Value
-from django.db.models.functions import Concat
+from django.db.models.functions import Cast, Concat
 from django.http import HttpRequest
 from django.utils import timezone
 from rest_framework import status
@@ -121,7 +121,9 @@ def _avatar_case():
     return Case(
         When(
             member__avatar_asset__isnull=False,
-            then=Concat(Value("/api/assets/v2/static/"), "member__avatar_asset", Value("/")),
+            then=Concat(
+                Value("/api/assets/v2/static/"), Cast("member__avatar_asset", models.CharField()), Value("/")
+            ),
         ),
         When(member__avatar_asset__isnull=True, then="member__avatar"),
         default=Value(None),
