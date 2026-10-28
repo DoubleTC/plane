@@ -43,6 +43,10 @@ NEUTRAL_SCORE = 50.0
 # work last. Unknown groups (e.g. an issue without a state) sort after these.
 ASSIGNED_STATE_GROUP_ORDER = {"started": 0, "unstarted": 1, "backlog": 2, "completed": 3}
 
+# Per-assignee metrics group on the IssueAssignee join (one row per active link,
+# see MemberAnalyticsBaseView._assigned_issues), never on the `assignees` m2m.
+ASSIGNEE_ID = "issue_assignee__assignee_id"
+
 
 def get_period_range(period: str, anchor: date) -> Tuple[date, date, date, date]:
     """
@@ -131,6 +135,19 @@ class MemberAnalyticsBaseView(ProjectAdvanceAnalyticsBaseView):
     def _scoped_issues(self):
         return Issue.issue_objects.filter(**self.filters["base_filters"])
 
+    def _assigned_issues(self, *args, **kwargs):
+        """
+        Scoped issues joined to their *active* assignee links, one row per link;
+        read the assignee through ASSIGNEE_ID. A removed assignee is a soft-deleted
+        IssueAssignee row that the plain `assignees` m2m still joins through, so
+        it would keep being credited (or blamed) for the issue.
+
+        Pass extra conditions in here rather than chaining .filter() when they
+        touch issue_assignee: Django only reuses a multi-valued join within one
+        filter() call (values()/annotate() do reuse it).
+        """
+        return self._scoped_issues().filter(*args, issue_assignee__deleted_at__isnull=True, **kwargs)
+
     def _state_group_map(self, slug: str) -> Dict[str, str]:
         return {
             str(row["id"]): row["group"]
@@ -157,10 +174,10 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
 
     def delivery_quality_flow(self, start: date, end: date) -> Dict[str, dict]:
         """Per-member delivery/quality/flow primitives over completed issues."""
-        rows = self._scoped_issues().filter(
+        rows = self._assigned_issues(
             state__group="completed", completed_at__date__range=(start, end)
         ).values(
-            "assignees__id", "id", "point", "start_date", "target_date", "completed_at", "created_at"
+            ASSIGNEE_ID, "id", "point", "start_date", "target_date", "completed_at", "created_at"
         )
 
         acc: Dict[str, dict] = defaultdict(
@@ -176,7 +193,7 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         )
         seen = set()
         for row in rows:
-            member_id = row["assignees__id"]
+            member_id = row[ASSIGNEE_ID]
             if member_id is None:
                 continue
             key = (str(member_id), row["id"])
@@ -209,10 +226,10 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         return result
 
     def bug_counts(self, start: date, end: date) -> Dict[str, int]:
-        rows = self._scoped_issues().filter(
+        rows = self._assigned_issues(
             state__group="completed", completed_at__date__range=(start, end), labels__name__icontains="bug"
-        ).values("assignees__id").annotate(c=Count("id", distinct=True))
-        return {str(r["assignees__id"]): r["c"] for r in rows if r["assignees__id"] is not None}
+        ).values(ASSIGNEE_ID).annotate(c=Count("id", distinct=True))
+        return {str(r[ASSIGNEE_ID]): r["c"] for r in rows if r[ASSIGNEE_ID] is not None}
 
     def assigned_counts(self, start: date, end: date) -> Dict[str, dict]:
         """
@@ -221,13 +238,13 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         assigned work list) and ``done`` = how many of those were completed within
         the period. ``done`` is the completion-rate numerator, so the rate stays
         within 0–100% even when completed_count also credits completions the
-        assigned set leaves out (removed assignee links, projects since left).
+        assigned set leaves out (work in projects the member has since left).
         """
         rows = (
             self._scoped_issues()
             .filter(assigned_work_q(start, end))
             # values() reuses the issue_assignee join made by the filter above.
-            .values("issue_assignee__assignee_id")
+            .values(ASSIGNEE_ID)
             .annotate(
                 assigned=Count("id", distinct=True),
                 done=Count(
@@ -238,9 +255,9 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
             )
         )
         return {
-            str(r["issue_assignee__assignee_id"]): {"assigned": r["assigned"], "done": r["done"]}
+            str(r[ASSIGNEE_ID]): {"assigned": r["assigned"], "done": r["done"]}
             for r in rows
-            if r["issue_assignee__assignee_id"] is not None
+            if r[ASSIGNEE_ID] is not None
         }
 
     def reopen_counts(self, slug: str, start: date, end: date) -> Dict[str, int]:
@@ -256,32 +273,32 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
                 reopened_ids.add(act["issue_id"])
         if not reopened_ids:
             return {}
-        rows = self._scoped_issues().filter(id__in=reopened_ids).values("assignees__id").annotate(
+        rows = self._assigned_issues(id__in=reopened_ids).values(ASSIGNEE_ID).annotate(
             c=Count("id", distinct=True)
         )
-        return {str(r["assignees__id"]): r["c"] for r in rows if r["assignees__id"] is not None}
+        return {str(r[ASSIGNEE_ID]): r["c"] for r in rows if r[ASSIGNEE_ID] is not None}
 
     def snapshot(self, today: date) -> Tuple[Dict[str, int], Dict[str, int]]:
-        wip_rows = self._scoped_issues().filter(state__group="started").values("assignees__id").annotate(
+        wip_rows = self._assigned_issues(state__group="started").values(ASSIGNEE_ID).annotate(
             c=Count("id", distinct=True)
         )
-        overdue_rows = self._scoped_issues().filter(
+        overdue_rows = self._assigned_issues(
             state__group__in=["backlog", "unstarted", "started"], target_date__lt=today
-        ).values("assignees__id").annotate(c=Count("id", distinct=True))
-        wip = {str(r["assignees__id"]): r["c"] for r in wip_rows if r["assignees__id"] is not None}
-        overdue = {str(r["assignees__id"]): r["c"] for r in overdue_rows if r["assignees__id"] is not None}
+        ).values(ASSIGNEE_ID).annotate(c=Count("id", distinct=True))
+        wip = {str(r[ASSIGNEE_ID]): r["c"] for r in wip_rows if r[ASSIGNEE_ID] is not None}
+        overdue = {str(r[ASSIGNEE_ID]): r["c"] for r in overdue_rows if r[ASSIGNEE_ID] is not None}
         return wip, overdue
 
     def scope_adherence(self, start: date, end: date) -> Dict[str, float]:
         """Share of a member's cycle-committed issues finished by the cycle end."""
-        rows = self._scoped_issues().filter(
+        rows = self._assigned_issues(
             issue_cycle__cycle__end_date__date__range=(start, end)
-        ).values("assignees__id", "id", "completed_at", "issue_cycle__cycle__end_date")
+        ).values(ASSIGNEE_ID, "id", "completed_at", "issue_cycle__cycle__end_date")
         committed: Dict[str, int] = defaultdict(int)
         kept: Dict[str, int] = defaultdict(int)
         seen = set()
         for row in rows:
-            member_id = row["assignees__id"]
+            member_id = row[ASSIGNEE_ID]
             cycle_end = row["issue_cycle__cycle__end_date"]
             if member_id is None or cycle_end is None:
                 continue
@@ -309,10 +326,10 @@ class WorkspaceMemberAnalyticsEndpoint(MemberAnalyticsBaseView):
         ).values("mention_id").annotate(c=Count("id", distinct=True))
         mentions = {str(r["mention_id"]): r["c"] for r in mention_rows if r["mention_id"] is not None}
 
-        breadth_rows = self._scoped_issues().filter(
+        breadth_rows = self._assigned_issues(
             Q(completed_at__date__range=(start, end)) | Q(created_at__date__range=(start, end))
-        ).values("assignees__id").annotate(p=Count("project_id", distinct=True))
-        breadth = {str(r["assignees__id"]): r["p"] for r in breadth_rows if r["assignees__id"] is not None}
+        ).values(ASSIGNEE_ID).annotate(p=Count("project_id", distinct=True))
+        breadth = {str(r[ASSIGNEE_ID]): r["p"] for r in breadth_rows if r[ASSIGNEE_ID] is not None}
 
         return comments, mentions, breadth
 
@@ -593,7 +610,7 @@ class WorkspaceMemberAnalyticsDetailEndpoint(MemberAnalyticsBaseView):
         anchor = self.get_anchor(request)
         start, end, _, _ = get_period_range(period, anchor)
 
-        member_issues = self._scoped_issues().filter(assignees__id=member_id)
+        member_issues = self._assigned_issues(issue_assignee__assignee_id=member_id)
 
         # Trend across the trailing buckets.
         buckets = self._trend_buckets(period, anchor)

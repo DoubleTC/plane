@@ -8,8 +8,13 @@ import pytest
 from rest_framework import status
 
 from plane.db.models import (
+    Cycle,
+    CycleIssue,
     Issue,
+    IssueActivity,
     IssueAssignee,
+    IssueLabel,
+    Label,
     Project,
     ProjectMember,
     State,
@@ -244,3 +249,80 @@ class TestMemberAnalyticsAssignedCount:
         assert metrics["assigned_count"] == 6
         # 2 of the 6 assigned items ("A done this week", "A done this month") were completed in March.
         assert metrics["completion_rate"] == 33.3
+
+
+@pytest.fixture
+def march_cycle(create_user, scenario):
+    """A March cycle the member kept: "A done this week" finished before it ended."""
+    project_a = scenario["projects"]["a"]
+    cycle = Cycle.objects.create(
+        name="March", project=project_a, start_date=_dt(2026, 3, 1), end_date=_dt(2026, 3, 20), owned_by=create_user
+    )
+    CycleIssue.objects.create(issue=scenario["items"]["a_done_week"], cycle=cycle, project=project_a)
+    return cycle
+
+
+def _add_work_the_member_was_taken_off(scenario, member, cycle, actor) -> None:
+    """Items another member now owns, which touch every per-assignee metric."""
+    project_a, project_b = scenario["projects"]["a"], scenario["projects"]["b"]
+    states_a = scenario["states"]
+    completed_b = State.objects.get(project=project_b, group="completed")
+    other = User.objects.get(email="other@example.com")
+
+    # Completed late in March, with points and a bug label, in a project the
+    # member did not otherwise touch this month.
+    done = _issue(
+        project_b,
+        completed_b,
+        "B removed done",
+        [other],
+        start=date(2026, 3, 2),
+        target=date(2026, 3, 4),
+        completed=_dt(2026, 3, 12),
+        removed=[member],
+    )
+    Issue.objects.filter(pk=done.pk).update(point=8)
+    IssueLabel.objects.create(issue=done, label=Label.objects.create(name="Bug", project=project_b), project=project_b)
+
+    # In progress, overdue, reopened in March and committed to the March cycle.
+    open_item = _issue(
+        project_a, states_a["started"], "A removed open", [other], target=date(2026, 3, 1), removed=[member]
+    )
+    CycleIssue.objects.create(issue=open_item, cycle=cycle, project=project_a)
+    reopened = IssueActivity.objects.create(
+        issue=open_item,
+        project=project_a,
+        actor=actor,
+        verb="updated",
+        field="state",
+        old_identifier=states_a["completed"].id,
+        new_identifier=states_a["started"].id,
+    )
+    IssueActivity.objects.filter(pk=reopened.pk).update(created_at=_dt(2026, 3, 13))
+
+
+@pytest.mark.contract
+class TestMemberAnalyticsRemovedAssignee:
+    """Removed assignees are soft-deleted links; they must not move the member's numbers."""
+
+    PARAMS = {"period": "month", "anchor": ANCHOR}
+
+    @pytest.mark.django_db
+    def test_leaderboard_metrics_ignore_removed_assignee_links(
+        self, session_client, workspace, create_user, member, scenario, march_cycle
+    ):
+        before = _member_metrics(session_client.get(leaderboard_url(workspace.slug), self.PARAMS), member)
+        _add_work_the_member_was_taken_off(scenario, member, march_cycle, create_user)
+        after = _member_metrics(session_client.get(leaderboard_url(workspace.slug), self.PARAMS), member)
+
+        assert after == before
+
+    @pytest.mark.django_db
+    def test_detail_series_ignore_removed_assignee_links(
+        self, session_client, workspace, create_user, member, scenario, march_cycle
+    ):
+        before = session_client.get(detail_url(workspace.slug, member.id), self.PARAMS).data
+        _add_work_the_member_was_taken_off(scenario, member, march_cycle, create_user)
+        after = session_client.get(detail_url(workspace.slug, member.id), self.PARAMS).data
+
+        assert after == before
