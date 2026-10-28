@@ -5,6 +5,7 @@
  */
 
 import { createInstance } from "i18next";
+import type { i18n as I18nInstance } from "i18next";
 import { initReactI18next } from "react-i18next";
 import ICU from "i18next-icu";
 import resourcesToBackend from "i18next-resources-to-backend";
@@ -12,7 +13,7 @@ import { SUPPORTED_LANGUAGES, FALLBACK_LANGUAGE, LANGUAGE_STORAGE_KEY } from "..
 import { NAMESPACES, DEFAULT_NAMESPACE } from "../constants/namespaces";
 import { resourceLoaders } from "./resources.generated";
 
-export const i18nInstance = createInstance();
+export const i18nInstance: I18nInstance = createInstance();
 
 i18nInstance
   .use(ICU)
