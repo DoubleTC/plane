@@ -7,11 +7,11 @@
 // ui
 import { Button } from "@plane/propel/button";
 
-function ErrorPage() {
-  const handleRetry = () => {
-    window.location.reload();
-  };
+const handleRetry = () => {
+  window.location.reload();
+};
 
+function ErrorPage() {
   return (
     <div className="grid h-screen place-items-center bg-surface-1 p-4">
       <div className="space-y-8 text-center">
@@ -24,7 +24,12 @@ function ErrorPage() {
               gmail@doubletc.com
             </a>{" "}
             or on our{" "}
-            <a href="https://forum.pm.cenhomes.net" target="_blank" className="text-accent-primary" rel="noopener noreferrer">
+            <a
+              href="https://forum.pm.cenhomes.net"
+              target="_blank"
+              className="text-accent-primary"
+              rel="noopener noreferrer"
+            >
               Forum
             </a>
             .

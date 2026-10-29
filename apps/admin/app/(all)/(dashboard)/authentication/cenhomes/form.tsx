@@ -132,8 +132,8 @@ export function InstanceCenhomesConfigForm(props: Props) {
       label: "Fallback email domain",
       description: (
         <>
-          When Cenhomes returns no email, BananaZ mints a placeholder address (<CodeBlock>{`{phone}@domain`}</CodeBlock>)
-          on this domain. Identity is still linked by the Cenhomes ID.
+          When Cenhomes returns no email, BananaZ mints a placeholder address (<CodeBlock>{`{phone}@domain`}</CodeBlock>
+          ) on this domain. Identity is still linked by the Cenhomes ID.
         </>
       ),
       placeholder: "pm.cenhomes.net",

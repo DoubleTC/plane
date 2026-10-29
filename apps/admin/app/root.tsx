@@ -15,15 +15,16 @@ import { LogoSpinner } from "@/components/common/logo-spinner";
 import globalStyles from "@/styles/globals.css?url";
 import { AppProviders } from "@/providers";
 import type { Route } from "./+types/root";
-// fonts
+// fonts (imported for their side effect: registering @font-face)
+/* oxlint-disable import/no-unassigned-import */
 import "@fontsource-variable/inter";
 import interVariableWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import "@fontsource/material-symbols-rounded";
 import "@fontsource/ibm-plex-mono";
+/* oxlint-enable import/no-unassigned-import */
 
 const APP_TITLE = "BananaZ | Làm ít chơi nhiều vẫn hiệu quả.";
-const APP_DESCRIPTION =
-  "Được vận hành bởi chuối và cà phê.";
+const APP_DESCRIPTION = "Được vận hành bởi chuối và cà phê.";
 
 export const links: LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },

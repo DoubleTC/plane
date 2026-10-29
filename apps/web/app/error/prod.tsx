@@ -18,7 +18,7 @@ const linkMap = [
     key: "mail_to",
     label: "Contact Support",
     value: "mailto:gmail@doubletc.com",
-  }
+  },
 ];
 
 // Production Error Component
