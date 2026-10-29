@@ -2,67 +2,26 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # See the LICENSE file for details.
 
-from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Subquery
-from django.db.models.functions import Coalesce
+from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 
 from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission, allow_permission, ROLE
 from plane.app.serializers import PhaseCycleSerializer, PhaseSerializer, PhaseWriteSerializer
-from plane.db.models import Cycle, CycleIssue, Phase, PhaseCycle, Project, UserFavorite
+from plane.db.models import Cycle, Phase, PhaseCycle, Project, UserFavorite
+from plane.utils.phase_progress import annotate_phase_cycle_progress
 from plane.utils.timezone_converter import convert_to_utc
 
 from .base import BaseAPIView, BaseViewSet
 
 
 def _annotate_phases(qs, user=None, project_id=None, slug=None):
-    """user, project_id, slug: when provided, also annotate is_favorite."""
     """
-    Annotate each Phase with:
-      - total_cycles   : number of linked PhaseCycles
-      - completed_cycles: number of linked cycles where EVERY work item
-                         has state.group = 'completed'
-                         (cycles with zero issues are NOT counted as complete)
+    Annotate each Phase with its cycle progress (see annotate_phase_cycle_progress)
+    and, when user/project_id/slug are provided, with is_favorite.
     """
-    # Inner exists: does this cycle have at least one CycleIssue?
-    cycle_has_any_issue = CycleIssue.objects.filter(
-        cycle_id=OuterRef("cycle_id"),
-        deleted_at__isnull=True,
-    )
-
-    # Inner exists: does this cycle have any issue whose state is NOT 'completed'?
-    cycle_has_incomplete_issue = CycleIssue.objects.filter(
-        cycle_id=OuterRef("cycle_id"),
-        deleted_at__isnull=True,
-    ).exclude(issue__state__group="completed")
-
-    # Subquery: for a given Phase PK, count PhaseCycles whose linked cycle is
-    # "completed" (has ≥1 issue AND no incomplete issues).
-    completed_cycles_subq = Subquery(
-        PhaseCycle.objects.filter(
-            phase_id=OuterRef("pk"),
-            deleted_at__isnull=True,
-        )
-        .annotate(
-            has_any=Exists(cycle_has_any_issue),
-            has_incomplete=Exists(cycle_has_incomplete_issue),
-        )
-        .filter(has_any=True, has_incomplete=False)
-        .values("phase_id")
-        .annotate(cnt=Count("id"))
-        .values("cnt"),
-        output_field=IntegerField(),
-    )
-
-    annotations = dict(
-        total_cycles=Count(
-            "phase_cycles",
-            filter=Q(phase_cycles__deleted_at__isnull=True),
-            distinct=True,
-        ),
-        completed_cycles=Coalesce(completed_cycles_subq, 0),
-    )
+    qs = annotate_phase_cycle_progress(qs)
 
     if user is not None:
         favorite_subquery = UserFavorite.objects.filter(
@@ -72,9 +31,9 @@ def _annotate_phases(qs, user=None, project_id=None, slug=None):
             project_id=project_id,
             workspace__slug=slug,
         )
-        annotations["is_favorite"] = Exists(favorite_subquery)
+        qs = qs.annotate(is_favorite=Exists(favorite_subquery))
 
-    return qs.annotate(**annotations)
+    return qs
 
 
 class PhaseViewSet(BaseViewSet):
