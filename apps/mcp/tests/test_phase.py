@@ -183,3 +183,25 @@ def test_api_errors_are_reported(server, mocked_api):
 
     assert is_error
     assert "already exists on the given dates" in text
+
+
+def test_sort_order_zero_is_sent(server, mocked_api):
+    mocked_api.patch(PHASE, json={**PHASE_JSON, "sort_order": 0})
+
+    is_error, _, _ = call(
+        server, "phase", {"action": "update", "project_id": PROJECT_ID, "phase_id": PHASE_ID, "sort_order": 0}
+    )
+
+    assert not is_error
+    assert body(mocked_api) == {"sort_order": 0}
+
+
+def test_adding_cycles_returns_the_linked_cycles_without_relisting(server, mocked_api):
+    mocked_api.post(f"{PHASE}cycles/", json=[{"id": CYCLE_A}])
+
+    _, _, data = call(
+        server, "phase", {"action": "manage_cycles", "project_id": PROJECT_ID, "phase_id": PHASE_ID, "add_ids": CYCLE_A}
+    )
+
+    assert data == [{"id": CYCLE_A}]
+    assert [c.request.method for c in mocked_api.calls] == ["POST"]

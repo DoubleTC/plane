@@ -104,7 +104,8 @@ def accepted_arguments() -> dict[str, frozenset[str]]:
 
 
 def _payload(**fields: Any) -> dict[str, Any]:
-    return {name: value for name, value in fields.items() if opt(value) is not None}
+    """The fields the caller passed. Unlike opt(), keeps 0 so sort_order=0 can be set."""
+    return {name: value for name, value in fields.items() if value not in (None, "")}
 
 
 def register(mcp: FastMCP) -> None:
@@ -133,7 +134,7 @@ def register(mcp: FastMCP) -> None:
         start_date: str = "",
         end_date: str = "",
         lead: str = "",
-        sort_order: float = 0,
+        sort_order: float | None = None,
         archived: bool = False,
         add_ids: str | list[str] = "",
         remove_ids: str | list[str] = "",
@@ -158,7 +159,7 @@ def register(mcp: FastMCP) -> None:
         )
 
         if action == "list":
-            params = _payload(cursor=cursor, per_page=per_page)
+            params = _payload(cursor=cursor, per_page=opt(per_page))
             if archived:
                 params["archived"] = "true"
             return phases.list(workspace_slug, project_id, params=params or None)
@@ -193,8 +194,8 @@ def register(mcp: FastMCP) -> None:
         remove = coerce_list(remove_ids)
         if not add and not remove:
             return "Error: action 'manage_cycles' requires: add_ids or remove_ids."
-        if add:
-            phases.add_cycles(workspace_slug, project_id, phase_id, add)
+        linked = phases.add_cycles(workspace_slug, project_id, phase_id, add) if add else None
         for cycle_id in remove or []:
             phases.remove_cycle(workspace_slug, project_id, phase_id, cycle_id)
-        return phases.list_cycles(workspace_slug, project_id, phase_id)
+        # Adding returns the linked cycles; only removals need a fresh listing.
+        return linked if not remove else phases.list_cycles(workspace_slug, project_id, phase_id)

@@ -1,5 +1,5 @@
 # BananaZ MCP server: Plane's official MCP server fitted to BananaZ (Community Edition + Phases).
-FROM python:3.12.5-alpine
+FROM python:3.12.16-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -21,6 +21,6 @@ USER mcp
 EXPOSE 8211
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD wget -qO- http://127.0.0.1:8211/mcp/health > /dev/null || exit 1
+    CMD wget -qO- "http://127.0.0.1:${PORT:-8211}/mcp/health" > /dev/null || exit 1
 
 CMD ["bananaz-mcp", "http"]

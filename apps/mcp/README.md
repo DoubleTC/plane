@@ -10,7 +10,7 @@ Cho phép trợ lý AI (Claude Code, Cursor, VS Code, Claude Desktop…) đọc 
 2. Tạo token mới, đặt tên dễ nhớ (vd. `Claude Code - laptop`) và hạn dùng. Sao chép token (dạng `plane_api_…`).
 3. Ghi lại **slug workspace**: phần ngay sau tên miền trong URL, vd. `technique` trong `https://pm.cenhomes.net/technique/projects`.
 
-Token mang toàn bộ quyền của bạn: không dán vào chat, không commit vào git. Lộ token thì xoá nó ở trang Token API (MCP server nhận ra token đã bị xoá trong tối đa 60 giây).
+Token mang toàn bộ quyền của bạn: không dán vào chat, không commit vào git. Lộ token thì xoá nó ở trang Token API; từ lúc đó mọi thao tác qua MCP bằng token ấy bị BananaZ từ chối.
 
 ## 2. Cấu hình ứng dụng
 
@@ -94,18 +94,21 @@ Giá trị header được đưa qua biến môi trường để tránh lỗi kh
 
 ## 3. Dùng được những gì
 
-| Tool                                                                            | Việc làm được                                                                                                |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `workitem`                                                                      | liệt kê theo project, tìm kiếm cả workspace, tra theo mã (`WEB-12`), xem, tạo, sửa, xoá, gán người, gán nhãn |
-| `workitem_comment`, `workitem_link`, `workitem_attachment`, `workitem_activity` | bình luận, link, file đính kèm, lịch sử thay đổi                                                             |
-| `phase`                                                                         | Phase của BananaZ: xem, tạo, sửa, xoá, lưu trữ, gắn hoặc gỡ cycle                                            |
-| `cycle`, `module`                                                               | xem, tạo, sửa, đưa công việc vào hoặc ra, lưu trữ                                                            |
-| `project`, `state`, `label`, `intake`, `project_estimate`                       | dữ liệu cấu hình project                                                                                     |
-| `member`, `workspace`                                                           | thành viên, workspace đang kết nối                                                                           |
+| Tool                                                      | Việc làm được                                                                                                |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `workitem`                                                | liệt kê theo project, tìm kiếm cả workspace, tra theo mã (`WEB-12`), xem, tạo, sửa, xoá, gán người, gán nhãn |
+| `workitem_comment`, `workitem_link`, `workitem_activity`  | bình luận, link, lịch sử thay đổi                                                                            |
+| `workitem_attachment`                                     | xem danh sách và xoá file đính kèm (tải lên/tải xuống file làm trên giao diện BananaZ)                       |
+| `phase`                                                   | Phase của BananaZ: xem, tạo, sửa, xoá, lưu trữ, gắn hoặc gỡ cycle                                            |
+| `cycle`, `module`                                         | xem, tạo, sửa, đưa công việc vào hoặc ra, lưu trữ                                                            |
+| `project`, `state`, `label`, `intake`, `project_estimate` | dữ liệu cấu hình project                                                                                     |
+| `member`, `workspace`                                     | thành viên, workspace đang kết nối                                                                           |
 
 Không có trên BananaZ (chỉ có ở bản thương mại của Plane): page, milestone, loại công việc và thuộc tính tuỳ chỉnh (nên không có epic), worklog, template, initiative, release, customer, collection, quan hệ giữa công việc, lọc bằng PQL.
 
-Phase chỉ dùng được khi project đã bật **Phases** trong cài đặt project.
+Phase chỉ dùng được khi project đã bật **Phases** trong cài đặt project. Chỉ admin project hoặc người tạo Phase mới xoá được Phase.
+
+**An toàn khi để AI tự thao tác:** AI đọc nội dung do người khác viết (mô tả công việc, bình luận), trong đó có thể có câu lệnh cài cắm (prompt injection). Hãy để ứng dụng AI **hỏi bạn trước khi tạo, sửa hoặc xoá** (mặc định của Claude Code, Cursor, VS Code, Claude Desktop) thay vì cho phép tự động mọi thao tác ghi.
 
 Mỗi token được gọi API BananaZ tối đa 60 lần/phút. Nếu AI làm việc dày đặc và báo lỗi 429, chờ một phút rồi thử lại.
 
@@ -147,6 +150,6 @@ PLANE_BASE_URL=http://localhost:8000 PLANE_API_KEY=<TOKEN> PLANE_WORKSPACE_SLUG=
 Nâng cấp `plane-mcp-server`:
 
 1. Đổi phiên bản trong `pyproject.toml`.
-2. Tạo lại `requirements.lock` trên `python:3.12.5-alpine`: cài `plane-mcp-server==<phiên bản mới>` vào một virtualenv trống rồi chạy `pip freeze`.
+2. Tạo lại `requirements.lock` trên `python:3.12-alpine` (cùng ảnh nền với `Dockerfile`): cài `plane-mcp-server==<phiên bản mới>` vào một virtualenv trống rồi chạy `pip freeze`.
 3. Chạy `pytest`. Test sẽ báo lỗi nếu danh mục tool hoặc các phần nội bộ mà lớp tương thích đang dùng thay đổi.
 4. Thử đầu-cuối với một instance BananaZ dev trước khi deploy.

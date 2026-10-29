@@ -1,4 +1,4 @@
-# Runtime dependencies of bananaz-mcp, resolved from plane-mcp-server==0.3.5 on python:3.12.5-alpine.
+# Runtime dependencies of bananaz-mcp, resolved from plane-mcp-server==0.3.5 on python:3.12-alpine.
 # Regenerate after bumping plane-mcp-server (see README).
 aiofile==3.12.3
 annotated-types==0.8.0

@@ -79,6 +79,10 @@ SUPPORTED_ACTIONS: dict[str, tuple[str, ...]] = {
     "workspace": ("retrieve",),
     # No custom roles.
     "member": ("me", "list_workspace", "list_project"),
+    # read/download_url return presigned URLs built for the internal API host, so they are
+    # unusable outside the server; upload_from_url makes the server fetch arbitrary URLs
+    # (slow-server thread exhaustion, and an exfiltration channel for prompt injection).
+    "workitem_attachment": ("list", "delete"),
 }
 
 # Parameters hidden everywhere: PQL is rejected by the Community Edition API, and work item
@@ -189,14 +193,16 @@ class CommunityEditionScope(Transform):
 
     def __init__(self) -> None:
         self._modules = {resource_name(module): module for module in supported_resources()}
-        self._cache: dict[tuple[str, int], Tool] = {}
+        # One entry per narrowed tool. Registered before StripOutputSchemas, this transform
+        # sees the server's registered Tool objects, which do not change at runtime.
+        self._cache: dict[str, Tool] = {}
 
     def scope(self, tool: Tool) -> Tool:
         module = self._modules.get(tool.name)
         scope = _scope_for(module) if module else None
         if scope is None:
             return tool
-        key = (tool.name, id(tool))
+        key = tool.name
         if key not in self._cache:
             allowed, visible = scope
             properties = (tool.parameters or {}).get("properties", {})
@@ -242,13 +248,26 @@ class BananaZValidateActionArguments(ValidateActionArguments):
         }
         accepted.update(extra_tools or {})
         self._accepted = accepted
+        self._aliases = supported_aliases()
+
+    def bananaz_rejection(self, name: str, arguments: dict) -> str | None:
+        # Legacy names call a tool with its action pinned; check what they resolve to.
+        tool, action = self._aliases.get(name, (name, arguments.get("action")))
+        by_action = self._accepted.get(tool)
+        # Upstream leaves an action it does not list alone, and the narrowed schema is only
+        # advertised (FastMCP does not re-validate enum values), so removed actions are
+        # refused here.
+        if by_action is not None and action is not None and action not in by_action:
+            return f"Error: action '{action}' is not available on BananaZ. Available: {', '.join(by_action)}."
+        required = REQUIRED_ON_BANANAZ.get((tool, action), ())
+        if absent := [arg for arg in required if not arguments.get(arg)]:
+            return f"Error: action '{action}' requires: {', '.join(absent)}."
+        return None
 
     async def on_call_tool(self, context: MiddlewareContext, call_next):
         arguments = getattr(context.message, "arguments", None)
-        if isinstance(arguments, dict):
-            required = REQUIRED_ON_BANANAZ.get((context.message.name, arguments.get("action")), ())
-            if absent := [name for name in required if not arguments.get(name)]:
-                return ToolResult(content=f"Error: action '{arguments['action']}' requires: {', '.join(absent)}.")
+        if isinstance(arguments, dict) and (message := self.bananaz_rejection(context.message.name, arguments)):
+            return ToolResult(content=message)
         return await super().on_call_tool(context, call_next)
 
 
@@ -256,8 +275,9 @@ def register_supported_tools(mcp: FastMCP, extra: Sequence[ModuleType] = ()) -> 
     """BananaZ counterpart of plane_mcp.tools.register_tools."""
     for module in (*supported_resources(), *extra):
         module.register(mcp)
-    mcp.add_transform(StripOutputSchemas())
+    # Scope first: it must see the registered tools, not StripOutputSchemas' per-call copies.
     mcp.add_transform(CommunityEditionScope())
+    mcp.add_transform(StripOutputSchemas())
     mcp.add_transform(LegacyNames(supported_aliases()))
 
 

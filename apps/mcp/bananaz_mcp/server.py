@@ -17,6 +17,7 @@ from starlette.responses import JSONResponse
 from bananaz_mcp import phase
 from bananaz_mcp.auth import CachedHeaderAuthProvider
 from bananaz_mcp.compat import BananaZValidateActionArguments, patch_sdk_models, register_supported_tools
+from bananaz_mcp.guards import ValidateIdentifiers
 
 SERVER_NAME = "BananaZ"
 MCP_PATH = "/mcp"
@@ -52,6 +53,7 @@ def build_server(auth: TokenVerifier | None = None) -> FastMCP:
     # Payload logging defaults to off: tool arguments carry work item content.
     mcp.add_middleware(PlaneLoggingMiddleware(include_payloads=_env_flag("LOG_PAYLOADS", False)))
     mcp.add_middleware(CoerceArguments())
+    mcp.add_middleware(ValidateIdentifiers())
     mcp.add_middleware(BananaZValidateActionArguments(extra_tools={phase.NAME: phase.accepted_arguments()}))
     register_supported_tools(mcp, extra=(phase,))
     return mcp
