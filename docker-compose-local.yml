@@ -140,6 +140,21 @@ services:
       - plane-db
       - plane-redis
 
+  # MCP server for AI assistants: http://localhost:8211/mcp (see apps/mcp/README.md)
+  mcp:
+    build:
+      context: ./apps/mcp
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - dev_env
+    environment:
+      PLANE_BASE_URL: http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8211:8211"
+
 volumes:
   redisdata:
   uploads:

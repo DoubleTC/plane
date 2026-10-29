@@ -46,6 +46,7 @@ IMAGES=(
   "admin|.|apps/admin/Dockerfile.admin"
   "live|.|apps/live/Dockerfile.live"
   "proxy|./apps/proxy|Dockerfile.ce"
+  "mcp|./apps/mcp|Dockerfile"
 )
 
 # ---- Helpers ------------------------------------------------

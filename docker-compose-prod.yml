@@ -356,6 +356,23 @@ services:
     networks:
       - plane-network
 
+  # ── MCP server for AI assistants ─────────────────────────────
+  # Served at https://<domain>/mcp through the proxy. Users authenticate
+  # with their personal API token; see apps/mcp/README.md.
+
+  mcp:
+    image: ${REGISTRY:-registry2.cenhomes.vn/doubletc/banana}/mcp:${TAG:-latest}
+    environment:
+      PLANE_BASE_URL: ${MCP_PLANE_BASE_URL:-http://api:8000}
+      AUTH_CACHE_TTL_SECONDS: ${MCP_AUTH_CACHE_TTL_SECONDS:-60}
+      LOG_PAYLOADS: ${MCP_LOG_PAYLOADS:-false}
+    deploy:
+      replicas: ${MCP_REPLICAS:-1}
+      restart_policy:
+        condition: on-failure
+    networks:
+      - plane-network
+
   # ── Reverse Proxy (Caddy) ────────────────────────────────────
   # The CE proxy image ships Caddyfile.ce baked in — no host mount
   # needed. Remove this block if you already run an external proxy
