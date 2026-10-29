@@ -88,6 +88,21 @@ def cycle_docs(**kwargs):
     return extend_schema(**_merge_schema_options(defaults, kwargs))
 
 
+def phase_docs(**kwargs):
+    """Decorator for phase-related endpoints"""
+    defaults = {
+        "tags": ["Phases"],
+        "parameters": [WORKSPACE_SLUG_PARAMETER, PROJECT_ID_PARAMETER],
+        "responses": {
+            401: UNAUTHORIZED_RESPONSE,
+            403: FORBIDDEN_RESPONSE,
+            404: NOT_FOUND_RESPONSE,
+        },
+    }
+
+    return extend_schema(**_merge_schema_options(defaults, kwargs))
+
+
 def issue_docs(**kwargs):
     """Decorator for issue-related endpoints"""
     defaults = {

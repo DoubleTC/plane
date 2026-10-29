@@ -119,6 +119,21 @@ CYCLE_ID_PARAMETER = OpenApiParameter(
     ],
 )
 
+PHASE_ID_PARAMETER = OpenApiParameter(
+    name="phase_id",
+    description="Phase ID",
+    required=True,
+    type=OpenApiTypes.UUID,
+    location=OpenApiParameter.PATH,
+    examples=[
+        OpenApiExample(
+            name="Example phase ID",
+            value="550e8400-e29b-41d4-a716-446655440000",
+            description="A typical phase UUID",
+        )
+    ],
+)
+
 MODULE_ID_PARAMETER = OpenApiParameter(
     name="module_id",
     description="Module ID",

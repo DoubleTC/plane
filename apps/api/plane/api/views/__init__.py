@@ -43,6 +43,14 @@ from .cycle import (
     CycleArchiveUnarchiveAPIEndpoint,
 )
 
+from .phase import (
+    PhaseListCreateAPIEndpoint,
+    PhaseDetailAPIEndpoint,
+    PhaseArchiveUnarchiveAPIEndpoint,
+    PhaseCycleListCreateAPIEndpoint,
+    PhaseCycleDetailAPIEndpoint,
+)
+
 from .module import (
     ModuleListCreateAPIEndpoint,
     ModuleListLiteAPIEndpoint,
