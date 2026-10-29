@@ -2,7 +2,9 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # See the LICENSE file for details.
 
-from django.db.models import Exists, OuterRef, Q
+from datetime import date
+
+from django.db.models import Exists, OuterRef
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
@@ -11,7 +13,13 @@ from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission
 from plane.app.serializers import PhaseCycleSerializer, PhaseSerializer, PhaseWriteSerializer
 from plane.db.models import Cycle, Phase, PhaseCycle, Project, UserFavorite
 from plane.utils.phase_progress import annotate_phase_cycle_progress
-from plane.utils.timezone_converter import convert_to_utc
+from plane.utils.phase_rules import (
+    PHASE_DATES_OVERLAP_ERROR,
+    PHASE_DELETE_FORBIDDEN_ERROR,
+    can_delete_phase,
+    has_overlap,
+    overlapping_phases,
+)
 
 from .base import BaseAPIView, BaseViewSet
 
@@ -136,6 +144,8 @@ class PhaseViewSet(BaseViewSet):
         phase = Phase.objects.filter(workspace__slug=slug, project_id=project_id, pk=pk).first()
         if not phase:
             return Response({"error": "Phase not found."}, status=status.HTTP_404_NOT_FOUND)
+        if not can_delete_phase(request.user, phase):
+            return Response({"error": PHASE_DELETE_FORBIDDEN_ERROR}, status=status.HTTP_403_FORBIDDEN)
         phase.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -155,10 +165,12 @@ class PhaseArchiveViewSet(BaseViewSet):
         return Response({"archived_at": phase.archived_at}, status=status.HTTP_200_OK)
 
     def destroy(self, request, slug, project_id, phase_id):
-        """DELETE → unarchive."""
+        """DELETE → unarchive. Rejected when the phase's dates now overlap another active phase."""
         phase = Phase.objects.filter(workspace__slug=slug, project_id=project_id, pk=phase_id).first()
         if not phase:
             return Response({"error": "Phase not found."}, status=status.HTTP_404_NOT_FOUND)
+        if phase.archived_at and has_overlap(phase):
+            return Response({"error": PHASE_DATES_OVERLAP_ERROR}, status=status.HTTP_400_BAD_REQUEST)
         phase.archived_at = None
         phase.save(update_fields=["archived_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -269,28 +281,16 @@ class PhaseDateCheckEndpoint(BaseAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        start_date = convert_to_utc(date=str(start_date), project_id=project_id, is_start_date=True)
-        end_date = convert_to_utc(date=str(end_date), project_id=project_id)
-
-        # Check if any non-archived phase overlaps the requested interval
-        overlapping = Phase.objects.filter(
-            Q(workspace__slug=slug)
-            & Q(project_id=project_id)
-            & Q(archived_at__isnull=True)
-            & Q(start_date__isnull=False)
-            & Q(end_date__isnull=False)
-            & (
-                Q(start_date__lte=start_date, end_date__gte=start_date)
-                | Q(start_date__lte=end_date, end_date__gte=end_date)
-                | Q(start_date__gte=start_date, end_date__lte=end_date)
-            )
-        ).exclude(pk=phase_id)
-
-        if overlapping.exists():
+        # Phase dates are calendar dates: compare them as such (no timezone conversion).
+        try:
+            start_date = date.fromisoformat(str(start_date)[:10])
+            end_date = date.fromisoformat(str(end_date)[:10])
+        except ValueError:
             return Response(
-                {
-                    "status": False,
-                    "error": "A phase already exists on the given dates. Please choose a different date range.",
-                }
+                {"error": "start_date and end_date must be dates in YYYY-MM-DD format."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if overlapping_phases(project_id, start_date, end_date, exclude_phase_id=phase_id).exists():
+            return Response({"status": False, "error": PHASE_DATES_OVERLAP_ERROR})
         return Response({"status": True}, status=status.HTTP_200_OK)

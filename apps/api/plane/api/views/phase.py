@@ -24,6 +24,12 @@ from plane.api.serializers import (
 from plane.app.permissions import ProjectEntityPermission
 from plane.db.models import Cycle, Phase, PhaseCycle, Project
 from plane.utils.phase_progress import annotate_phase_cycle_progress
+from plane.utils.phase_rules import (
+    PHASE_DATES_OVERLAP_ERROR,
+    PHASE_DELETE_FORBIDDEN_ERROR,
+    can_delete_phase,
+    has_overlap,
+)
 from plane.utils.openapi import (
     phase_docs,
     PHASE_ID_PARAMETER,
@@ -69,13 +75,15 @@ class PhaseBaseAPIEndpoint(BaseAPIView):
         return None
 
     def phase_queryset(self):
-        return annotate_phase_cycle_progress(
-            Phase.objects.filter(project=self.project).select_related("project", "workspace")
-        ).annotate(
+        return annotate_phase_cycle_progress(Phase.objects.filter(project=self.project)).annotate(
             cycle_ids=ArrayAgg(
                 "phase_cycles__cycle_id",
                 # phase_cycles__isnull=False drops the NULL row the LEFT JOIN yields for phases without links.
-                filter=Q(phase_cycles__isnull=False, phase_cycles__deleted_at__isnull=True),
+                filter=Q(
+                    phase_cycles__isnull=False,
+                    phase_cycles__deleted_at__isnull=True,
+                    phase_cycles__cycle__deleted_at__isnull=True,
+                ),
                 distinct=True,
                 default=Value([]),
             )
@@ -84,15 +92,18 @@ class PhaseBaseAPIEndpoint(BaseAPIView):
     def get_phase(self, phase_id):
         return self.phase_queryset().get(pk=phase_id)
 
-    def name_conflict_response(self, name):
-        existing = Phase.objects.filter(project=self.project, name=name).first()
-        return Response(
-            {
-                "error": "Phase with the same name already exists in the project",
-                "id": str(existing.id) if existing else None,
-            },
-            status=status.HTTP_409_CONFLICT,
-        )
+    def integrity_error_response(self, name, exclude_phase_id=None):
+        """409 when the failure is the per-project unique name, otherwise a generic 400."""
+        existing = Phase.objects.filter(project=self.project, name=name)
+        if exclude_phase_id:
+            existing = existing.exclude(pk=exclude_phase_id)
+        existing = existing.first() if name else None
+        if existing:
+            return Response(
+                {"error": "Phase with the same name already exists in the project", "id": str(existing.id)},
+                status=status.HTTP_409_CONFLICT,
+            )
+        return Response({"error": "The payload is not valid"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PhaseListCreateAPIEndpoint(PhaseBaseAPIEndpoint):
@@ -146,7 +157,7 @@ class PhaseListCreateAPIEndpoint(PhaseBaseAPIEndpoint):
             with transaction.atomic():
                 phase = serializer.save(project=self.project, workspace=self.project.workspace)
         except IntegrityError:
-            return self.name_conflict_response(serializer.validated_data.get("name"))
+            return self.integrity_error_response(serializer.validated_data.get("name"))
         return Response(PhaseSerializer(self.get_phase(phase.id)).data, status=status.HTTP_201_CREATED)
 
 
@@ -190,13 +201,14 @@ class PhaseDetailAPIEndpoint(PhaseBaseAPIEndpoint):
             with transaction.atomic():
                 serializer.save()
         except IntegrityError:
-            return self.name_conflict_response(serializer.validated_data.get("name"))
+            return self.integrity_error_response(serializer.validated_data.get("name"), exclude_phase_id=phase_id)
         return Response(PhaseSerializer(self.get_phase(phase_id)).data, status=status.HTTP_200_OK)
 
     @phase_docs(
         operation_id="delete_phase",
         summary="Delete phase",
-        description="Delete a phase. Linked cycles are kept; only the links are removed.",
+        description="Delete a phase. Linked cycles are kept; only the links are removed. "
+        "Only a project admin or the phase creator can delete a phase.",
         parameters=[PHASE_ID_PARAMETER],
         responses={204: DELETED_RESPONSE},
     )
@@ -204,7 +216,10 @@ class PhaseDetailAPIEndpoint(PhaseBaseAPIEndpoint):
         """Delete phase"""
         if error := self.phases_disabled_response():
             return error
-        Phase.objects.get(project=self.project, pk=phase_id).delete()
+        phase = Phase.objects.get(project=self.project, pk=phase_id)
+        if not can_delete_phase(request.user, phase):
+            return Response({"error": PHASE_DELETE_FORBIDDEN_ERROR}, status=status.HTTP_403_FORBIDDEN)
+        phase.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -231,15 +246,21 @@ class PhaseArchiveUnarchiveAPIEndpoint(PhaseBaseAPIEndpoint):
     @phase_docs(
         operation_id="unarchive_phase",
         summary="Unarchive phase",
-        description="Restore an archived phase to the default phase list.",
+        description="Restore an archived phase to the default phase list. Rejected when its dates overlap "
+        "another active phase.",
         parameters=[PHASE_ID_PARAMETER],
-        responses={200: OpenApiResponse(description="Phase unarchived", response=PhaseSerializer)},
+        responses={
+            200: OpenApiResponse(description="Phase unarchived", response=PhaseSerializer),
+            400: INVALID_REQUEST_RESPONSE,
+        },
     )
     def delete(self, request, slug, project_id, phase_id):
         """Unarchive phase"""
         if error := self.phases_disabled_response():
             return error
         phase = Phase.objects.get(project=self.project, pk=phase_id)
+        if phase.archived_at and has_overlap(phase):
+            return Response({"error": PHASE_DATES_OVERLAP_ERROR}, status=status.HTTP_400_BAD_REQUEST)
         phase.archived_at = None
         phase.save(update_fields=["archived_at", "updated_at"])
         return Response(PhaseSerializer(self.get_phase(phase_id)).data, status=status.HTTP_200_OK)

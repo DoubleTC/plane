@@ -18,7 +18,7 @@ import { CreateUpdatePhaseModal } from "@/components/phases/create-update-phase-
 import { DeletePhaseModal } from "@/components/phases/delete-phase-modal";
 // hooks
 import { usePhase } from "@/hooks/store/use-phase";
-import { useUserPermissions } from "@/hooks/store/user";
+import { useUser, useUserPermissions } from "@/hooks/store/user";
 
 type Props = {
   parentRef: React.RefObject<HTMLDivElement>;
@@ -35,6 +35,7 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
   const [linkedCycleIds, setLinkedCycleIds] = useState<string[]>([]);
   const { getPhaseById, archivePhase, unarchivePhase, getPhaseCycles } = usePhase();
   const { allowPermissions } = useUserPermissions();
+  const { data: currentUser } = useUser();
   const { t } = useTranslation();
 
   const phase = getPhaseById(phaseId);
@@ -44,6 +45,14 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
     workspaceSlug,
     projectId
   );
+  const isProjectAdmin = allowPermissions(
+    [EUserPermissions.ADMIN],
+    EUserPermissionsLevel.PROJECT,
+    workspaceSlug,
+    projectId
+  );
+  // Same rule as the API: only a project admin or the phase creator may delete it.
+  const isDeleteAllowed = isProjectAdmin || (!!currentUser?.id && phase?.created_by === currentUser.id);
 
   if (!phase) return null;
 
@@ -64,8 +73,15 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
         await archivePhase(workspaceSlug, projectId, phaseId);
         setToast({ type: TOAST_TYPE.SUCCESS, title: t("phase.toast.archived_title") });
       }
-    } catch {
-      setToast({ type: TOAST_TYPE.ERROR, title: t("common.error") });
+    } catch (error) {
+      // Restoring is refused when the phase's dates now overlap another active phase.
+      const status = (error as { response?: { status?: number } } | undefined)?.response?.status;
+      const isDateOverlap = !!phase.archived_at && status === 400;
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("common.error"),
+        message: isDateOverlap ? t("phase.toast.date_overlap_error") : undefined,
+      });
     }
   };
 
@@ -120,7 +136,7 @@ export const PhaseQuickActions = observer(function PhaseQuickActions(props: Prop
       title: t("delete"),
       icon: Trash2,
       action: () => setDeleteModal(true),
-      shouldRender: isEditingAllowed,
+      shouldRender: isDeleteAllowed,
       className: "text-red-500",
       iconClassName: "text-red-500",
     },

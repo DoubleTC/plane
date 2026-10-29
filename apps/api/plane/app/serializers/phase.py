@@ -5,6 +5,7 @@
 from rest_framework import serializers
 
 from plane.db.models import IssueAssignee, Phase, PhaseCycle, User
+from plane.utils.phase_rules import PHASE_DATES_OVERLAP_ERROR, overlapping_phases
 
 from .base import BaseSerializer, DynamicBaseSerializer
 
@@ -77,6 +78,18 @@ class PhaseWriteSerializer(BaseSerializer):
             "sort_order",
             "archived_at",
         ]
+
+    def validate(self, data):
+        project = self.context["project"]
+        start_date = data.get("start_date", self.instance.start_date if self.instance else None)
+        end_date = data.get("end_date", self.instance.end_date if self.instance else None)
+        if start_date and end_date:
+            if start_date > end_date:
+                raise serializers.ValidationError("Start date cannot exceed end date")
+            exclude = self.instance.pk if self.instance else None
+            if overlapping_phases(project.id, start_date, end_date, exclude_phase_id=exclude).exists():
+                raise serializers.ValidationError(PHASE_DATES_OVERLAP_ERROR)
+        return data
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

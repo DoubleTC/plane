@@ -7,9 +7,8 @@ from rest_framework import serializers
 
 # Module imports
 from plane.db.models import Phase, ProjectMember, User
+from plane.utils.phase_rules import PHASE_DATES_OVERLAP_ERROR, overlapping_phases
 from .base import BaseSerializer
-
-PHASE_DATES_OVERLAP_ERROR = "A phase already exists on the given dates. Please choose a different date range."
 
 
 class PhaseSerializer(BaseSerializer):
@@ -87,17 +86,8 @@ class PhaseWriteSerializer(BaseSerializer):
             if start_date > end_date:
                 raise serializers.ValidationError("Start date cannot exceed end date")
 
-            overlapping = Phase.objects.filter(
-                project=project,
-                archived_at__isnull=True,
-                start_date__isnull=False,
-                end_date__isnull=False,
-                start_date__lte=end_date,
-                end_date__gte=start_date,
-            )
-            if self.instance:
-                overlapping = overlapping.exclude(pk=self.instance.pk)
-            if overlapping.exists():
+            exclude = self.instance.pk if self.instance else None
+            if overlapping_phases(project.id, start_date, end_date, exclude_phase_id=exclude).exists():
                 raise serializers.ValidationError(PHASE_DATES_OVERLAP_ERROR)
 
         lead = data.get("lead")

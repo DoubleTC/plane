@@ -333,3 +333,61 @@ class TestPhasePermissions:
 
         assert read.status_code == status.HTTP_200_OK
         assert write.status_code == status.HTTP_403_FORBIDDEN
+
+    @pytest.mark.django_db
+    def test_member_cannot_delete_a_phase_they_did_not_create(self, api_client, workspace, project, phase):
+        member = User.objects.create(email="member@example.com", username="member")
+        WorkspaceMember.objects.create(workspace=workspace, member=member, role=15)
+        ProjectMember.objects.create(project=project, member=member, role=15, is_active=True)
+        token = APIToken.objects.create(user=member, label="member", token="plane_api_member_token_phase")
+        api_client.credentials(HTTP_X_API_KEY=token.token)
+
+        response = api_client.delete(phase_url(workspace.slug, project.id, phase.id))
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert Phase.objects.filter(pk=phase.id).exists()
+
+
+@pytest.mark.contract
+class TestPhaseRules:
+    @pytest.mark.django_db
+    def test_unarchive_into_an_overlap_is_rejected(self, api_key_client, workspace, project, phase):
+        api_key_client.post(phase_url(workspace.slug, project.id, phase.id, "archive/"))
+        Phase.objects.create(
+            name="Mid January",
+            project=project,
+            workspace=workspace,
+            start_date=date(2026, 1, 10),
+            end_date=date(2026, 1, 20),
+        )
+
+        response = api_key_client.delete(phase_url(workspace.slug, project.id, phase.id, "archive/"))
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        phase.refresh_from_db()
+        assert phase.archived_at is not None
+
+    @pytest.mark.django_db
+    def test_adjacent_dates_are_allowed_in_a_utc_plus_timezone(self, api_key_client, workspace, project, phase):
+        project.timezone = "Asia/Ho_Chi_Minh"
+        project.save(update_fields=["timezone"])
+
+        response = api_key_client.post(
+            phases_url(workspace.slug, project.id),
+            {"name": "February", "start_date": "2026-02-01", "end_date": "2026-02-28"},
+            format="json",
+        )
+
+        assert response.status_code == status.HTTP_201_CREATED
+
+    @pytest.mark.django_db
+    def test_deleted_cycles_are_not_reported(self, api_key_client, workspace, project, phase, cycles):
+        for cycle in cycles:
+            PhaseCycle.objects.create(phase=phase, cycle=cycle, project=project, workspace=workspace)
+        cycles[1].deleted_at = cycles[1].created_at
+        cycles[1].save(update_fields=["deleted_at"])
+
+        response = api_key_client.get(phase_url(workspace.slug, project.id, phase.id))
+
+        assert response.data["total_cycles"] == 1
+        assert [str(c) for c in response.data["cycle_ids"]] == [str(cycles[0].id)]

@@ -11,7 +11,9 @@ from plane.db.models import CycleIssue, PhaseCycle
 def annotate_phase_cycle_progress(queryset):
     """
     Annotate a Phase queryset with:
-      - total_cycles    : number of linked PhaseCycles
+      - total_cycles    : number of linked cycles (links and cycles that were deleted are
+                          ignored; deleting a cycle soft-deletes its links only later, in
+                          a background task)
       - completed_cycles: number of linked cycles where EVERY work item has
                           state.group = 'completed' (cycles with zero work items
                           are NOT counted as complete)
@@ -31,6 +33,7 @@ def annotate_phase_cycle_progress(queryset):
         PhaseCycle.objects.filter(
             phase_id=OuterRef("pk"),
             deleted_at__isnull=True,
+            cycle__deleted_at__isnull=True,
         )
         .annotate(
             has_any=Exists(cycle_has_any_issue),
@@ -46,7 +49,7 @@ def annotate_phase_cycle_progress(queryset):
     return queryset.annotate(
         total_cycles=Count(
             "phase_cycles",
-            filter=Q(phase_cycles__deleted_at__isnull=True),
+            filter=Q(phase_cycles__deleted_at__isnull=True, phase_cycles__cycle__deleted_at__isnull=True),
             distinct=True,
         ),
         completed_cycles=Coalesce(completed_cycles_subq, 0),
