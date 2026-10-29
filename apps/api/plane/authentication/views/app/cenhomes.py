@@ -2,15 +2,12 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # See the LICENSE file for details.
 
-# Python imports
-import uuid
-
 # Django import
 from django.http import HttpResponseRedirect
 from django.views import View
 
 # Module imports
-from plane.authentication.provider.oauth.cenhomes import CenhomesOAuthProvider
+from plane.authentication.provider.oauth.cenhomes import CenhomesOAuthProvider, finish_login, start_login
 from plane.authentication.utils.login import user_login
 from plane.authentication.utils.redirection_path import get_redirection_path
 from plane.authentication.utils.user_auth_workflow import post_user_auth_workflow
@@ -44,9 +41,7 @@ class CenhomesOauthInitiateEndpoint(View):
             )
             return HttpResponseRedirect(url)
         try:
-            state = uuid.uuid4().hex
-            provider = CenhomesOAuthProvider(request=request, state=state)
-            request.session["state"] = state
+            provider = CenhomesOAuthProvider(request=request, state=start_login(request))
             auth_url = provider.get_auth_url()
             return HttpResponseRedirect(auth_url)
         except AuthenticationException as e:
@@ -63,9 +58,9 @@ class CenhomesCallbackEndpoint(View):
         state = request.GET.get("state")
         next_path = request.session.get("next_path")
 
-        # Cenhomes ID (IdentityServer) does not echo back the `state` param, so
-        # we only enforce the CSRF check when a state is actually returned.
-        if state and state != request.session.get("state", ""):
+        # Login CSRF: the callback must belong to a login this browser session started
+        # (see finish_login; Cenhomes ID's login gateway drops the `state` param).
+        if not finish_login(request, state):
             exc = AuthenticationException(
                 error_code=AUTHENTICATION_ERROR_CODES["CENHOMES_OAUTH_PROVIDER_ERROR"],
                 error_message="CENHOMES_OAUTH_PROVIDER_ERROR",

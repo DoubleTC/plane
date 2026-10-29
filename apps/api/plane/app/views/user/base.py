@@ -230,8 +230,10 @@ class UserEndpoint(BaseViewSet):
         old_email = user.email
         # Update the email - this updates the existing user record without creating a new user
         user.email = new_email
-        # Reset email verification status when email is changed
-        user.is_email_verified = False
+        # The code was delivered to new_email, so its owner has just proven control of it.
+        # BananaZ: Cenhomes users whose Cenhomes email was unverified start with a phone-based
+        # address and attach their real email here; invitations only match verified emails.
+        user.is_email_verified = True
         user.save()
 
         # delete the cache

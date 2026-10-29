@@ -265,6 +265,9 @@ class UserWorkspaceInvitationsViewSet(BaseViewSet):
     model = WorkspaceMemberInvite
 
     def get_queryset(self):
+        # Invitations are matched by email alone, so only a verified email may claim them.
+        if not self.request.user.is_email_verified:
+            return WorkspaceMemberInvite.objects.none()
         return self.filter_queryset(
             super().get_queryset().filter(email=self.request.user.email).select_related("workspace")
         )
@@ -272,6 +275,11 @@ class UserWorkspaceInvitationsViewSet(BaseViewSet):
     @invalidate_cache(path="/api/workspaces/", user=False)
     @invalidate_cache(path="/api/users/me/workspaces/", multiple=True)
     def create(self, request):
+        if not request.user.is_email_verified:
+            return Response(
+                {"error": "Verify your email address to accept invitations."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         invitations = request.data.get("invitations", [])
         workspace_invitations = WorkspaceMemberInvite.objects.filter(
             pk__in=invitations, email=request.user.email

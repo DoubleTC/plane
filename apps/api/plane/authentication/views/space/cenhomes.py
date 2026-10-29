@@ -2,16 +2,13 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # See the LICENSE file for details.
 
-# Python imports
-import uuid
-
 # Django import
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.utils.http import url_has_allowed_host_and_scheme
 
 # Module imports
-from plane.authentication.provider.oauth.cenhomes import CenhomesOAuthProvider
+from plane.authentication.provider.oauth.cenhomes import CenhomesOAuthProvider, finish_login, start_login
 from plane.authentication.utils.login import user_login
 from plane.license.models import Instance
 from plane.authentication.utils.host import base_host
@@ -27,6 +24,9 @@ class CenhomesOauthInitiateSpaceEndpoint(View):
         # Get host and next path
         request.session["host"] = base_host(request=request, is_space=True)
         next_path = request.GET.get("next_path")
+        if next_path:
+            # Read back by the callback, which validates it before redirecting.
+            request.session["next_path"] = str(next_path)
 
         # Check instance configuration
         instance = Instance.objects.first()
@@ -42,9 +42,7 @@ class CenhomesOauthInitiateSpaceEndpoint(View):
             return HttpResponseRedirect(url)
 
         try:
-            state = uuid.uuid4().hex
-            provider = CenhomesOAuthProvider(request=request, state=state)
-            request.session["state"] = state
+            provider = CenhomesOAuthProvider(request=request, state=start_login(request))
             auth_url = provider.get_auth_url()
             return HttpResponseRedirect(auth_url)
         except AuthenticationException as e:
@@ -62,9 +60,9 @@ class CenhomesCallbackSpaceEndpoint(View):
         base_host_url = request.session.get("host")
         next_path = request.session.get("next_path")
 
-        # Cenhomes ID (IdentityServer) does not echo back the `state` param, so
-        # we only enforce the CSRF check when a state is actually returned.
-        if state and state != request.session.get("state", ""):
+        # Login CSRF: the callback must belong to a login this browser session started
+        # (see finish_login; Cenhomes ID's login gateway drops the `state` param).
+        if not finish_login(request, state):
             exc = AuthenticationException(
                 error_code=AUTHENTICATION_ERROR_CODES["CENHOMES_OAUTH_PROVIDER_ERROR"],
                 error_message="CENHOMES_OAUTH_PROVIDER_ERROR",

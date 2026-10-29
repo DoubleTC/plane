@@ -3,8 +3,10 @@
 # See the LICENSE file for details.
 
 # Python imports
+import hmac
 import os
 import re
+import time
 import uuid
 from datetime import datetime
 from urllib.parse import urlencode
@@ -23,6 +25,38 @@ from plane.authentication.adapter.error import (
 from plane.authentication.adapter.oauth import OauthAdapter
 from plane.db.models import Account, Profile, User
 from plane.license.utils.instance_value import get_configuration_value
+
+
+# Seconds a started Cenhomes login stays valid for its callback.
+LOGIN_TTL_SECONDS = 600
+LOGIN_SESSION_KEY = "cenhomes_login"
+# Seconds to wait for Cenhomes ID before failing the login instead of blocking a worker.
+REQUEST_TIMEOUT_SECONDS = 10
+
+
+def start_login(request):
+    """Record in the browser session that it started a Cenhomes login; returns the OAuth state."""
+    state = uuid.uuid4().hex
+    request.session[LOGIN_SESSION_KEY] = {"state": state, "started_at": time.time()}
+    return state
+
+
+def finish_login(request, returned_state):
+    """Consume this browser session's pending Cenhomes login. False means: reject the callback.
+
+    Cenhomes ID's login gateway drops `state` (and `nonce`, PKCE) when it redirects to its
+    login page, so the standard login-CSRF check cannot be done yet. Instead a callback is
+    accepted only in the browser session that started a login within LOGIN_TTL_SECONDS, and
+    only once. Whenever Cenhomes does return `state`, it must match.
+    """
+    pending = request.session.pop(LOGIN_SESSION_KEY, None)
+    if not isinstance(pending, dict):
+        return False
+    if time.time() - float(pending.get("started_at", 0)) > LOGIN_TTL_SECONDS:
+        return False
+    if returned_state:
+        return hmac.compare_digest(str(returned_state), str(pending.get("state", "")))
+    return True
 
 
 class CenhomesOAuthProvider(OauthAdapter):
@@ -125,7 +159,9 @@ class CenhomesOAuthProvider(OauthAdapter):
         # base adapter only logs a generic warning, which makes diagnosing
         # token-exchange failures (bad secret, redirect_uri mismatch, …) hard.
         try:
-            response = requests.post(self.get_token_url(), data=data, headers=headers or {}, auth=auth)
+            response = requests.post(
+                self.get_token_url(), data=data, headers=headers or {}, auth=auth, timeout=REQUEST_TIMEOUT_SECONDS
+            )
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -142,7 +178,7 @@ class CenhomesOAuthProvider(OauthAdapter):
                 "Authorization": f"Bearer {self.token_data.get('access_token')}",
                 "Accept": "application/json",
             }
-            response = requests.get(self.get_user_info_url(), headers=headers)
+            response = requests.get(self.get_user_info_url(), headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:
@@ -213,6 +249,8 @@ class CenhomesOAuthProvider(OauthAdapter):
                     "display_name": full_name or "",
                     "avatar": user_info.get("picture") or user_info.get("avatar") or "",
                     "is_password_autoset": True,
+                    # OIDC email_verified; some providers send it as the string "true".
+                    "email_verified": str(user_info.get("email_verified")).strip().lower() == "true",
                 },
             }
         )
@@ -225,26 +263,51 @@ class CenhomesOAuthProvider(OauthAdapter):
                 return str(value)
         return None
 
-    def _resolve_email(self, provider_id, email, phone):
-        """Pick a usable, unique email for Plane's email-keyed user model.
+    def _verified_email(self):
+        """The Cenhomes email, only when Cenhomes reports it as verified."""
+        email = self.user_data.get("email")
+        if not (email and self.user_data.get("user", {}).get("email_verified")):
+            return None
+        try:
+            return self.sanitize_email(email)
+        except AuthenticationException:
+            return None
 
-        Prefers the real email; otherwise mints a deterministic placeholder.
-        The placeholder follows the Cenhomes ecosystem convention
-        ({digits}@domain) so the same person maps to the same address across
-        systems, falling back to the immutable subject id when no phone exists.
+    def _account_email(self, provider_id, verified_email, phone):
+        """Email for a new BananaZ account.
+
+        A Cenhomes-verified email is used when no account holds it yet. Otherwise the address
+        is minted from the phone number (Cenhomes accounts are phone-based) or from the
+        immutable subject id. An unverified Cenhomes email is never used: it could be someone
+        else's address and would let its holder pick up invitations sent to it. Users attach
+        their real email later through BananaZ's verified change-email flow.
         """
-        if email:
-            try:
-                return self.sanitize_email(email)
-            except AuthenticationException:
-                pass
+        candidates = [verified_email] if verified_email else []
+        digits = re.sub(r"\D+", "", phone or "")
+        if digits:
+            candidates.append(f"{digits}@{self.fallback_email_domain}")
+        candidates.append(f"cenhomes-{provider_id}@{self.fallback_email_domain}")
+        for email in candidates:
+            if not User.objects.filter(email=email).exists():
+                return email
+        return f"cenhomes-{provider_id}-{uuid.uuid4().hex[:8]}@{self.fallback_email_domain}"
 
-        if phone:
-            digits = re.sub(r"\D+", "", phone)
-            if digits:
-                return f"{digits}@{self.fallback_email_domain}"
-
-        return f"cenhomes-{provider_id}@{self.fallback_email_domain}"
+    @staticmethod
+    def _check_can_login(user):
+        """Checks of the upstream Adapter.complete_login_or_signup that this override must keep."""
+        if not user.is_active and user.last_logout_time is not None:
+            raise AuthenticationException(
+                error_code=AUTHENTICATION_ERROR_CODES["USER_ACCOUNT_DEACTIVATED"],
+                error_message="USER_ACCOUNT_DEACTIVATED",
+                payload={"email": user.email},
+            )
+        # Bots (e.g. each workspace's seed bot, a workspace admin) act only through API tokens.
+        if user.is_bot:
+            raise AuthenticationException(
+                error_code=AUTHENTICATION_ERROR_CODES["BOT_USER_LOGIN_FORBIDDEN"],
+                error_message="BOT_USER_LOGIN_FORBIDDEN",
+                payload={"email": user.email},
+            )
 
     def complete_login_or_signup(self):
         user_info = self.user_data.get("user", {})
@@ -258,7 +321,7 @@ class CenhomesOAuthProvider(OauthAdapter):
                 error_message="CENHOMES_OAUTH_PROVIDER_ERROR",
             )
 
-        # 1) Durable link: resolve by the stored Cenhomes subject id.
+        # 1) Durable link: the Cenhomes subject id (the person behind the phone number).
         account = (
             Account.objects.filter(provider=self.provider, provider_account_id=provider_id)
             .select_related("user")
@@ -266,22 +329,31 @@ class CenhomesOAuthProvider(OauthAdapter):
         )
         user = account.user if account else None
 
-        # 2) Otherwise resolve by a real email (links an existing Plane user).
-        email = self._resolve_email(provider_id, self.user_data.get("email"), phone)
-        if user is None:
-            user = User.objects.filter(email=email).first()
+        # 2) First Cenhomes login: link an existing user only through an email Cenhomes has
+        #    verified, and never one already linked to another Cenhomes account.
+        verified_email = self._verified_email()
+        if user is None and verified_email:
+            candidate = User.objects.filter(email=verified_email).first()
+            if candidate and not Account.objects.filter(user=candidate, provider=self.provider).exists():
+                user = candidate
 
         is_existing = bool(user)
 
-        # 3) Create a new user when nothing matched.
-        if user is None:
+        if user is not None:
+            self._check_can_login(user)
+            # Keep the phone number current on subsequent logins.
+            if phone and user.mobile_number != phone:
+                user.mobile_number = phone
+                user.save(update_fields=["mobile_number"])
+        else:
+            # 3) New user.
+            email = self._account_email(provider_id, verified_email, phone)
             self._Adapter__check_signup(email)
 
             user = User(email=email, username=uuid.uuid4().hex)
             user.set_password(uuid.uuid4().hex)
             user.is_password_autoset = True
-            # Email is verified only when Cenhomes actually returned one.
-            user.is_email_verified = bool(self.user_data.get("email"))
+            user.is_email_verified = email == verified_email
             user.first_name = user_info.get("first_name", "") or ""
             user.last_name = user_info.get("last_name", "") or ""
             display_name = user_info.get("display_name") or User.get_display_name(email)
@@ -291,11 +363,6 @@ class CenhomesOAuthProvider(OauthAdapter):
             user.save()
 
             Profile.objects.create(user=user)
-        else:
-            # Keep the phone number current on subsequent logins.
-            if phone and user.mobile_number != phone:
-                user.mobile_number = phone
-                user.save(update_fields=["mobile_number"])
 
         # Optional IDP sync (only for already-existing users, matching core).
         if self.check_sync_enabled() and is_existing:

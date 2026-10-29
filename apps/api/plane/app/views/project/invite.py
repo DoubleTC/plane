@@ -121,6 +121,9 @@ class UserProjectInvitationsViewset(BaseViewSet):
     model = ProjectMemberInvite
 
     def get_queryset(self):
+        # Invitations are matched by email alone, so only a verified email may see them.
+        if not self.request.user.is_email_verified:
+            return ProjectMemberInvite.objects.none()
         return self.filter_queryset(
             super()
             .get_queryset()
